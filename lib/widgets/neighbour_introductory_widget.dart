@@ -12,12 +12,13 @@ class NeighbourIntroductoryWidget extends StatefulWidget {
 class _NeighbourIntroductoryWidgetState extends State<NeighbourIntroductoryWidget> {
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(aspectRatio: 2/3,
-    child: Container(
+    return  Container(
+      // height: 220,
+      width: 300,
       margin: const EdgeInsets.only(right: 15),
       decoration: BoxDecoration(
         image: DecorationImage(image:  AssetImage(widget.neighbourModel.neighbourPhoto),
-        fit: BoxFit.cover,)
+        fit: BoxFit.cover, )
       ),
       child: Container(
         padding: const EdgeInsets.all(20),
@@ -34,13 +35,14 @@ class _NeighbourIntroductoryWidgetState extends State<NeighbourIntroductoryWidge
         ),
         child: Align(
             alignment: Alignment.bottomLeft,
-            child: Text(widget.neighbourModel.neighbourFullName, style: const TextStyle(
-              color: Colors.white, fontSize: 20
+            child: Text(widget.neighbourModel.neighbourFullName,
+            textAlign: TextAlign.center, style: const TextStyle(
+              color: Colors.white, fontSize: 15
             ),
             ),
           ),
       ),
-    ),
+    
     
     );
   }

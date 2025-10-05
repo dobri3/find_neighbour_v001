@@ -1,6 +1,9 @@
 import 'package:find_neighbour_v001/models/neighbour_model.dart';
+import 'package:find_neighbour_v001/utils/play_animation_widget.dart';
 import 'package:find_neighbour_v001/widgets/neighbour_introductory_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 
@@ -160,7 +163,7 @@ class HomePage extends StatelessWidget {
             ),
             Container(
                       width: double.infinity,
-                      height: 500,
+                      height: 700,
                       decoration: const BoxDecoration(
                         border: BorderDirectional(
                           bottom: BorderSide(
@@ -173,21 +176,53 @@ class HomePage extends StatelessWidget {
                         children: [
                           const Text("Прямо сейчас в поиске", style: TextStyle(fontFamily: "Inter",
                           fontSize: 48, fontWeight: FontWeight.bold),),
-                          Row(
-                            children: [
-                              const SizedBox(height: 20,),
-                  Container(height: 220,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 3,
-                    itemBuilder: ((context, position) {
-                      return NeighbourIntroductoryWidget(neighbourModel: neighbourModels[position]);
-                    }
-                    ),
-                  ),
-                  ),
-                            ],
-                          ),
+                          const SizedBox(height: 80,),
+                          SafeArea(
+        child: SizedBox(
+              height: 300,
+               child:
+                ListView.separated(
+                separatorBuilder: (_, index) => const SizedBox(width: 15),
+                scrollDirection: Axis.horizontal,
+                itemCount: neighbourModels.length,              
+                itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: (){},
+                  child: PlayAnimatonWidget( delay: 1.2, child: NeighbourIntroductoryWidget(neighbourModel: neighbourModels[index],),)
+                );
+                }),
+             ),
+          // ],
+          //   ),
+              // ),
+            
+        
+          ),
+
+
+
+
+                          // SafeArea(
+                //             child: ListView.separated(
+                //               separatorBuilder: (_, index) => const SizedBox(height: 15),
+                // scrollDirection: Axis.vertical,
+                // itemCount: 1,
+                // child: NeighbourIntroductoryWidget(neighbourModel: neighbourModels[position])
+                              // children: [
+                              //   // const SizedBox(height: 20,),
+                              //                 SizedBox(height: 220, width: 600,
+                              //                 child: ListView.builder(
+                              //                   scrollDirection: Axis.horizontal,
+                              //                   itemCount: 1,
+                              //                   itemBuilder: ((context, position) {
+                              //                     return NeighbourIntroductoryWidget(neighbourModel: neighbourModels[position]);
+                              //                   }
+                              //                   ),
+                              //                 ),
+                              //                 ),
+                              // ],
+                        //     ),
+                        //   ),
                         ],
                       ),
                     ),
