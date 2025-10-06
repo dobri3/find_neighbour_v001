@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:find_neighbour_v001/models/neighbour_model.dart';
 import 'package:find_neighbour_v001/utils/play_animation_widget.dart';
 import 'package:find_neighbour_v001/widgets/neighbour_introductory_widget.dart';
@@ -179,18 +181,24 @@ class HomePage extends StatelessWidget {
                           const SizedBox(height: 80,),
                           SafeArea(
         child: SizedBox(
-              height: 300,
+              height: 450,
                child:
-                ListView.separated(
-                separatorBuilder: (_, index) => const SizedBox(width: 15),
-                scrollDirection: Axis.horizontal,
-                itemCount: neighbourModels.length,              
-                itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: (){},
-                  child: PlayAnimatonWidget( delay: 1.2, child: NeighbourIntroductoryWidget(neighbourModel: neighbourModels[index],),)
-                );
-                }),
+                ScrollConfiguration(
+behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+  PointerDeviceKind.touch,
+  PointerDeviceKind.mouse,
+},),
+                  child: ListView.separated(
+                  separatorBuilder: (_, index) => const SizedBox(width: 15),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: neighbourModels.length,              
+                  itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: (){},
+                    child: PlayAnimatonWidget( delay: 1.2, child: NeighbourIntroductoryWidget(neighbourModel: neighbourModels[index],),)
+                  );
+                  }),
+                ),
              ),
           // ],
           //   ),
