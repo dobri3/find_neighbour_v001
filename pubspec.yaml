@@ -33,6 +33,8 @@ dependencies:
   simple_animations: ^5.0.1
   page_transition: ^2.0.9
   sidebarx: ^0.17.1
+  google_sign_in: ^6.2.1
+  http: ^1.1.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

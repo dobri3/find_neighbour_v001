@@ -1,4 +1,4 @@
-import 'package:find_neighbour_v001/pages/home_page.dart';
+import 'package:find_neighbour_v001/pages/auth_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         colorScheme: const ColorScheme.dark(),
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      home: AuthPage(),
     );
   }
 }
