@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:find_neighbour_v001/models/neighbour_model.dart';
+import 'package:find_neighbour_v001/pages/auth_page.dart';
 import 'package:find_neighbour_v001/utils/play_animation_widget.dart';
 import 'package:find_neighbour_v001/widgets/neighbour_introductory_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -56,14 +57,14 @@ class HomePage extends StatelessWidget {
                     const SizedBox(
                       width: 30,
                     ),
-                    const Text(
-                      "Новости",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: "Inter",
-                        fontSize: 15
-                      ),
-                    ),
+                    // const Text(
+                    //   "Новости",
+                    //   style: TextStyle(
+                    //     color: Colors.white,
+                    //     fontFamily: "Inter",
+                    //     fontSize: 15
+                    //   ),
+                    // ),
                     const SizedBox(
                       width: 30,
                     ),
@@ -77,7 +78,11 @@ class HomePage extends StatelessWidget {
                       ),
                       child: TextButton(
                         onPressed: () {
-                          
+                          Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const AuthPage(),
+      ),
+    );
                         },
                         child: const Text("Войти", style: TextStyle(color: Colors.white, fontFamily: "Inter", fontSize: 15)),
                       ),
@@ -137,26 +142,53 @@ class HomePage extends StatelessWidget {
                       ),
                       ),
                       const SizedBox(
-                        height: 15,
+                        height: 10,
                       ),
                       Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: const Color(0xFF6A999E)
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                          color: const Color(0xFF131718)
-                        ),
-                        width: 500,
-                        child: const TextField(
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            prefixIcon: Icon(Icons.search, color:Colors.grey),
-                            hintStyle: TextStyle(color: Colors.grey, fontSize: 16, fontFamily: "Inter"),
-                            hintText: "Найти соседа"
-                          ),
-                    ),
+                      margin: const EdgeInsets.all(25),
+                      width: 350,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                   BoxShadow(
+                     color: Colors.black.withOpacity(0.25),
+                     blurRadius: 20,
+                     spreadRadius: 2,
+                     offset: const Offset(0, 0),
+                   ),
+                 ],
+                        color: const Color(0xFF6A999E),
+                        borderRadius: BorderRadius.circular(10)
                       ),
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const AuthPage(),
+      ),
+    );
+                        },
+                        child: const Text("Войти", style: TextStyle(color: Colors.white, fontFamily: "Inter", fontSize: 17)),
+                      ),
+                    ),
+                    //   Container(
+                    //     decoration: BoxDecoration(
+                    //       border: Border.all(
+                    //         color: const Color(0xFF6A999E)
+                    //       ),
+                    //       borderRadius: BorderRadius.circular(10),
+                    //       color: const Color(0xFF131718)
+                    //     ),
+                    //     width: 500,
+                    //     child: const TextField(
+                    //       decoration: InputDecoration(
+                    //         border: InputBorder.none,
+                    //         prefixIcon: Icon(Icons.search, color:Colors.grey),
+                    //         hintStyle: TextStyle(color: Colors.grey, fontSize: 16, fontFamily: "Inter"),
+                    //         hintText: "Найти соседа"
+                    //       ),
+                    // ),
+                    //   ),
                     
                   ],
                 ),
