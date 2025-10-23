@@ -25,8 +25,8 @@ class RootPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AutoTabsScaffold(
-      routes: const [
+    return const AutoTabsScaffold(
+      routes: [
         HomeRoute(),
         AuthRoute(),
       ],

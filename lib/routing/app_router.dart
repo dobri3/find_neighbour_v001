@@ -12,7 +12,7 @@ class AppRouter extends _$AppRouter {
   List<AutoRoute> get routes => [
         /// Основной, корневой маршрут
         AutoRoute(
-          path: "/rootpage",
+          path: "/root",
           page: RootRoute.page,
           initial: true,
           children: [
