@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../styles/app_colors.dart';
 
 class ToastNotification {
   static void show(
@@ -115,18 +116,18 @@ class _ToastWidgetState extends State<_ToastWidget>
   Color _getBackgroundColor() {
     switch (widget.type) {
       case ToastType.success:
-        return const Color(0xFF10B981);
+        return AppColors.toastSuccess;
       case ToastType.error:
-        return const Color(0xFFEF4444);
+        return AppColors.toastError;
       case ToastType.warning:
-        return const Color(0xFFF59E0B);
+        return AppColors.toastWarning;
       case ToastType.info:
-        return const Color(0xFF3B82F6);
+        return AppColors.toastInfo;
     }
   }
 
   Color _getTextColor() {
-    return Colors.white;
+    return AppColors.textPrimary;
   }
 
   IconData _getIcon() {

@@ -1,5 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import '../styles/app_colors.dart';
+import '../styles/app_textstyles.dart';
+import '../styles/app_buttonstyles.dart';
 
 @RoutePage()
 class UserProfilePage extends StatefulWidget {
@@ -51,7 +54,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1C2B38),
+      backgroundColor: AppColors.backgroundDark,
       body: SingleChildScrollView(
         child: Center(
           child: Container(
@@ -72,16 +75,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         children: <TextSpan>[
                           TextSpan(
                               text: 'Ищу',
-                              style: TextStyle(
-                                  fontSize: 40,
-                                  fontWeight: FontWeight.w100,
-                                  color: Colors.white)),
+                              style: AppTextStyles.headingLarge),
                           TextSpan(
                               text: 'Соседа',
-                              style: TextStyle(
-                                  fontSize: 40,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xff6A999E))),
+                              style: AppTextStyles.headingLargeBold),
                         ],
                       ),
                     ),
@@ -91,7 +88,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   margin: const EdgeInsets.only(bottom: 20),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: const Color(0xFF131718),
+                    color: AppColors.backgroundCard,
                   ),
                   child: Padding(
                     padding: const EdgeInsets.only(
@@ -105,10 +102,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         children: [
                           const Text(
                             'Профиль',
-                            style: TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
+                            style: AppTextStyles.headingMedium,
                           ),
                           Container(
                             margin: const EdgeInsets.only(
@@ -140,15 +134,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           const SizedBox(height: 20),
                           ElevatedButton(
                             onPressed: _saveProfile,
+                            style: AppButtonStyles.primaryButton,
                             child: const Text("Сохранить"),
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: const Size(200, 60),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              foregroundColor: Colors.white,
-                              backgroundColor: const Color(0xFF6A999E),
-                            ),
                           ),
                         ],
                       ),
@@ -167,8 +154,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: const Color(0x1932658D),
-        border: Border.all(color: const Color(0x4D6A999E), width: 1),
+        color: AppColors.inputBackground,
+        border: Border.all(color: AppColors.borderPrimary, width: 1),
       ),
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -176,10 +163,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
           children: [
             const Text(
               "Основная информация",
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF6A999E)),
+              style: AppTextStyles.secondaryLarge,
             ),
             Container(
               padding: const EdgeInsets.only(top: 20),
@@ -207,8 +191,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: const Color(0x1932658D),
-        border: Border.all(color: const Color(0x4D6A999E), width: 1),
+        color: AppColors.inputBackground,
+        border: Border.all(color: AppColors.borderPrimary, width: 1),
       ),
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -216,10 +200,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
           children: [
             const Text(
               "Параметры жилья",
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF6A999E)),
+              style: AppTextStyles.secondaryLarge,
             ),
             Container(
               padding: const EdgeInsets.only(top: 20),
@@ -253,40 +234,37 @@ class _UserProfilePageState extends State<UserProfilePage> {
             alignment: Alignment.centerLeft,
             child: Text(
               title,
-              style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w100,
-                  color: Colors.white),
+              style: AppTextStyles.labelMedium,
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           TextField(
             controller: controller,
             maxLines: maxLines,
             minLines: minLines,
-            cursorColor: const Color(0xFF6A999E),
+            cursorColor: AppColors.inputBorderFocused,
             decoration: const InputDecoration(
               filled: true,
-              fillColor: Color(0x1932658D),
+              fillColor: AppColors.inputBackground,
               // labelText: title,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
-                    color: Color(0x4D6A999E),
+                    color: AppColors.borderPrimary,
                     width: 1,
                     style: BorderStyle.solid),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
-                    color: Color(0xFF6A999E),
+                    color: AppColors.inputBorderFocused,
                     width: 1,
                     style: BorderStyle.solid),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
-                  color: Color(0x4D32658D),
+                  color: AppColors.inputBorder,
                   width: 1,
                   style: BorderStyle.solid,
                 ),

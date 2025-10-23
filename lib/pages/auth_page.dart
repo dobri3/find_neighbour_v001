@@ -1,6 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:find_neighbour_v001/routing/app_router.dart';
 import 'package:flutter/material.dart';
+import '../styles/app_colors.dart';
+import '../styles/app_textstyles.dart';
+import '../styles/app_buttonstyles.dart';
 
 
 @RoutePage()
@@ -55,7 +58,7 @@ class AuthPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1C2B38),
+      backgroundColor: AppColors.backgroundDark,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -68,13 +71,13 @@ class AuthPage extends StatelessWidget {
                 padding: const EdgeInsets.all(15.0),
                 decoration: BoxDecoration(
                  borderRadius: BorderRadius.circular(15),
-                 color: const Color(0xFF131718),
-                 boxShadow: [
-                   BoxShadow(
-                     color: Colors.black.withOpacity(0.25),
+                 color: AppColors.backgroundCard,
+                 boxShadow: const [
+                    BoxShadow(
+                     color: AppColors.shadowBlack,
                      blurRadius: 20,
                      spreadRadius: 2,
-                     offset: const Offset(0, 0),
+                     offset: Offset(0, 0),
                    ),
                  ],
                 ),
@@ -85,27 +88,18 @@ class AuthPage extends StatelessWidget {
                      const Icon(
                   Icons.people_alt_rounded,
                   size: 80,
-                  color: Color(0xFF6366F1),
+                  color: AppColors.primaryPurple,
                                ),
                  const SizedBox(height: 24),
                  const Text(
                   "Добро пожаловать!",
-                  style: TextStyle(
-                    fontSize: 28,
-                    // fontWeight: FontWeight.bold,
-                    fontFamily: "Inter",
-                    color: Colors.white,
-                  ),
+                  style: AppTextStyles.headingSmall,
                   textAlign: TextAlign.center,
                                ),
                  const SizedBox(height: 8),
                  const Text(
                   "Войдите через Google, чтобы продолжить",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontFamily: "Inter",
-                    color: Color(0xFF6B7280),
-                  ),
+                  style: AppTextStyles.secondaryMedium,
                   textAlign: TextAlign.center,
                                ),
                  const SizedBox(height: 48),
@@ -117,28 +111,15 @@ class AuthPage extends StatelessWidget {
                          onPressed: () {
                           context.router.push(const UserProfileRoute());
                          },
-                         style: ElevatedButton.styleFrom(
-                           backgroundColor: const Color(0xFF1F2937),
-                           foregroundColor: const Color(0xFF32658D),
-                           elevation: 0,
-                           side: const BorderSide(color: Color(0xFF32658D), width: 1),
-                           shape: RoundedRectangleBorder(
-                             borderRadius: BorderRadius.circular(12),
-                           ),
-                         ),
+                         style: AppButtonStyles.secondaryButton,
                          child: const Row(
                            mainAxisAlignment: MainAxisAlignment.center,
                            children: [
-                             Icon(Icons.g_mobiledata, size: 28, color: Color.fromARGB(255, 222, 222, 222)),
+                             Icon(Icons.g_mobiledata, size: 28, color: AppColors.buttonText),
                              SizedBox(width: 12),
                              Text(
                                "Войти через Google",
-                               style: TextStyle(
-                  fontSize: 16,
-                  // fontWeight: FontWeight.w600,
-                  fontFamily: "Inter",
-                  color: Color.fromARGB(255, 222, 222, 222),
-                               ),
+                               style: AppTextStyles.buttonPrimary,
                              ),
                            ],
                          ),
@@ -152,28 +133,15 @@ class AuthPage extends StatelessWidget {
                          onPressed: () {
                           context.router.push(const UserProfileRoute());
                          },
-                         style: ElevatedButton.styleFrom(
-                           backgroundColor: const Color(0xFF1F2937),
-                           foregroundColor: const Color(0xFF32658D),
-                           elevation: 0,
-                           side: const BorderSide(color: Color(0xFF32658D), width: 1),
-                           shape: RoundedRectangleBorder(
-                             borderRadius: BorderRadius.circular(12),
-                           ),
-                         ),
+                         style: AppButtonStyles.secondaryButton,
                          child: const Row(
                            mainAxisAlignment: MainAxisAlignment.center,
                            children: [
-                             Icon(Icons.g_mobiledata, size: 28, color: Color.fromARGB(255, 222, 222, 222)),
+                             Icon(Icons.g_mobiledata, size: 28, color: AppColors.buttonText),
                              SizedBox(width: 12),
                              Text(
                                "Войти через Yandex",
-                               style: TextStyle(
-                  fontSize: 16,
-                  // fontWeight: FontWeight.w600,
-                  fontFamily: "Inter",
-                  color: Color.fromARGB(255, 222, 222, 222),
-                               ),
+                               style: AppTextStyles.buttonPrimary,
                              ),
                            ],
                          ),

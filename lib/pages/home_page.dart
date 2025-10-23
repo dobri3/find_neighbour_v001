@@ -6,6 +6,9 @@ import 'package:find_neighbour_v001/routing/app_router.dart';
 import 'package:find_neighbour_v001/utils/play_animation_widget.dart';
 import 'package:find_neighbour_v001/widgets/neighbour_introductory_widget.dart';
 import 'package:flutter/material.dart';
+import '../styles/app_colors.dart';
+import '../styles/app_textstyles.dart';
+import '../styles/app_buttonstyles.dart';
 
 
 @RoutePage()
@@ -23,7 +26,7 @@ class HomePage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  color: const Color(0xFF131718),
+                  color: AppColors.backgroundCard,
                   height: 80,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -65,11 +68,7 @@ class HomePage extends StatelessWidget {
                     //   width: 500,
                     // ),
                     const Text(
-                      "Как это работает", style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: "Inter",
-                        fontSize: 15,
-                      ),
+                      "Как это работает", style: AppTextStyles.bodySmall,
                     ),
                     const SizedBox(
                       width: 30,
@@ -89,22 +88,12 @@ class HomePage extends StatelessWidget {
                       margin: const EdgeInsets.all(25),
                       width: 100,
                       height: 40,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF6A999E),
-                        borderRadius: BorderRadius.circular(10)
-                      ),
-                      child: TextButton(
+                      child: ElevatedButton(
                         onPressed: () {
-
                           context.router.push(const AuthRoute());
-
-      //                     Navigator.of(context).push(
-      // MaterialPageRoute(
-      //   builder: (context) => const AuthPage(),
-      // ),
-    // );
                         },
-                        child: const Text("Войти", style: TextStyle(color: Colors.white, fontFamily: "Inter", fontSize: 15)),
+                        style: AppButtonStyles.smallPrimaryButton,
+                        child: const Text("Войти", style: AppTextStyles.buttonPrimary),
                       ),
                     ),
                   ],
@@ -119,10 +108,10 @@ class HomePage extends StatelessWidget {
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
                   colors: [
-                    Color(0xFF133B5A),
-                    Color(0xFF32658D),
-                    Color(0xFF32658D),
-                    Color(0xFF133B5A),
+                    AppColors.gradientStart,
+                    AppColors.gradientEnd,
+                    AppColors.gradientEnd,
+                    AppColors.gradientStart,
                   ]
                 )
               ),

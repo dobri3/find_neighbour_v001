@@ -27,6 +27,22 @@ class AuthRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [DraftStylesPage]
+class DraftStylesRoute extends PageRouteInfo<void> {
+  const DraftStylesRoute({List<PageRouteInfo>? children})
+      : super(DraftStylesRoute.name, initialChildren: children);
+
+  static const String name = 'DraftStylesRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const DraftStylesPage();
+    },
+  );
+}
+
+/// generated route for
 /// [HomePage]
 class HomeRoute extends PageRouteInfo<void> {
   const HomeRoute({List<PageRouteInfo>? children})

@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:find_neighbour_v001/pages/user_profile_page.dart';
 import 'package:find_neighbour_v001/routing/app_router.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -15,6 +14,7 @@ class RootPage extends StatelessWidget {
          HomeRoute(),
          AuthRoute(),
         UserProfileRoute(),
+        DraftStylesRoute(),
       ],
     );
   }
