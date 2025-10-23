@@ -1,9 +1,12 @@
 // import 'package:find_neighbour_v001/pages/auth_page.dart';
 import 'package:find_neighbour_v001/pages/home_page.dart';
 import 'package:find_neighbour_v001/pages/user_profile_page.dart';
+import 'package:find_neighbour_v001/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:find_neighbour_v001/api/api.dart';
 import 'package:find_neighbour_v001/api/interceptor.dart';
+
+final appRouter = AppRouter();
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +22,7 @@ class MyApp extends StatelessWidget {
       dio: ApiService.dio,
       refreshTokenCallback: ApiService.refreshToken,
     ));
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -28,7 +31,7 @@ class MyApp extends StatelessWidget {
         colorScheme: const ColorScheme.dark(),
         useMaterial3: true,
       ),
-      home: HomePage(),
+      routerConfig: appRouter.config(),
     );
   }
 }
