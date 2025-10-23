@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class NeighbourIntroductoryWidget extends StatefulWidget {
   final NeighbourModel neighbourModel;
-  const NeighbourIntroductoryWidget({required this.neighbourModel});
+  const NeighbourIntroductoryWidget({super.key, required this.neighbourModel});
 
   @override
   State<NeighbourIntroductoryWidget> createState() => _NeighbourIntroductoryWidgetState();

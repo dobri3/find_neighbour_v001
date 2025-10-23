@@ -1,17 +1,18 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:find_neighbour_v001/routing/app_router.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-// import 'package:google_sign_in/google_sign_in.dart';
-// import 'package:find_neighbour_v001/pages/home_page.dart';
-// import '../widgets/toast_notification.dart';
 
-class AuthPage extends StatefulWidget {
+
+@RoutePage()
+class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
 
-  @override
-  State<AuthPage> createState() => _AuthPageState();
-}
+//   @override
+//   State<AuthPage> createState() => _AuthPageState();
+// }
 
-class _AuthPageState extends State<AuthPage> {
+// class _AuthPageState extends State<AuthPage> {
+
   // final GoogleSignIn _googleSignIn = GoogleSignIn(
   //   scopes: ['email', 'profile'],
   // );
@@ -113,7 +114,9 @@ class _AuthPageState extends State<AuthPage> {
                        height: 56,
                        child: ElevatedButton(
                          // onPressed: _isLoading ? null : _signInWithGoogle,
-                         onPressed: () {},
+                         onPressed: () {
+                          context.router.push(const UserProfileRoute());
+                         },
                          style: ElevatedButton.styleFrom(
                            backgroundColor: const Color(0xFF1F2937),
                            foregroundColor: const Color(0xFF32658D),
@@ -146,7 +149,9 @@ class _AuthPageState extends State<AuthPage> {
                        height: 56,
                        child: ElevatedButton(
                          // onPressed: _isLoading ? null : _signInWithGoogle,
-                         onPressed: () {},
+                         onPressed: () {
+                          context.router.push(const UserProfileRoute());
+                         },
                          style: ElevatedButton.styleFrom(
                            backgroundColor: const Color(0xFF1F2937),
                            foregroundColor: const Color(0xFF32658D),

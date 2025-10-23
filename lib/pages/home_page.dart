@@ -1,15 +1,14 @@
 import 'dart:ui';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:find_neighbour_v001/models/neighbour_model.dart';
-import 'package:find_neighbour_v001/pages/auth_page.dart';
+import 'package:find_neighbour_v001/routing/app_router.dart';
 import 'package:find_neighbour_v001/utils/play_animation_widget.dart';
 import 'package:find_neighbour_v001/widgets/neighbour_introductory_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 
+@RoutePage()
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -32,17 +31,35 @@ class HomePage extends StatelessWidget {
                     const SizedBox(
                 width: 10,
               ), 
-                    const Expanded(
-                      child: Text("ИщуСоседа", 
+                    Expanded(
+                      child: RichText(
+                      text: const TextSpan(
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: 'Ищу',
+                              style: TextStyle(
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.w100,
+                                  color: Colors.white)),
+                          TextSpan(
+                              text: 'Соседа',
+                              style: TextStyle(
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xff6A999E))),
+                        ],
+                      ),
+                    ),
+                      // child: Text("ИщуСоседа", 
                       
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 32,
-                          fontFamily: 'Inter',
-                          ),
+                      // style: TextStyle(
+                      //     color: Colors.white,
+                      //     fontWeight: FontWeight.bold,
+                      //     fontSize: 32,
+                      //     fontFamily: 'Inter',
+                      //     ),
                           
-                          ),
+                      //     ),
                     ),
                     // const SizedBox(
                     //   width: 500,
@@ -78,11 +95,14 @@ class HomePage extends StatelessWidget {
                       ),
                       child: TextButton(
                         onPressed: () {
-                          Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const AuthPage(),
-      ),
-    );
+
+                          context.router.push(const AuthRoute());
+
+      //                     Navigator.of(context).push(
+      // MaterialPageRoute(
+      //   builder: (context) => const AuthPage(),
+      // ),
+    // );
                         },
                         child: const Text("Войти", style: TextStyle(color: Colors.white, fontFamily: "Inter", fontSize: 15)),
                       ),
@@ -162,11 +182,15 @@ class HomePage extends StatelessWidget {
                       ),
                       child: TextButton(
                         onPressed: () {
-                          Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const AuthPage(),
-      ),
-    );
+                          
+                          context.router.push(const AuthRoute());
+
+
+    //                       Navigator.of(context).push(
+    //   MaterialPageRoute(
+    //     builder: (context) => const AuthPage(),
+    //   ),
+    // );
                         },
                         child: const Text("Войти", style: TextStyle(color: Colors.white, fontFamily: "Inter", fontSize: 17)),
                       ),
