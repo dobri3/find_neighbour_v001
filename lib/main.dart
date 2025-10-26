@@ -1,6 +1,4 @@
 // import 'package:find_neighbour_v001/pages/auth_page.dart';
-import 'package:find_neighbour_v001/pages/home_page.dart';
-import 'package:find_neighbour_v001/pages/user_profile_page.dart';
 import 'package:find_neighbour_v001/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:find_neighbour_v001/api/api.dart';
