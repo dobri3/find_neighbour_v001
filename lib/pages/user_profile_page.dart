@@ -1,4 +1,10 @@
+
+import 'package:find_neighbour_v001/styles/app_button_styles.dart';
+import 'package:find_neighbour_v001/styles/app_colors.dart';
+import 'package:find_neighbour_v001/styles/app_container_styles.dart';
+import 'package:find_neighbour_v001/styles/app_text_styles.dart';
 import 'package:flutter/material.dart';
+
 
 class UserProfilePage extends StatefulWidget {
   const UserProfilePage({super.key});
@@ -63,34 +69,32 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     top: 42,
                     bottom: 42,
                   ),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: RichText(
-                      text: const TextSpan(
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: 'Ищу',
-                              style: TextStyle(
-                                  fontSize: 40,
-                                  fontWeight: FontWeight.w100,
-                                  color: Colors.white)),
-                          TextSpan(
-                              text: 'Соседа',
-                              style: TextStyle(
-                                  fontSize: 40,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xff6A999E))),
-                        ],
-                      ),
-                    ),
-                  ),
+                  child: AppRichTextStyles.logoText(),
+                  // Align(
+                  //   alignment: Alignment.topLeft,
+                  //   child: RichText(
+                  //     text: const TextSpan(
+                  //       children: <TextSpan>[
+                  //         TextSpan(
+                  //             text: 'Ищу',
+                  //             style: TextStyle(
+                  //                 fontSize: 40,
+                  //                 fontWeight: FontWeight.w100,
+                  //                 color: Colors.white)),
+                  //         TextSpan(
+                  //             text: 'Соседа',
+                  //             style: TextStyle(
+                  //                 fontSize: 40,
+                  //                 fontWeight: FontWeight.bold,
+                  //                 color: Color(0xff6A999E))),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                 ),
                 Container(
                   margin: const EdgeInsets.only(bottom: 20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: const Color(0xFF131718),
-                  ),
+                  decoration: AppContainerStyles.profileCard,
                   child: Padding(
                     padding: const EdgeInsets.only(
                       top: 20,
@@ -103,10 +107,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         children: [
                           const Text(
                             'Профиль',
-                            style: TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
+                            style: AppTextStyles.profileTitle,
                           ),
                           Container(
                             margin: const EdgeInsets.only(
@@ -124,11 +125,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                               ),
                               const Text(
                                 "Имя Фамилия",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w300,
-                                  color: Colors.white,
-                                ),
+                                style: AppTextStyles.profileName,
                               ),
                             ]),
                           ),
@@ -138,15 +135,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           const SizedBox(height: 20),
                           ElevatedButton(
                             onPressed: _saveProfile,
+                            style: AppButtonStyles.primaryLarge,
                             child: const Text("Сохранить"),
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: const Size(200, 60),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              foregroundColor: Colors.white,
-                              backgroundColor: const Color(0xFF6A999E),
-                            ),
                           ),
                         ],
                       ),
@@ -163,21 +153,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   Widget _buildMainInfo() {
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: const Color(0x1932658D),
-        border: Border.all(color: const Color(0x4D6A999E), width: 1),
-      ),
+      decoration: AppContainerStyles.sectionContainer,
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             const Text(
               "Основная информация",
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF6A999E)),
+              style: AppTextStyles.sectionTitle,
             ),
             Container(
               padding: const EdgeInsets.only(top: 20),
@@ -203,21 +186,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   Widget _buildHomeInfo() {
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: const Color(0x1932658D),
-        border: Border.all(color: const Color(0x4D6A999E), width: 1),
-      ),
+      decoration: AppContainerStyles.sectionContainer,
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             const Text(
               "Параметры жилья",
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF6A999E)),
+              style: AppTextStyles.sectionTitle,
             ),
             Container(
               padding: const EdgeInsets.only(top: 20),
@@ -251,45 +227,16 @@ class _UserProfilePageState extends State<UserProfilePage> {
             alignment: Alignment.centerLeft,
             child: Text(
               title,
-              style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w100,
-                  color: Colors.white),
+              style: AppTextStyles.inputLabel,
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           TextField(
             controller: controller,
             maxLines: maxLines,
             minLines: minLines,
-            cursorColor: const Color(0xFF6A999E),
-            decoration: const InputDecoration(
-              filled: true,
-              fillColor: Color(0x1932658D),
-              // labelText: title,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                borderSide: BorderSide(
-                    color: Color(0x4D6A999E),
-                    width: 1,
-                    style: BorderStyle.solid),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                borderSide: BorderSide(
-                    color: Color(0xFF6A999E),
-                    width: 1,
-                    style: BorderStyle.solid),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                borderSide: BorderSide(
-                  color: Color(0x4D32658D),
-                  width: 1,
-                  style: BorderStyle.solid,
-                ),
-              ),
-            ),
+            cursorColor: AppColors.teal,
+            decoration: AppContainerStyles.textInput,
           ),
         ],
       ),

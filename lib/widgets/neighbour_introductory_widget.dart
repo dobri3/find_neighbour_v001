@@ -1,4 +1,6 @@
 import 'package:find_neighbour_v001/models/neighbour_model.dart';
+import 'package:find_neighbour_v001/styles/app_text_styles.dart';
+import 'package:find_neighbour_v001/styles/app_container_styles.dart';
 import 'package:flutter/material.dart';
 
 class NeighbourIntroductoryWidget extends StatefulWidget {
@@ -16,13 +18,7 @@ class _NeighbourIntroductoryWidgetState extends State<NeighbourIntroductoryWidge
       height: 500,
       width: 500,
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 0, 0, 0),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: const Color(0xFF32658D)
-        ),
-      ),
+      decoration: AppContainerStyles.neighbourCard,
       margin: const EdgeInsets.only(right: 15),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -34,22 +30,10 @@ class _NeighbourIntroductoryWidgetState extends State<NeighbourIntroductoryWidge
                   height: 170,
                   width: 130,
         padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        image: DecorationImage(image:  AssetImage(widget.neighbourModel.neighbourPhoto),
-        fit: BoxFit.cover, )
-      ),
-        // decoration: BoxDecoration(
-        //   borderRadius: BorderRadius.circular(20),
-        //   gradient: LinearGradient(
-        //       begin: Alignment.bottomRight,
-        //       colors: [
-        //         Colors.black.withOpacity(0.8),
-        //         Colors.black.withOpacity(0.2),
-        //       ]
-        //     ),
-            
-        // ),
+        decoration: AppContainerStyles.photoContainer.copyWith(
+          image: DecorationImage(image:  AssetImage(widget.neighbourModel.neighbourPhoto),
+                  fit: BoxFit.cover,)
+        )
                 ),
                 const SizedBox(
                   width: 20,
@@ -63,61 +47,24 @@ class _NeighbourIntroductoryWidgetState extends State<NeighbourIntroductoryWidge
                         Align(
             alignment: Alignment.center,
             child: Text(widget.neighbourModel.neighbourFullName,
-            textAlign: TextAlign.center, style: const TextStyle(
-              color: Colors.white, fontSize: 24, fontFamily: "Inter"
-            ),
+            textAlign: TextAlign.center, style: AppTextStyles.neighbourName
             ),
           ),
           const SizedBox(
             height: 10,
-          ),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: SizedBox(
-              width: 250,
-              child: Text("Город: ${widget.neighbourModel.neighbourCity}",
-              textAlign: TextAlign.left, style: const TextStyle(
-                color: Color(0xFF6A999E), fontSize: 14, fontFamily: "Inter"
-              ),
-              ),
-            ),
-          ),
+          ),   
 
-          Align(
-            alignment: Alignment.centerLeft,
-            child: SizedBox(
-              width:250,
-              child: Text("Район/метро: ${widget.neighbourModel.neighbourAddress}",
-              textAlign: TextAlign.left, style: const TextStyle(
-                color: Color(0xFF6A999E), fontSize: 14, fontFamily: "Inter"
-              ),
-              ),
-            ),
-          ),    
-
-          Align(
-            alignment: Alignment.centerLeft,
-            child: SizedBox(
-              width:250,
-              child: Text("Бюджет: ${widget.neighbourModel.neighbourCost}",
-              textAlign: TextAlign.left, style: const TextStyle(
-                color: Color(0xFF6A999E), fontSize: 14, fontFamily: "Inter"
-              ),
-              ),
-            ),
-          ),          
-
-          Align(
-            alignment: Alignment.centerLeft,
-            child: SizedBox(
-              width:250,
-              child: Text("Кол-во соседей: ${widget.neighbourModel.neighbourCount}",
-              textAlign: TextAlign.left, style: const TextStyle(
-                color: Color(0xFF6A999E), fontSize: 14, fontFamily: "Inter"
-              ),
-              ),
-            ),
-          ),       
+          // City
+    _buildDetailItem("Город: ${widget.neighbourModel.neighbourCity}"),
+    
+    // Address
+    _buildDetailItem("Район/метро: ${widget.neighbourModel.neighbourAddress}"),
+    
+    // Budget
+    _buildDetailItem("Бюджет: ${widget.neighbourModel.neighbourCost}"),
+    
+    // Neighbour Count
+    _buildDetailItem("Кол-во соседей: ${widget.neighbourModel.neighbourCount}"),
                       ],
                     )
                        
@@ -133,9 +80,7 @@ class _NeighbourIntroductoryWidgetState extends State<NeighbourIntroductoryWidge
             child: SizedBox(
               width:400,
               child: Text("Описание: ${widget.neighbourModel.neighbourDescription}",
-              textAlign: TextAlign.left, style: const TextStyle(
-                color: Color(0xFFE7E9EC), fontSize: 14, fontFamily: "Inter"
-              ),
+              textAlign: TextAlign.left, style: AppTextStyles.neighbourDescription,
               ),
             ),
           ),    
@@ -180,4 +125,18 @@ class _NeighbourIntroductoryWidgetState extends State<NeighbourIntroductoryWidge
     
     );
   }
+}
+
+Widget _buildDetailItem(String text) {
+  return Align(
+    alignment: Alignment.centerLeft,
+    child: SizedBox(
+      width: 250,
+      child: Text(
+        text,
+        textAlign: TextAlign.left,
+        style: AppTextStyles.neighbourDetail,
+      ),
+    ),
+  );
 }
