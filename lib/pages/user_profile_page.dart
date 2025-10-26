@@ -1,13 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:find_neighbour_v001/routing/app_router.dart';
+import 'package:auto_route/auto_route.dart';
 
+import 'package:find_neighbour_v001/models/user.dart';
+import 'package:find_neighbour_v001/api/api.dart';
+
+import 'package:find_neighbour_v001/api/api.dart';
+
+@RoutePage()
 class UserProfilePage extends StatefulWidget {
-  const UserProfilePage({super.key});
+  final String id;
+
+  const UserProfilePage({@PathParam('id') required this.id, super.key});
 
   @override
   State<UserProfilePage> createState() => _UserProfilePageState();
 }
 
 class _UserProfilePageState extends State<UserProfilePage> {
+  String _name = '';
+  String _surname = '';
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _surnameController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
@@ -21,10 +33,18 @@ class _UserProfilePageState extends State<UserProfilePage> {
     _loadUserData();
   }
 
-  void _loadUserData() {
-    _nameController.text = "Иванов";
-    _surnameController.text = "Иванов";
-    _descController.text = "О себе";
+  void _loadUserData() async {
+    User user = await ApiService.getUserById(widget.id);
+
+    setState(() {
+      _name = user.name;
+      _surname = user.surname;
+    });
+
+    _nameController.text = user.name;
+    _surnameController.text = user.surname;
+    _descController.text = user.description;
+
     _moneyController.text = "20000";
     _neighboursController.text = "2";
     _regionController.text = "м. Войковская";
@@ -122,9 +142,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                              const Text(
-                                "Имя Фамилия",
-                                style: TextStyle(
+                              Text(
+                                "$_name $_surname",
+                                style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w300,
                                   color: Colors.white,
