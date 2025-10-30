@@ -6,6 +6,9 @@ import 'package:find_neighbour_v001/pages/root_page.dart';
 
 part 'app_router.gr.dart';
 
+// Большая проблема с зависимостями от библиотек (или еще чем то)
+// Карточку группы соседей и страницу рекомендаций еще нужно допилить
+
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
 class AppRouter extends _$AppRouter {
   @override
