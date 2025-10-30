@@ -1,3 +1,4 @@
+// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
@@ -9,71 +10,66 @@
 
 part of 'app_router.dart';
 
-abstract class _$AppRouter extends RootStackRouter {
-  // ignore: unused_element
-  _$AppRouter();
-
-  @override
-  final Map<String, PageFactory> pagesMap = {
-    AuthRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const AuthPage(),
-      );
-    },
-    HomeRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const HomePage(),
-      );
-    },
-    RootRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const RootPage(),
-      );
-    },
-  };
-}
-
 /// generated route for
 /// [AuthPage]
 class AuthRoute extends PageRouteInfo<void> {
   const AuthRoute({List<PageRouteInfo>? children})
-      : super(
-          AuthRoute.name,
-          initialChildren: children,
-        );
+      : super(AuthRoute.name, initialChildren: children);
 
   static const String name = 'AuthRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AuthPage();
+    },
+  );
 }
 
 /// generated route for
 /// [HomePage]
 class HomeRoute extends PageRouteInfo<void> {
   const HomeRoute({List<PageRouteInfo>? children})
-      : super(
-          HomeRoute.name,
-          initialChildren: children,
-        );
+      : super(HomeRoute.name, initialChildren: children);
 
   static const String name = 'HomeRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const HomePage();
+    },
+  );
+}
+
+/// generated route for
+/// [RecommendationPage]
+class RecommendationRoute extends PageRouteInfo<void> {
+  const RecommendationRoute({List<PageRouteInfo>? children})
+      : super(RecommendationRoute.name, initialChildren: children);
+
+  static const String name = 'RecommendationRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RecommendationPage();
+    },
+  );
 }
 
 /// generated route for
 /// [RootPage]
 class RootRoute extends PageRouteInfo<void> {
   const RootRoute({List<PageRouteInfo>? children})
-      : super(
-          RootRoute.name,
-          initialChildren: children,
-        );
+      : super(RootRoute.name, initialChildren: children);
 
   static const String name = 'RootRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RootPage();
+    },
+  );
 }
