@@ -10,61 +10,6 @@
 
 part of 'app_router.dart';
 
-abstract class _$AppRouter extends RootStackRouter {
-  // ignore: unused_element
-  _$AppRouter({super.navigatorKey});
-
-  @override
-  final Map<String, PageFactory> pagesMap = {
-    AuthGoogleCallbackRoute.name: (routeData) {
-      final queryParams = routeData.queryParams;
-      final args = routeData.argsAs<AuthGoogleCallbackRouteArgs>(
-          orElse: () => AuthGoogleCallbackRouteArgs(
-                code: queryParams.optString('code'),
-                state: queryParams.optString('state'),
-              ));
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: AuthGoogleCallbackPage(
-          code: args.code,
-          state: args.state,
-          key: args.key,
-        ),
-      );
-    },
-    AuthRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const AuthPage(),
-      );
-    },
-    HomeRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const HomePage(),
-      );
-    },
-    RootRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const RootPage(),
-      );
-    },
-    UserProfileRoute.name: (routeData) {
-      final pathParams = routeData.inheritedPathParams;
-      final args = routeData.argsAs<UserProfileRouteArgs>(
-          orElse: () => UserProfileRouteArgs(id: pathParams.getString('id')));
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: UserProfilePage(
-          id: args.id,
-          key: args.key,
-        ),
-      );
-    },
-  };
-}
-
 /// generated route for
 /// [AuthGoogleCallbackPage]
 class AuthGoogleCallbackRoute
@@ -76,30 +21,34 @@ class AuthGoogleCallbackRoute
     List<PageRouteInfo>? children,
   }) : super(
           AuthGoogleCallbackRoute.name,
-          args: AuthGoogleCallbackRouteArgs(
-            code: code,
-            state: state,
-            key: key,
-          ),
-          rawQueryParams: {
-            'code': code,
-            'state': state,
-          },
+          args: AuthGoogleCallbackRouteArgs(code: code, state: state, key: key),
+          rawQueryParams: {'code': code, 'state': state},
           initialChildren: children,
         );
 
   static const String name = 'AuthGoogleCallbackRoute';
 
-  static const PageInfo<AuthGoogleCallbackRouteArgs> page =
-      PageInfo<AuthGoogleCallbackRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final queryParams = data.queryParams;
+      final args = data.argsAs<AuthGoogleCallbackRouteArgs>(
+        orElse: () => AuthGoogleCallbackRouteArgs(
+          code: queryParams.optString('code'),
+          state: queryParams.optString('state'),
+        ),
+      );
+      return AuthGoogleCallbackPage(
+        code: args.code,
+        state: args.state,
+        key: args.key,
+      );
+    },
+  );
 }
 
 class AuthGoogleCallbackRouteArgs {
-  const AuthGoogleCallbackRouteArgs({
-    this.code,
-    this.state,
-    this.key,
-  });
+  const AuthGoogleCallbackRouteArgs({this.code, this.state, this.key});
 
   final String? code;
 
@@ -111,6 +60,16 @@ class AuthGoogleCallbackRouteArgs {
   String toString() {
     return 'AuthGoogleCallbackRouteArgs{code: $code, state: $state, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AuthGoogleCallbackRouteArgs) return false;
+    return code == other.code && state == other.state && key == other.key;
+  }
+
+  @override
+  int get hashCode => code.hashCode ^ state.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -127,6 +86,68 @@ class AuthRoute extends PageRouteInfo<void> {
       return const AuthPage();
     },
   );
+}
+
+/// generated route for
+/// [AuthYandexCallbackPage]
+class AuthYandexCallbackRoute
+    extends PageRouteInfo<AuthYandexCallbackRouteArgs> {
+  AuthYandexCallbackRoute({
+    String? code,
+    String? state,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          AuthYandexCallbackRoute.name,
+          args: AuthYandexCallbackRouteArgs(code: code, state: state, key: key),
+          rawQueryParams: {'code': code, 'state': state},
+          initialChildren: children,
+        );
+
+  static const String name = 'AuthYandexCallbackRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final queryParams = data.queryParams;
+      final args = data.argsAs<AuthYandexCallbackRouteArgs>(
+        orElse: () => AuthYandexCallbackRouteArgs(
+          code: queryParams.optString('code'),
+          state: queryParams.optString('state'),
+        ),
+      );
+      return AuthYandexCallbackPage(
+        code: args.code,
+        state: args.state,
+        key: args.key,
+      );
+    },
+  );
+}
+
+class AuthYandexCallbackRouteArgs {
+  const AuthYandexCallbackRouteArgs({this.code, this.state, this.key});
+
+  final String? code;
+
+  final String? state;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'AuthYandexCallbackRouteArgs{code: $code, state: $state, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AuthYandexCallbackRouteArgs) return false;
+    return code == other.code && state == other.state && key == other.key;
+  }
+
+  @override
+  int get hashCode => code.hashCode ^ state.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -165,14 +186,16 @@ class RecommendationRoute extends PageRouteInfo<void> {
 /// [RootPage]
 class RootRoute extends PageRouteInfo<void> {
   const RootRoute({List<PageRouteInfo>? children})
-      : super(
-          RootRoute.name,
-          initialChildren: children,
-        );
+      : super(RootRoute.name, initialChildren: children);
 
-  static const String name = 'UserProfileRoute';
+  static const String name = 'RootRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RootPage();
+    },
+  );
 }
 
 /// generated route for
@@ -184,25 +207,27 @@ class UserProfileRoute extends PageRouteInfo<UserProfileRouteArgs> {
     List<PageRouteInfo>? children,
   }) : super(
           UserProfileRoute.name,
-          args: UserProfileRouteArgs(
-            id: id,
-            key: key,
-          ),
+          args: UserProfileRouteArgs(id: id, key: key),
           rawPathParams: {'id': id},
           initialChildren: children,
         );
 
   static const String name = 'UserProfileRoute';
 
-  static const PageInfo<UserProfileRouteArgs> page =
-      PageInfo<UserProfileRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<UserProfileRouteArgs>(
+        orElse: () => UserProfileRouteArgs(id: pathParams.getString('id')),
+      );
+      return UserProfilePage(id: args.id, key: args.key);
+    },
+  );
 }
 
 class UserProfileRouteArgs {
-  const UserProfileRouteArgs({
-    required this.id,
-    this.key,
-  });
+  const UserProfileRouteArgs({required this.id, this.key});
 
   final String id;
 
@@ -212,4 +237,14 @@ class UserProfileRouteArgs {
   String toString() {
     return 'UserProfileRouteArgs{id: $id, key: $key}';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UserProfileRouteArgs) return false;
+    return id == other.id && key == other.key;
+  }
+
+  @override
+  int get hashCode => id.hashCode ^ key.hashCode;
 }

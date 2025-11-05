@@ -5,11 +5,11 @@ import 'package:find_neighbour_v001/api/api.dart';
 import 'package:find_neighbour_v001/routing/app_router.dart';
 
 @RoutePage()
-class AuthGoogleCallbackPage extends StatelessWidget {
+class AuthYandexCallbackPage extends StatelessWidget {
   final String? code;
   final String? state;
 
-  const AuthGoogleCallbackPage({
+  const AuthYandexCallbackPage({
     @QueryParam('code') this.code,
     @QueryParam('state') this.state,
     Key? key,
@@ -17,7 +17,7 @@ class AuthGoogleCallbackPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ApiService.googleAuthorize(code ?? '', state ?? '').then(
+    ApiService.yandexAuthorize(code ?? '', state ?? '').then(
       (value) => ApiService.getSession().then((id) {
         context.router.push(UserProfileRoute(id: id));
       }),

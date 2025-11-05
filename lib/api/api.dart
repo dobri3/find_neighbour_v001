@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:find_neighbour_v001/models/user.dart';
 
 class ApiService {
   static final Dio _dio = Dio(
@@ -12,15 +11,12 @@ class ApiService {
         'Content-Type': 'application/json',
         'Origin': 'http://localhost:8888',
       },
-      extra: {
-        'withCredentials': true,
-      },
     ),
   );
 
   static Future refreshToken() async {
     try {
-      await _dio.head('/auth/refresh');
+      await _dio.get('/auth/refresh');
     } catch (e) {
       print(e);
     }
@@ -29,7 +25,7 @@ class ApiService {
   static Future<String> googleAuthURL() async {
     try {
       final response = await _dio.get('/auth/google/login');
-      return response.data['Url'] ?? 'url';
+      return response.data['Url'] ?? '';
     } catch (e) {
       print(e);
       return '';
@@ -38,7 +34,7 @@ class ApiService {
 
   static Future googleAuthorize(String code, String state) async {
     try {
-      final response = await _dio.get('/auth/google/callback',
+      final response = await _dio.post('/auth/google/authorize',
           queryParameters: {'code': code, 'state': state});
 
       return response.data['access_token'];
@@ -48,43 +44,94 @@ class ApiService {
     }
   }
 
-  static Future<User> getSession() async {
+  static Future<bool> logout() async {
     try {
-      final response = await _dio.get('/user/session');
-      return User(
-          id: response.data['ID'],
-          name: response.data['Name'],
-          surname: response.data['Surname'],
-          description: response.data['Description']);
+      await _dio.delete('/auth/logout');
+      return true;
     } catch (e) {
       print(e);
-      return User(id: '', name: '', surname: '', description: '');
+      return false;
     }
-  }
+}
 
-  static Future<User> getUserById(String id) async {
+static Future<String> yandexAuthURL() async {
     try {
-      Response response = await dio.get('/user/$id');
-      return User(
-          id: response.data['ID'],
-          name: response.data['Name'],
-          surname: response.data['Surname'],
-          description: response.data['Description']);
-    } catch (e) {
-      print(e);
-      return User(id: '', name: '', surname: '', description: '');
-    }
-  }
-
-  static Future<String> updateUser(User user) async {
-    try {
-      final response = await _dio.put('/user/${user.id}', data: user.toJson());
-      return response.data['ID'];
+      final response = await _dio.get('/auth/yandex/login');
+      return response.data['Url'] ?? '';
     } catch (e) {
       print(e);
       return '';
     }
-  }
+}
+
+static Future yandexAuthorize(String code, String state) async {
+    try {
+      final response = await _dio.get(
+        '/auth/yandex/callback',
+        queryParameters: {'code': code, 'state': state},
+      );
+      return response.data['access_token'];
+    } catch (e) {
+      print(e);
+      return '';
+    }
+}
+
+static Future getSession() async {
+    try {
+      final response = await _dio.get('/user/session');
+      return response.data['id'] ?? '';
+    } catch (e) {
+      print(e);
+      return false;
+    }
+}
+
+
+  static Future createUser() async {
+    try {
+      final response = await _dio.get('/user');
+      return response.data['id'] ?? '';
+    } catch (e) {
+      print(e);
+      return false;
+    }
+}
+
 
   static Dio get dio => _dio;
+}
+
+
+
+
+
+
+
+
+
+class User {
+  final String id;
+  final String name;
+  final String surname;
+  final List<String> contacts;
+  final String description;
+
+  User({
+    required this.id,
+    required this.name,
+    required this.surname,
+    required this.contacts,
+    required this.description,
+  });
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      id: json['json'] ?? '',
+      name: json['name'] ?? '',
+      surname: json['surname'] ?? '',
+      contacts: List<String>.from(json['contacts'] ?? []),
+      description: json['description'] ?? '',
+    );
+  }
 }
