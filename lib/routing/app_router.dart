@@ -9,11 +9,8 @@ import 'package:flutter/material.dart';
 
 part 'app_router.gr.dart';
 
-// Большая проблема с зависимостями от библиотек (или еще чем то)
-// Карточку группы соседей и страницу рекомендаций еще нужно допилить
-
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
-class AppRouter extends _$AppRouter {
+class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
         AutoRoute(
@@ -34,7 +31,7 @@ class AppRouter extends _$AppRouter {
           path: '/auth/google/callback',
         ),
         // AutoRoute(page: Profile Route.page)
-        RecommendationRoute(
+        AutoRoute(
           page: RecommendationRoute.page,
           path: '/recommendation',
         ),
