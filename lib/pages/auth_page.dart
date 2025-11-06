@@ -1,3 +1,6 @@
+// ignore: deprecated_member_use
+import 'dart:html' as html;
+
 import 'package:auto_route/auto_route.dart';
 import 'package:find_neighbour_v001/styles/app_colors.dart';
 import 'package:find_neighbour_v001/styles/app_text_styles.dart';
@@ -111,7 +114,10 @@ Widget build(BuildContext context) {
                     // Google Button
                     AppButtonStyles.socialButton(
                       onPressed: () async {
-                        launchUrl(Uri.parse(await ApiService.googleAuthURL()));
+                        // launchUrl(Uri.parse(await ApiService.googleAuthURL()));
+                         final url = await ApiService.googleAuthURL();
+                          // print("GOOGLE URL = $url");
+                          html.window.location.href = url;
                       },
                       text: "Войти через Google",
                       icon: Icons.g_mobiledata,
@@ -121,7 +127,11 @@ Widget build(BuildContext context) {
                     
                     // Yandex Button
                     AppButtonStyles.socialButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        // launchUrl(Uri.parse(await ApiService.googleAuthURL()));
+                         final url = await ApiService.yandexAuthURL();
+                          html.window.location.href = url;
+                      },
                       text: "Войти через Yandex",
                       icon: Icons.g_mobiledata,
                     ),

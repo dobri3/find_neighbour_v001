@@ -65,7 +65,7 @@ class ApiService {
 
   static Future<User> getUserById(String id) async {
     try {
-      Response response = await dio.get('/user/$id');
+      Response response = await _dio.get('/user/$id');
       return User(
           id: response.data['ID'],
           name: response.data['Name'],
@@ -79,7 +79,7 @@ class ApiService {
 
   static Future<String> updateUser(User user) async {
     try {
-      final response = await _dio.put('/user/${user.id}', data: user.toJson());
+      final response = await _dio.put('/user', data: user.toJson());
       return response.data['ID'];
     } catch (e) {
       print(e);
@@ -99,7 +99,7 @@ class ApiService {
 
   static Future<String> yandexAuthorize(String code, String state) async {
     try {
-      final response = await _dio.post('/auth/yandex/authorize',
+      final response = await _dio.post('/auth/yandex/callback',
           queryParameters: {'code': code, 'state': state});
 
       return response.data['access_token'];
@@ -265,7 +265,7 @@ class ApiService {
 
   static Future<List<Form>> listGroupMembers(String gid) async {
     try {
-      final response = await _dio.get('/matcher/group/$gid/members');
+      final response = await _dio.get('/matcher/group/members/$gid');
       return (response.data as List).map((formJson) => Form(
         id: formJson['ID'] ?? '',
         userId: formJson['UserID'] ?? '',

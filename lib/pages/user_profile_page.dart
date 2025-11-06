@@ -62,10 +62,28 @@ class _UserProfilePageState extends State<UserProfilePage> {
     super.dispose();
   }
 
-  @override
-  void _saveProfile() {
-    print("save");
-  }
+  // @override
+  // void _saveProfile() {
+  //   print("save");
+  // }
+
+  Future<void> _saveProfile() async {
+  User updatedUser = User(
+    id: widget.id,
+    name: _nameController.text,
+    surname: _surnameController.text,
+    description: _descController.text,
+  );
+
+  final result = await ApiService.updateUser(updatedUser);
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text("Профиль сохранён ✅ ID: $result"),
+      duration: Duration(seconds: 2),
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -85,27 +103,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     bottom: 42,
                   ),
                   child: AppRichTextStyles.logoText(),
-                  // Align(
-                  //   alignment: Alignment.topLeft,
-                  //   child: RichText(
-                  //     text: const TextSpan(
-                  //       children: <TextSpan>[
-                  //         TextSpan(
-                  //             text: 'Ищу',
-                  //             style: TextStyle(
-                  //                 fontSize: 40,
-                  //                 fontWeight: FontWeight.w100,
-                  //                 color: Colors.white)),
-                  //         TextSpan(
-                  //             text: 'Соседа',
-                  //             style: TextStyle(
-                  //                 fontSize: 40,
-                  //                 fontWeight: FontWeight.bold,
-                  //                 color: Color(0xff6A999E))),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
                 ),
                 Container(
                   margin: const EdgeInsets.only(bottom: 20),

@@ -22,6 +22,7 @@ class AuthGoogleCallbackPage extends StatelessWidget {
         context.router.push(UserProfileRoute(id: value.id));
       }),
     );
+    
     return const Scaffold();
   }
 }
