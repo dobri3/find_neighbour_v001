@@ -30,10 +30,13 @@ class AppRouter extends RootStackRouter {
           page: AuthGoogleCallbackRoute.page,
           path: '/auth/google/callback',
         ),
-        // AutoRoute(page: Profile Route.page)
         AutoRoute(
           page: RecommendationRoute.page,
           path: '/recommendation',
+        ),
+        AutoRoute(
+          page: AuthYandexCallbackRoute.page,
+          path: '/auth/yandex/callback',
         ),
       ];
 }
