@@ -17,11 +17,11 @@ class AuthGoogleCallbackPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ApiService.googleAuthorize(code ?? '', state ?? '').then(
-      (value) => ApiService.getSession().then((value) {
-        context.router.push(UserProfileRoute(id: value.id));
-      }),
-    );
+    ApiService.authService.googleAuthorize(code ?? '', state ?? '').then(
+          (value) => ApiService.authService.getSession().then((value) {
+            context.router.push(UserProfileRoute(id: value.id, auth: true));
+          }),
+        );
     return const Scaffold();
   }
 }

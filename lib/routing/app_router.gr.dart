@@ -141,12 +141,14 @@ class RootRoute extends PageRouteInfo<void> {
 class UserProfileRoute extends PageRouteInfo<UserProfileRouteArgs> {
   UserProfileRoute({
     required String id,
+    bool auth = false,
     Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           UserProfileRoute.name,
-          args: UserProfileRouteArgs(id: id, key: key),
+          args: UserProfileRouteArgs(id: id, auth: auth, key: key),
           rawPathParams: {'id': id},
+          rawQueryParams: {'auth': auth},
           initialChildren: children,
         );
 
@@ -156,33 +158,39 @@ class UserProfileRoute extends PageRouteInfo<UserProfileRouteArgs> {
     name,
     builder: (data) {
       final pathParams = data.inheritedPathParams;
+      final queryParams = data.queryParams;
       final args = data.argsAs<UserProfileRouteArgs>(
-        orElse: () => UserProfileRouteArgs(id: pathParams.getString('id')),
+        orElse: () => UserProfileRouteArgs(
+          id: pathParams.getString('id'),
+          auth: queryParams.getBool('auth', false),
+        ),
       );
-      return UserProfilePage(id: args.id, key: args.key);
+      return UserProfilePage(id: args.id, auth: args.auth, key: args.key);
     },
   );
 }
 
 class UserProfileRouteArgs {
-  const UserProfileRouteArgs({required this.id, this.key});
+  const UserProfileRouteArgs({required this.id, this.auth = false, this.key});
 
   final String id;
+
+  final bool auth;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'UserProfileRouteArgs{id: $id, key: $key}';
+    return 'UserProfileRouteArgs{id: $id, auth: $auth, key: $key}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! UserProfileRouteArgs) return false;
-    return id == other.id && key == other.key;
+    return id == other.id && auth == other.auth && key == other.key;
   }
 
   @override
-  int get hashCode => id.hashCode ^ key.hashCode;
+  int get hashCode => id.hashCode ^ auth.hashCode ^ key.hashCode;
 }

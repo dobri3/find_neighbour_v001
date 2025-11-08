@@ -61,91 +61,89 @@ class AuthPage extends StatelessWidget {
   // }
 
   @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    backgroundColor: AppColors.darkBlue,
-    body: SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Center(
-              child: Container(
-                height: 600,
-                width: 500,
-                padding: const EdgeInsets.all(15.0),
-                decoration: AppContainerStyles.authCard,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // Icon
-                    const Icon(
-                      Icons.people_alt_rounded,
-                      size: 80,
-                      color: AppColors.indigo,
-                    ),
-                    
-                    const SizedBox(height: 24),
-                    
-                    // Title
-                    const Text(
-                      "Добро пожаловать!",
-                      style: AppTextStyles.authTitle,
-                      textAlign: TextAlign.center,
-                    ),
-                    
-                    const SizedBox(height: 8),
-                    
-                    // Subtitle
-                    const Text(
-                      "Войдите через Google, чтобы продолжить",
-                      style: AppTextStyles.authSubtitle,
-                      textAlign: TextAlign.center,
-                    ),
-                    
-                    const SizedBox(height: 48),
-                    
-                    // Google Button
-                    AppButtonStyles.socialButton(
-                      onPressed: () async {
-                        launchUrl(Uri.parse(await ApiService.googleAuthURL()));
-                      },
-                      text: "Войти через Google",
-                      icon: Icons.g_mobiledata,
-                    ),
-                    
-                    const SizedBox(height: 24),
-                    
-                    // Yandex Button
-                    AppButtonStyles.socialButton(
-                      onPressed: () {},
-                      text: "Войти через Yandex",
-                      icon: Icons.g_mobiledata,
-                    ),
-                    
-                    const SizedBox(height: 24),
-                    const SizedBox(height: 24),
-                    
-                    // Footer text
-                    const Text(
-                      "Продолжая, вы соглашаетесь с нашими\nУсловиями использования и Политикой конфиденциальности",
-                      style: AppTextStyles.authFooter,
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.darkBlue,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Center(
+                child: Container(
+                  height: 600,
+                  width: 500,
+                  padding: const EdgeInsets.all(15.0),
+                  decoration: AppContainerStyles.authCard,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // Icon
+                      const Icon(
+                        Icons.people_alt_rounded,
+                        size: 80,
+                        color: AppColors.indigo,
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // Title
+                      const Text(
+                        "Добро пожаловать!",
+                        style: AppTextStyles.authTitle,
+                        textAlign: TextAlign.center,
+                      ),
+
+                      const SizedBox(height: 8),
+
+                      // Subtitle
+                      const Text(
+                        "Войдите через Google, чтобы продолжить",
+                        style: AppTextStyles.authSubtitle,
+                        textAlign: TextAlign.center,
+                      ),
+
+                      const SizedBox(height: 48),
+
+                      // Google Button
+                      AppButtonStyles.socialButton(
+                        onPressed: () async {
+                          launchUrl(Uri.parse(
+                              await ApiService.authService.googleAuthURL()));
+                        },
+                        text: "Войти через Google",
+                        icon: Icons.g_mobiledata,
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // Yandex Button
+                      AppButtonStyles.socialButton(
+                        onPressed: () {},
+                        text: "Войти через Yandex",
+                        icon: Icons.g_mobiledata,
+                      ),
+
+                      const SizedBox(height: 24),
+                      const SizedBox(height: 24),
+
+                      // Footer text
+                      const Text(
+                        "Продолжая, вы соглашаетесь с нашими\nУсловиями использования и Политикой конфиденциальности",
+                        style: AppTextStyles.authFooter,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-    ),
-  );
-}
-
-
-  
+    );
+  }
 }

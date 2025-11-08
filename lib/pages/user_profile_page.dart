@@ -8,24 +8,34 @@ import 'package:auto_route/auto_route.dart';
 import 'package:find_neighbour_v001/api/api.dart';
 import 'package:find_neighbour_v001/models/user.dart';
 
+import 'package:find_neighbour_v001/models/matcher/parameters.dart' as matcher;
+
 @RoutePage()
 class UserProfilePage extends StatefulWidget {
   final String id;
+  final bool auth;
 
-  const UserProfilePage({@PathParam('id') required this.id, super.key});
+  const UserProfilePage({
+    @PathParam('id') required this.id,
+    @QueryParam('auth') this.auth = false,
+    super.key,
+  });
 
   @override
   State<UserProfilePage> createState() => _UserProfilePageState();
 }
 
 class _UserProfilePageState extends State<UserProfilePage> {
+  User _user = User(id: '', name: '', surname: '', description: '');
   String _name = '';
   String _surname = '';
+  String _id = '';
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _surnameController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
   final TextEditingController _moneyController = TextEditingController();
   final TextEditingController _neighboursController = TextEditingController();
+  final TextEditingController _roomCountController = TextEditingController();
   final TextEditingController _regionController = TextEditingController();
 
   @override
@@ -35,19 +45,21 @@ class _UserProfilePageState extends State<UserProfilePage> {
   }
 
   void _loadUserData() async {
-    User user = await ApiService.getUserById(widget.id);
+    User _user = await ApiService.userService.getUserById(widget.id);
 
     setState(() {
-      _name = user.name;
-      _surname = user.surname;
+      _id = _user.id;
+      _name = _user.name;
+      _surname = _user.surname;
     });
 
-    _nameController.text = user.name;
-    _surnameController.text = user.surname;
-    _descController.text = user.description;
+    _nameController.text = _user.name;
+    _surnameController.text = _user.surname;
+    _descController.text = _user.description;
 
     _moneyController.text = "20000";
     _neighboursController.text = "2";
+    _roomCountController.text = "2";
     _regionController.text = "м. Войковская";
   }
 
@@ -58,13 +70,53 @@ class _UserProfilePageState extends State<UserProfilePage> {
     _descController.dispose();
     _moneyController.dispose();
     _neighboursController.dispose();
+    _roomCountController.dispose();
     _regionController.dispose();
     super.dispose();
   }
 
-  @override
-  void _saveProfile() {
-    print("save");
+  void _saveProfile() async {
+    User user = User(
+      id: _id,
+      name: _nameController.text,
+      surname: _surnameController.text,
+      description: _descController.text,
+    );
+    await ApiService.userService.updateUser(user);
+    matcher.Parameters parameters = matcher.Parameters(
+      name: _nameController.text,
+      surname: _surnameController.text,
+      geo: matcher.Point(lat: 0, lon: 0),
+      photos: [],
+      budget:
+          _moneyController.text.isEmpty ? 0 : int.parse(_moneyController.text),
+      roomCount: _roomCountController.text.isEmpty
+          ? 0
+          : int.parse(_roomCountController.text),
+      roommatesCount: _neighboursController.text.isEmpty
+          ? 0
+          : int.parse(_neighboursController.text),
+      age: 0,
+      smoking: false,
+      alko: false,
+      pet: false,
+      sex: 'male',
+      userType: 'student',
+      description: _descController.text,
+    );
+
+    if (widget.auth) {
+      await ApiService.matcherService.createForm(
+        _id,
+        parameters,
+      );
+      context.router.push(RecommendationRoute());
+    } else {
+      await ApiService.matcherService.updateForm(
+        _id,
+        parameters,
+      );
+    }
   }
 
   @override
@@ -85,27 +137,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     bottom: 42,
                   ),
                   child: AppRichTextStyles.logoText(),
-                  // Align(
-                  //   alignment: Alignment.topLeft,
-                  //   child: RichText(
-                  //     text: const TextSpan(
-                  //       children: <TextSpan>[
-                  //         TextSpan(
-                  //             text: 'Ищу',
-                  //             style: TextStyle(
-                  //                 fontSize: 40,
-                  //                 fontWeight: FontWeight.w100,
-                  //                 color: Colors.white)),
-                  //         TextSpan(
-                  //             text: 'Соседа',
-                  //             style: TextStyle(
-                  //                 fontSize: 40,
-                  //                 fontWeight: FontWeight.bold,
-                  //                 color: Color(0xff6A999E))),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
                 ),
                 Container(
                   margin: const EdgeInsets.only(bottom: 20),

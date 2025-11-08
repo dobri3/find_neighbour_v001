@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     ApiService.dio.interceptors.add(RefreshTokenInterceptor(
       dio: ApiService.dio,
-      refreshTokenCallback: ApiService.refreshToken,
+      refreshTokenCallback: ApiService.authService.refreshToken,
     ));
     return MaterialApp.router(
       title: 'Flutter Demo',
