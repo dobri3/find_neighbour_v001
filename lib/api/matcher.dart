@@ -137,4 +137,35 @@ class MatcherService {
       print(e);
     }
   }
+
+  Future<Form> getFormByUser(String userId) async {
+    try {
+      Response response = await _dio.get('/matcher/form/$userId');
+      return Form.fromJson(response.data);
+    } catch (e) {
+      print(e);
+      return Form(
+        id: '',
+        userId: '',
+        parameters: Parameters(
+            name: '',
+            surname: '',
+            geo: Point(lat: 0, lon: 0),
+            photos: [],
+            budget: 0,
+            roomCount: 0,
+            roommatesCount: 0,
+            age: 0,
+            smoking: false,
+            alko: false,
+            pet: false,
+            sex: '',
+            userType: '',
+            description: ''),
+        active: false,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      );
+    }
+  }
 }

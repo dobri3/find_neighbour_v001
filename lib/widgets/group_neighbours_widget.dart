@@ -1,6 +1,9 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:find_neighbour_v001/routing/app_router.dart';
 import 'package:flutter/material.dart';
 
 class NeighborGroupCard extends StatelessWidget {
+  final String id;
   final String title;
   final String location;
   final int membersCount;
@@ -14,6 +17,7 @@ class NeighborGroupCard extends StatelessWidget {
 
   const NeighborGroupCard({
     super.key,
+    required this.id,
     required this.title,
     required this.location,
     required this.membersCount,
@@ -63,7 +67,6 @@ class NeighborGroupCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-
           ClipRRect(
             borderRadius: BorderRadius.circular(6),
             child: LinearProgressIndicator(
@@ -74,7 +77,6 @@ class NeighborGroupCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-
           Wrap(
             alignment: WrapAlignment.spaceBetween,
             runSpacing: 8,
@@ -86,7 +88,6 @@ class NeighborGroupCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 24),
-
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: members
@@ -94,10 +95,10 @@ class NeighborGroupCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 6),
                       child: Row(
                         children: [
-                          CircleAvatar(
-                            radius: 20,
-                            backgroundImage: AssetImage(m.avatarPath),
-                          ),
+                          // CircleAvatar(
+                          //   radius: 20,
+                          //   backgroundImage: AssetImage(m.avatarPath),
+                          // ),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Text(
@@ -115,12 +116,11 @@ class NeighborGroupCard extends StatelessWidget {
                 .toList(),
           ),
           const SizedBox(height: 24),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               OutlinedButton(
-                onPressed: () {},
+                onPressed: () => context.router.push(GroupRoute(id: id)),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: Colors.white,
                   side: const BorderSide(color: Colors.white30),

@@ -1,5 +1,6 @@
 import 'package:find_neighbour_v001/styles/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:find_neighbour_v001/styles/app_text_styles.dart';
 
 class AppContainerStyles {
   // Card Style
@@ -14,7 +15,7 @@ class AppContainerStyles {
       ),
     ],
   );
-  
+
   // Section Border
   static BoxDecoration sectionBorder = const BoxDecoration(
     border: BorderDirectional(
@@ -30,7 +31,7 @@ class AppContainerStyles {
     borderRadius: BorderRadius.circular(20),
     border: Border.all(color: AppColors.blueDark),
   );
-  
+
   static BoxDecoration photoContainer = BoxDecoration(
     borderRadius: BorderRadius.circular(20),
   );
@@ -47,46 +48,49 @@ class AppContainerStyles {
       ),
     ],
   );
-  
+
   static BoxDecoration profileCard = BoxDecoration(
     borderRadius: BorderRadius.circular(10),
+    border: Border.all(color: AppColors.borderTeal, width: 1),
     color: AppColors.darkCard,
   );
-  
+
   static BoxDecoration sectionContainer = BoxDecoration(
     borderRadius: BorderRadius.circular(10),
     color: AppColors.transparentBlue,
     border: Border.all(color: AppColors.borderTeal, width: 1),
   );
-  
-  static InputDecoration textInput = const InputDecoration(
-    filled: true,
-    fillColor: AppColors.transparentBlue,
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(10)),
-      borderSide: BorderSide(
-        color: AppColors.borderTeal,
-        width: 1,
-        style: BorderStyle.solid,
-      ),
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(10)),
-      borderSide: BorderSide(
-        color: AppColors.teal,
-        width: 1,
-        style: BorderStyle.solid,
-      ),
-    ),
-    enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(10)),
-      borderSide: BorderSide(
-        color: AppColors.borderBlue,
-        width: 1,
-        style: BorderStyle.solid,
-      ),
-    ),
-  );
+
+  static InputDecoration textInput(String hint) => InputDecoration(
+        hintText: hint,
+        hintStyle: AppTextStyles.inputHint,
+        filled: true,
+        fillColor: AppColors.transparentBlue,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(
+            color: AppColors.borderTeal,
+            width: 1,
+            style: BorderStyle.solid,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(
+            color: AppColors.teal,
+            width: 1,
+            style: BorderStyle.solid,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(
+            color: AppColors.borderBlue,
+            width: 1,
+            style: BorderStyle.solid,
+          ),
+        ),
+      );
   // static BoxDecoration gradientOverlay = BoxDecoration(
   //   borderRadius: BorderRadius.circular(20),
   //   gradient: const LinearGradient(

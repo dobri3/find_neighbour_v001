@@ -7,6 +7,9 @@ import 'package:find_neighbour_v001/models/matcher/group.dart';
 
 import 'package:find_neighbour_v001/models/matcher/form.dart';
 import 'package:find_neighbour_v001/models/user.dart';
+import 'package:find_neighbour_v001/routing/app_router.dart';
+
+import 'package:find_neighbour_v001/pages/group_page.dart';
 
 @RoutePage()
 class RecommendationPage extends StatefulWidget {
@@ -56,6 +59,7 @@ class _RecommendationPageState extends State<RecommendationPage> {
             children: [
               for (var group in _groups)
                 NeighborGroupCard(
+                  id: group.group.id,
                   title: group.group.parameters.name,
                   location: "",
                   membersCount: 0,

@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 
+import 'package:find_neighbour_v001/storage/session.dart';
+
 class RefreshTokenInterceptor extends Interceptor {
   final Dio _dio;
   final Future<void> Function() _refreshTokenCallback;
@@ -32,13 +34,16 @@ class RefreshTokenInterceptor extends Interceptor {
 
           _clearQueue();
           handler.reject(err);
+          TemporaryStorage.clear();
         } finally {
           _isRefreshing = false;
         }
       } else {
         handler.reject(err);
+        TemporaryStorage.clear();
       }
     } else {
+      TemporaryStorage.clear();
       handler.reject(err);
     }
   }

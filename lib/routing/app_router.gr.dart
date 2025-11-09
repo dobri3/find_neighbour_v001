@@ -89,6 +89,54 @@ class AuthRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [GroupPage]
+class GroupRoute extends PageRouteInfo<GroupRouteArgs> {
+  GroupRoute({required String id, Key? key, List<PageRouteInfo>? children})
+      : super(
+          GroupRoute.name,
+          args: GroupRouteArgs(id: id, key: key),
+          rawPathParams: {'id': id},
+          initialChildren: children,
+        );
+
+  static const String name = 'GroupRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final pathParams = data.inheritedPathParams;
+      final args = data.argsAs<GroupRouteArgs>(
+        orElse: () => GroupRouteArgs(id: pathParams.getString('id')),
+      );
+      return GroupPage(id: args.id, key: args.key);
+    },
+  );
+}
+
+class GroupRouteArgs {
+  const GroupRouteArgs({required this.id, this.key});
+
+  final String id;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'GroupRouteArgs{id: $id, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! GroupRouteArgs) return false;
+    return id == other.id && key == other.key;
+  }
+
+  @override
+  int get hashCode => id.hashCode ^ key.hashCode;
+}
+
+/// generated route for
 /// [HomePage]
 class HomeRoute extends PageRouteInfo<void> {
   const HomeRoute({List<PageRouteInfo>? children})

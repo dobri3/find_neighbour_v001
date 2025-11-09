@@ -3,7 +3,6 @@
 // // is loading для чего, можно ли избежать, не сломает ли навигацию?
 // // переписать для container
 
-
 // class PrimaryButton extends StatelessWidget {
 //   final String text;
 //   final VoidCallback onPressed;
@@ -104,9 +103,8 @@ class AppButtonStyles {
         child: Text(text, style: AppTextStyles.buttonLarge),
       ),
     );
-  
-}
-  
+  }
+
   static ButtonStyle primaryMedium = ElevatedButton.styleFrom(
     backgroundColor: AppColors.teal,
     minimumSize: const Size(100, 40),
@@ -115,7 +113,7 @@ class AppButtonStyles {
       borderRadius: BorderRadius.circular(10),
     ),
   );
-  
+
   static ButtonStyle primarySmall = ElevatedButton.styleFrom(
     backgroundColor: AppColors.teal,
     minimumSize: const Size(80, 32),
@@ -124,7 +122,7 @@ class AppButtonStyles {
       borderRadius: BorderRadius.circular(8),
     ),
   );
-  
+
   // Secondary Button Style
   static ButtonStyle secondaryLarge = ElevatedButton.styleFrom(
     backgroundColor: Colors.transparent,
@@ -136,7 +134,30 @@ class AppButtonStyles {
       side: const BorderSide(color: AppColors.white, width: 2),
     ),
   );
-  
+
+  static ButtonStyle tealOutlinedButton(Size minSize) =>
+      OutlinedButton.styleFrom(
+        backgroundColor: Colors.transparent,
+        foregroundColor: AppColors.teal,
+        minimumSize: minSize,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: const BorderSide(color: AppColors.teal, width: 2),
+        ),
+      );
+
+  static ButtonStyle tealFiledButton(Size minSize) => OutlinedButton.styleFrom(
+        backgroundColor: AppColors.teal,
+        foregroundColor: AppColors.white,
+        minimumSize: minSize,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: const BorderSide(color: AppColors.white, width: 2),
+        ),
+      );
+
   // Text Button Style
   static ButtonStyle textButton = TextButton.styleFrom(
     foregroundColor: AppColors.teal,
@@ -151,7 +172,7 @@ class AppButtonStyles {
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     minimumSize: const Size(double.infinity, 56),
   );
-  
+
   static Widget socialButton({
     required VoidCallback onPressed,
     required String text,
@@ -181,3 +202,4 @@ class AppButtonStyles {
     backgroundColor: AppColors.teal,
   );
 }
+

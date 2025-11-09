@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:find_neighbour_v001/api/api.dart';
 import 'package:find_neighbour_v001/models/user.dart';
+import 'package:find_neighbour_v001/storage/session.dart';
 
 class AuthService {
   static final Dio _dio = ApiService.dio;
@@ -37,12 +38,20 @@ class AuthService {
 
   Future<User> getSession() async {
     try {
+      User? user = await TemporaryStorage.getValue('user');
+
+      if (user != null) {
+        print('User from cache');
+        return user;
+      }
+
       final response = await _dio.get('/user/session');
-      return User(
-          id: response.data['ID'],
-          name: response.data['Name'],
-          surname: response.data['Surname'],
-          description: response.data['Description']);
+      print("User from server");
+      user = User.fromJson(response.data);
+
+      await TemporaryStorage.saveValue('user', user);
+
+      return user;
     } catch (e) {
       print(e);
       return User(id: '', name: '', surname: '', description: '');
