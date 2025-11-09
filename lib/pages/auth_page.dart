@@ -8,7 +8,6 @@ import 'package:find_neighbour_v001/styles/app_button_styles.dart';
 import 'package:find_neighbour_v001/styles/app_container_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:find_neighbour_v001/api/api.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 // import 'package:google_sign_in/google_sign_in.dart';
 // import 'package:find_neighbour_v001/pages/home_page.dart';

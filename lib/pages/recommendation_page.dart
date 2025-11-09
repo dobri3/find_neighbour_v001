@@ -72,6 +72,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:find_neighbour_v001/api/api.dart';
 import 'package:find_neighbour_v001/models/parameters.dart';
+import 'package:find_neighbour_v001/styles/app_colors.dart';
 import 'package:flutter/material.dart' hide Form;
 import 'package:find_neighbour_v001/widgets/group_neighbours_widget.dart';
 import 'package:find_neighbour_v001/styles/app_text_styles.dart';
@@ -96,7 +97,7 @@ class _RecommendationPageState extends State<RecommendationPage> {
 
   Future<void> loadGroups() async {
     final session = await ApiService.getSession();
-    if (session == null || session.id.isEmpty) {
+    if (session.id.isEmpty) {
       setState(() => loading = false);
       return;
     }
@@ -130,7 +131,7 @@ class _RecommendationPageState extends State<RecommendationPage> {
         progress: members.isEmpty ? 0 : members.length / group.maxUsers,
         budget: _avgBudget(membersForms),
         age: _avgAge(membersForms),
-        housing: "${group.parameters.roomCount}-к квартира",
+        housing: "${group.parameters.roomCount} комнаты",
         compatibility: (gws.score * 100).toInt(),
         members: members,
       );
@@ -159,27 +160,77 @@ class _RecommendationPageState extends State<RecommendationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0E1922),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF162632),
-        elevation: 0,
-        title: AppRichTextStyles.logoText(),
-        toolbarHeight: 75,
-      ),
+      backgroundColor: AppColors.blueDark,
+      appBar: MainAppBar(),
       body: loading
           ? const Center(child: CircularProgressIndicator())
+          // : SingleChildScrollView(
+          //     physics: const BouncingScrollPhysics(),
+          //     child: Padding(
+          //       padding: const EdgeInsets.symmetric(horizontal: 48),
+          //       child: Column(
+          //         crossAxisAlignment: CrossAxisAlignment.start,
+          //         children: [
+                    
+          //     Padding(
+          //       padding: const EdgeInsets.symmetric(horizontal: 24),
+          //       child: const Text("Поиск соседей", 
+          //       style: AppTextStyles.neighbourName, textAlign: TextAlign.left,),
+          //     ),
+          //           for (var card in cards) card,
+          //           const SizedBox(height: 40),
+          //         ],
+          //       ),
+          //     ),
+          //   ),
           : SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Column(
-                  children: [
-                    for (var card in cards) card,
-                    const SizedBox(height: 40),
-                  ],
-                ),
+        physics: const BouncingScrollPhysics(),
+        child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 96),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 0),
+                child: const Text("Поиск соседей", 
+                style: AppTextStyles.neighbourName, textAlign: TextAlign.left,),
               ),
-            ),
+              for (var card in cards) card,
+                    const SizedBox(height: 40),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
+
+class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const MainAppBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: preferredSize.height,
+      color: AppColors.blueDark,
+      padding: const EdgeInsets.symmetric(horizontal: 72),
+      child: Row(
+        children: [
+          AppRichTextStyles.logoText(),
+          const Spacer(),
+          const Text("Поиск", style: AppTextStyles.whiteSmall),
+          const SizedBox(width: 32),
+          const Text("Сообщения", style: AppTextStyles.whiteSmall),
+          const SizedBox(width: 32),
+          const Text("Заявки", style: AppTextStyles.whiteSmall),
+          const SizedBox(width: 32),
+          const Text("Мой профиль", style: AppTextStyles.whiteSmall),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(75);
+}
+

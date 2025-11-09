@@ -3,7 +3,6 @@ import 'package:find_neighbour_v001/styles/app_colors.dart';
 import 'package:find_neighbour_v001/styles/app_container_styles.dart';
 import 'package:find_neighbour_v001/styles/app_text_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:find_neighbour_v001/routing/app_router.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:find_neighbour_v001/api/api.dart';
 import 'package:find_neighbour_v001/models/user.dart';

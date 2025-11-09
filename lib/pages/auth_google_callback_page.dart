@@ -12,8 +12,8 @@ class AuthGoogleCallbackPage extends StatelessWidget {
   const AuthGoogleCallbackPage({
     @QueryParam('code') this.code,
     @QueryParam('state') this.state,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

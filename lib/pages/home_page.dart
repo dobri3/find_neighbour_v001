@@ -20,48 +20,9 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
-        child: Center(
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  color: AppColors.midnight,
-                  height: 80,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        child: AppRichTextStyles.logoText(),
-                      ),
-                      const Text(
-                        "Как это работает",
-                        style: AppTextStyles.whiteSmall,
-                      ),
-                      const SizedBox(
-                        width: 30,
-                      ),
-                      const SizedBox(
-                        width: 30,
-                      ),
-                      Container(
-                        margin: const EdgeInsets.all(25),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            context.router.push(const AuthRoute());
-                          },
-                          style: AppButtonStyles.primaryMedium,
-                          child: const Text("Войти",
-                              style: AppTextStyles.buttonMedium),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              HomeHeader(),
               Container(
                 height: 530,
                 width: double.infinity,
@@ -78,7 +39,7 @@ class HomePage extends StatelessWidget {
                         style: AppTextStyles.mediumHeading
                       ),
                       const SizedBox(
-                        height: 15,
+                        height: 25,
                       ),
                       const Text(
                         "Сервис для поиска людей с похожими привычками и интересами\nдля совместной аренды",
@@ -86,7 +47,7 @@ class HomePage extends StatelessWidget {
                         style: AppTextStyles.bodyLarge,
                       ),
                       const SizedBox(
-                        height: 15,
+                        height: 25,
                       ),
                       AppButtonStyles.primaryButtonWithShadow(
                                 onPressed: () {
@@ -100,6 +61,7 @@ class HomePage extends StatelessWidget {
               ),
               Container(
                 width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 48),
                 height: 700,
                 decoration: AppContainerStyles.sectionBorder,
                 child: Column(
@@ -148,8 +110,35 @@ class HomePage extends StatelessWidget {
             ],
           ),
         ),
-      ),
     );
   }
 }
 
+
+
+
+class HomeHeader extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 80,
+      color: AppColors.midnight,
+      padding: const EdgeInsets.symmetric(horizontal: 48),
+      child: Row(
+        children: [
+          AppRichTextStyles.logoText(),
+          const Spacer(),
+          const Text("Как это работает", style: AppTextStyles.whiteSmall),
+          const SizedBox(width: 32),
+          const Text("Новости", style: AppTextStyles.whiteSmall),
+          const SizedBox(width: 32),
+          ElevatedButton(
+            onPressed: () => context.router.push(const AuthRoute()),
+            style: AppButtonStyles.primaryMedium,
+            child: const Text("Войти", style: AppTextStyles.buttonMedium),
+          )
+        ],
+      ),
+    );
+  }
+}
