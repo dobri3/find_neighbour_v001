@@ -13,6 +13,8 @@ import 'package:find_neighbour_v001/models/matcher/form.dart' as form;
 import 'package:find_neighbour_v001/models/matcher/parameters.dart' as matcher;
 
 import 'package:find_neighbour_v001/widgets/group/member.dart';
+import 'package:find_neighbour_v001/widgets/map.dart';
+import 'package:latlong2/latlong.dart';
 
 @RoutePage()
 class GroupPage extends StatefulWidget {
@@ -39,6 +41,7 @@ class _GroupPageState extends State<GroupPage> {
       budget: 0,
       roomCount: 0,
       roommatesCount: 0,
+      months: 0,
       age: 0,
       smoking: false,
       alko: false,
@@ -62,97 +65,7 @@ class _GroupPageState extends State<GroupPage> {
     Group group = await ApiService.matcherService.getGroup(widget.id);
 
     setState(() {
-      _group = Group(
-        id: widget.id,
-        ownerId: "",
-        parameters: matcher.Parameters(
-          name: "Какая-то группа",
-          surname: "345",
-          geo: matcher.Point(lat: 0, lon: 0),
-          photos: [],
-          budget: 45000,
-          roomCount: 3,
-          roommatesCount: 4,
-          age: 24,
-          smoking: false,
-          alko: false,
-          pet: false,
-          sex: "male",
-          userType: "student",
-          description: "Это очень крутое описание группы",
-        ),
-        maxUsers: 5,
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-        members: [
-          form.Form(
-              id: "1",
-              userId: "1",
-              parameters: matcher.Parameters(
-                name: "Это имя",
-                surname: "Это фамилия",
-                geo: matcher.Point(lat: 0, lon: 0),
-                photos: [],
-                budget: 45000,
-                roomCount: 3,
-                roommatesCount: 4,
-                age: 24,
-                smoking: false,
-                alko: false,
-                pet: false,
-                sex: "male",
-                userType: "student",
-                description: "Это очень крутое описание группы",
-              ),
-              active: true,
-              createdAt: DateTime.now(),
-              updatedAt: DateTime.now()),
-          form.Form(
-              id: "2",
-              userId: "2",
-              parameters: matcher.Parameters(
-                name: "Это имя",
-                surname: "Это фамилия",
-                geo: matcher.Point(lat: 0, lon: 0),
-                photos: [],
-                budget: 45000,
-                roomCount: 3,
-                roommatesCount: 4,
-                age: 24,
-                smoking: false,
-                alko: false,
-                pet: false,
-                sex: "male",
-                userType: "student",
-                description: "Это очень крутое описание группы",
-              ),
-              active: true,
-              createdAt: DateTime.now(),
-              updatedAt: DateTime.now()),
-          form.Form(
-              id: "3",
-              userId: "3",
-              parameters: matcher.Parameters(
-                name: "Это имя",
-                surname: "Это фамилия",
-                geo: matcher.Point(lat: 0, lon: 0),
-                photos: [],
-                budget: 45000,
-                roomCount: 3,
-                roommatesCount: 4,
-                age: 24,
-                smoking: false,
-                alko: false,
-                pet: false,
-                sex: "male",
-                userType: "student",
-                description: "Это очень крутое описание группы",
-              ),
-              active: true,
-              createdAt: DateTime.now(),
-              updatedAt: DateTime.now()),
-        ],
-      );
+      _group = group;
     });
   }
 
@@ -248,9 +161,15 @@ class _GroupPageState extends State<GroupPage> {
                                 style: AppTextStyles.smallHeaderBold,
                               ),
                               const SizedBox(height: 10),
-                              Text(
-                                'Место нахождения',
-                                style: AppTextStyles.whiteSmall,
+                              MapWidget(
+                                width: double.infinity,
+                                height: 500,
+                                initialCenter: LatLng(55.755793, 37.617134),
+                                initialZoom: 10,
+                                isSelectable: false,
+                                staticMarkerPoint: LatLng(
+                                    _group.parameters.geo.lat,
+                                    _group.parameters.geo.lon),
                               ),
                             ],
                           ),

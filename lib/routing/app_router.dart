@@ -7,7 +7,6 @@ import 'package:find_neighbour_v001/pages/user_profile_page.dart';
 import 'package:find_neighbour_v001/pages/auth_google_callback_page.dart';
 import 'package:flutter/material.dart';
 import 'package:find_neighbour_v001/pages/group_page.dart';
-
 part 'app_router.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')

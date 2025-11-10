@@ -11,6 +11,9 @@ import 'package:find_neighbour_v001/models/user.dart';
 import 'package:find_neighbour_v001/models/matcher/parameters.dart' as matcher;
 import 'package:find_neighbour_v001/models/matcher/form.dart' as form;
 
+import 'package:find_neighbour_v001/widgets/map.dart';
+import 'package:latlong2/latlong.dart';
+
 @RoutePage()
 class UserProfilePage extends StatefulWidget {
   final String id;
@@ -29,6 +32,7 @@ class UserProfilePage extends StatefulWidget {
 class _UserProfilePageState extends State<UserProfilePage> {
   User _user = User(id: '', name: '', surname: '', description: '');
   User sessionUser = User(id: '', name: '', surname: '', description: '');
+  matcher.Point _userLocation = matcher.Point(lat: 55.755793, lon: 37.617134);
   String _name = '';
   String _surname = '';
   String _id = '';
@@ -56,6 +60,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
       _id = _user.id;
       _name = _user.name;
       _surname = _user.surname;
+
+      _userLocation = _form.parameters.geo;
     });
 
     _nameController.text = _user.name;
@@ -65,6 +71,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     _moneyController.text = _form.parameters.budget.toString();
     _neighboursController.text = _form.parameters.roommatesCount.toString();
     _roomCountController.text = _form.parameters.roomCount.toString();
+    _monthsController.text = _form.parameters.months.toString();
     _regionController.text = _form.parameters.geo.toString();
   }
 
@@ -101,6 +108,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
       roommatesCount: _neighboursController.text.isEmpty
           ? 0
           : int.parse(_neighboursController.text),
+      months: _monthsController.text.isEmpty
+          ? 0
+          : int.parse(_monthsController.text),
       age: 0,
       smoking: false,
       alko: false,
@@ -281,8 +291,31 @@ class _UserProfilePageState extends State<UserProfilePage> {
               ),
             ),
             const SizedBox(height: 20),
-            _buildInput(
-                "Предпочитаемый район", _regionController, "Введите район"),
+            const SizedBox(height: 20),
+            widget.id == sessionUser.id
+                ? MapWidget(
+                    width: double.infinity,
+                    height: 500,
+                    onPointSelected: (point, address) {
+                      if (point != null) {
+                        _userLocation = matcher.Point(
+                            lat: point.latitude, lon: point.longitude);
+                      }
+                    },
+                    initialCenter: LatLng(55.755793, 37.617134),
+                    initialMarkerPoint:
+                        LatLng(_userLocation.lat, _userLocation.lon),
+                    initialZoom: 10,
+                  )
+                : MapWidget(
+                    width: double.infinity,
+                    height: 500,
+                    initialCenter: LatLng(_userLocation.lat, _userLocation.lon),
+                    initialZoom: 10,
+                    isSelectable: false,
+                    staticMarkerPoint:
+                        LatLng(_userLocation.lat, _userLocation.lon),
+                  ),
           ],
         ),
       ),

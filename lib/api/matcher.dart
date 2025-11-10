@@ -50,6 +50,7 @@ class MatcherService {
             budget: 0,
             roomCount: 0,
             roommatesCount: 0,
+            months: 0,
             age: 0,
             smoking: false,
             alko: false,
@@ -87,6 +88,7 @@ class MatcherService {
   Future<List<GroupWithScore>> findGroups(String userId) async {
     try {
       Response response = await _dio.get('/matcher/find/$userId');
+      print(response.data);
 
       final data = response.data['groups_with_score'];
 
@@ -155,6 +157,7 @@ class MatcherService {
             budget: 0,
             roomCount: 0,
             roommatesCount: 0,
+            months: 0,
             age: 0,
             smoking: false,
             alko: false,

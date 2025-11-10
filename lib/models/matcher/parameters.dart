@@ -6,6 +6,7 @@ class Parameters {
   final int budget;
   final int roomCount;
   final int roommatesCount;
+  final int months;
   final int age;
 
   final bool smoking;
@@ -24,6 +25,7 @@ class Parameters {
     required this.budget,
     required this.roomCount,
     required this.roommatesCount,
+    required this.months,
     required this.age,
     required this.smoking,
     required this.alko,
@@ -42,6 +44,7 @@ class Parameters {
       'budget': budget,
       'room_count': roomCount,
       'roommates_count': roommatesCount,
+      'months': months,
       'age': age,
       'smoking': smoking,
       'alko': alko,
@@ -61,6 +64,7 @@ class Parameters {
       budget: json['budget'] ?? 0,
       roomCount: json['room_count'] ?? 0,
       roommatesCount: json['roommates_count'] ?? 0,
+      months: json['months'] ?? 0,
       age: json['age'] ?? 0,
       smoking: json['smoking'] ?? false,
       alko: json['alko'] ?? false,
