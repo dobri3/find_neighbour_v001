@@ -6,11 +6,12 @@ class User {
   final String surname;
   final String description;
 
-  User(
-      {required this.id,
-      required this.name,
-      required this.surname,
-      required this.description});
+  User({
+    required this.id,
+    required this.name,
+    required this.surname,
+    required this.description,
+  });
 
   Map<String, dynamic> toJson() {
     return {

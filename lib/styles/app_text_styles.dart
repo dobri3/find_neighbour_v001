@@ -9,7 +9,7 @@ class AppRichTextStyles {
           TextSpan(
             text: 'Ищу',
             style: TextStyle(
-              fontSize: 40,
+              fontSize: 30,
               fontWeight: FontWeight.w100,
               color: Colors.white,
             ),
@@ -17,7 +17,7 @@ class AppRichTextStyles {
           TextSpan(
             text: 'Соседа',
             style: TextStyle(
-              fontSize: 40,
+              fontSize: 30,
               fontWeight: FontWeight.bold,
               color: Color(0xff6A999E),
             ),

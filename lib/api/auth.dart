@@ -36,6 +36,28 @@ class AuthService {
     }
   }
 
+  Future<String> yandexAuthURL() async {
+    try {
+      final response = await _dio.get('/auth/yandex/login');
+      return response.data['Url'] ?? 'url';
+    } catch (e) {
+      print(e);
+      return '';
+    }
+  }
+
+  Future yandexAuthorize(String code, String state) async {
+    try {
+      final response = await _dio.get('/auth/yandex/callback',
+          queryParameters: {'code': code, 'state': state});
+
+      return response.data['access_token'];
+    } catch (e) {
+      print(e);
+      return '';
+    }
+  }
+
   Future<User> getSession() async {
     try {
       User? user = await TemporaryStorage.getValue('user');

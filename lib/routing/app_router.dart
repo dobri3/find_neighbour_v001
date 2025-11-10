@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:find_neighbour_v001/pages/auth_page.dart';
+import 'package:find_neighbour_v001/pages/auth_yandex_callback_page.dart';
 import 'package:find_neighbour_v001/pages/home_page.dart';
 import 'package:find_neighbour_v001/pages/recommendation_page.dart';
 import 'package:find_neighbour_v001/pages/root_page.dart';
@@ -30,7 +31,6 @@ class AppRouter extends RootStackRouter {
           page: AuthGoogleCallbackRoute.page,
           path: '/auth/google/callback',
         ),
-        // AutoRoute(page: Profile Route.page)
         AutoRoute(
           page: RecommendationRoute.page,
           path: '/recommendation',
@@ -38,6 +38,10 @@ class AppRouter extends RootStackRouter {
         AutoRoute(
           page: GroupRoute.page,
           path: '/group/:id',
+        ),
+        AutoRoute(
+          page: AuthYandexCallbackRoute.page,
+          path: '/auth/yandex/callback',
         ),
       ];
 }

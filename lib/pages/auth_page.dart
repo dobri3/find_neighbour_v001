@@ -1,3 +1,6 @@
+// ignore: deprecated_member_use
+import 'dart:html' as html;
+
 import 'package:auto_route/auto_route.dart';
 import 'package:find_neighbour_v001/styles/app_colors.dart';
 import 'package:find_neighbour_v001/styles/app_text_styles.dart';
@@ -5,60 +8,10 @@ import 'package:find_neighbour_v001/styles/app_button_styles.dart';
 import 'package:find_neighbour_v001/styles/app_container_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:find_neighbour_v001/api/api.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-// import 'package:google_sign_in/google_sign_in.dart';
-// import 'package:find_neighbour_v001/pages/home_page.dart';
-// import '../widgets/toast_notification.dart';
 
 @RoutePage()
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
-
-//   @override
-//   State<AuthPage> createState() => _AuthPageState();
-// }
-
-// class _AuthPageState extends State<AuthPage> {
-
-  // final GoogleSignIn _googleSignIn = GoogleSignIn(
-  //   scopes: ['email', 'profile'],
-  // );
-
-  // bool _isLoading = false;
-
-  // Future<void> _signInWithGoogle() async {
-  //   try {
-  //     setState(() {
-  //       _isLoading = true;
-  //     });
-
-  //     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-  //     if (!mounted) return;
-  //     if (googleUser != null) {
-  //       ToastNotification.showSuccess(
-  //         context,
-  //         'Успешный вход через Google: ${googleUser.email}',
-  //       );
-  //       Navigator.of(context).pushReplacement(
-  //         MaterialPageRoute(builder: (_) => const HomePage()),
-  //       );
-  //     }
-  //   } catch (error) {
-  //     if (mounted) {
-  //       ToastNotification.showError(
-  //         context,
-  //         'Ошибка входа через Google: $error',
-  //       );
-  //     }
-  //   } finally {
-  //     if (mounted) {
-  //       setState(() {
-  //         _isLoading = false;
-  //       });
-  //     }
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -111,8 +64,11 @@ class AuthPage extends StatelessWidget {
                       // Google Button
                       AppButtonStyles.socialButton(
                         onPressed: () async {
-                          launchUrl(Uri.parse(
-                              await ApiService.authService.googleAuthURL()));
+                          // launchUrl(Uri.parse(await ApiService.googleAuthURL()));
+                          final url =
+                              await ApiService.authService.googleAuthURL();
+                          // print("GOOGLE URL = $url");
+                          html.window.location.href = url;
                         },
                         text: "Войти через Google",
                         icon: Icons.g_mobiledata,
@@ -122,7 +78,12 @@ class AuthPage extends StatelessWidget {
 
                       // Yandex Button
                       AppButtonStyles.socialButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          // launchUrl(Uri.parse(await ApiService.googleAuthURL()));
+                          final url =
+                              await ApiService.authService.yandexAuthURL();
+                          html.window.location.href = url;
+                        },
                         text: "Войти через Yandex",
                         icon: Icons.g_mobiledata,
                       ),

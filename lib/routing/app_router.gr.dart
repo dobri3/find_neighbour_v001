@@ -89,6 +89,68 @@ class AuthRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [AuthYandexCallbackPage]
+class AuthYandexCallbackRoute
+    extends PageRouteInfo<AuthYandexCallbackRouteArgs> {
+  AuthYandexCallbackRoute({
+    String? code,
+    String? state,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          AuthYandexCallbackRoute.name,
+          args: AuthYandexCallbackRouteArgs(code: code, state: state, key: key),
+          rawQueryParams: {'code': code, 'state': state},
+          initialChildren: children,
+        );
+
+  static const String name = 'AuthYandexCallbackRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final queryParams = data.queryParams;
+      final args = data.argsAs<AuthYandexCallbackRouteArgs>(
+        orElse: () => AuthYandexCallbackRouteArgs(
+          code: queryParams.optString('code'),
+          state: queryParams.optString('state'),
+        ),
+      );
+      return AuthYandexCallbackPage(
+        code: args.code,
+        state: args.state,
+        key: args.key,
+      );
+    },
+  );
+}
+
+class AuthYandexCallbackRouteArgs {
+  const AuthYandexCallbackRouteArgs({this.code, this.state, this.key});
+
+  final String? code;
+
+  final String? state;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'AuthYandexCallbackRouteArgs{code: $code, state: $state, key: $key}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! AuthYandexCallbackRouteArgs) return false;
+    return code == other.code && state == other.state && key == other.key;
+  }
+
+  @override
+  int get hashCode => code.hashCode ^ state.hashCode ^ key.hashCode;
+}
+
+/// generated route for
 /// [GroupPage]
 class GroupRoute extends PageRouteInfo<GroupRouteArgs> {
   GroupRoute({required String id, Key? key, List<PageRouteInfo>? children})

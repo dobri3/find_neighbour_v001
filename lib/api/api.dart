@@ -20,11 +20,13 @@ class ApiService {
       },
     ),
   );
+
   static final AuthService _authService = AuthService();
   static final UserService _userService = UserService();
   static final MatcherService _matcherService = MatcherService();
 
   static Dio get dio => _dio;
+
   static AuthService get authService => _authService;
   static UserService get userService => _userService;
   static MatcherService get matcherService => _matcherService;
