@@ -25,8 +25,7 @@ class RecommendationPage extends StatefulWidget {
 
 class _RecommendationPageState extends State<RecommendationPage> {
   List<GroupWithScore> _groups = [];
-  bool loading = true;
-  List<NeighborGroupCard> cards = [];
+  bool _loading = true;
 
   @override
   void initState() {
@@ -35,54 +34,89 @@ class _RecommendationPageState extends State<RecommendationPage> {
   }
 
   void _loadRecommendation() async {
-    User session = await ApiService.authService.getSession();
-    List<GroupWithScore> recommendation =
-        await ApiService.matcherService.findGroups(session.id);
+    try {
+      User session = await ApiService.authService.getSession();
+      List<GroupWithScore> recommendation =
+          await ApiService.matcherService.findGroups(session.id);
 
-    setState(() {
-      _groups = recommendation;
-    });
+      setState(() {
+        _groups = recommendation;
+        _loading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _loading = false;
+      });
+      print('Error loading recommendations: $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0E1922),
+      backgroundColor: const Color(0xFF1C2B38),
       appBar: MainAppBar(),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 96),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              for (var group in _groups)
-                NeighborGroupCard(
-                  id: group.group.id,
-                  title: group.group.parameters.name,
-                  location: "",
-                  membersCount: 0,
-                  totalSpots: group.group.maxUsers,
-                  progress: 0,
-                  budget: group.group.parameters.budget,
-                  age: group.group.parameters.age,
-                  housing: "${group.group.parameters.roomCount}-к кв",
-                  compatibility: (group.score * 100).round(),
-                  members: [
-                    for (var member in group.group.members)
-                      Member(
-                        name: member.parameters.name,
-                        age: member.parameters.age,
-                        profession: member.parameters.userType,
-                        budget: member.parameters.budget,
-                        avatarPath: "",
-                      ),
-                  ],
+      body: _loading
+          ? const Center(child: CircularProgressIndicator())
+          : Center(
+              child: Container(
+                constraints: const BoxConstraints(
+                  maxWidth: 1280,
                 ),
-              const SizedBox(height: 40),
-            ],
-          ),
+                child: _buildContent(),
+              ),
+            ),
+    );
+  }
+
+  Widget _buildContent() {
+    if (_groups.isEmpty) {
+      return const Center(
+        child: Text(
+          'Нет доступных групп',
+          style: TextStyle(color: Colors.white),
         ),
+      );
+    }
+
+    return ScrollConfiguration(
+      behavior: ScrollConfiguration.of(context).copyWith(
+        scrollbars: false,
+      ),
+      child: GridView.builder(
+        physics: const BouncingScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 0,
+          crossAxisSpacing: 20,
+          childAspectRatio: 1,
+        ),
+        itemCount: _groups.length,
+        itemBuilder: (context, index) {
+          final group = _groups[index];
+          return NeighborGroupCard(
+            id: group.group.id,
+            title: group.group.parameters.name,
+            location: "",
+            membersCount: group.group.members.length,
+            totalSpots: group.group.maxUsers,
+            progress: (group.group.members.length / group.group.maxUsers),
+            budget: group.group.parameters.budget,
+            age: group.group.parameters.age,
+            housing: "${group.group.parameters.roomCount}-к кв",
+            compatibility: (group.score * 100).round(),
+            members: [
+              for (var member in group.group.members)
+                Member(
+                  name: member.parameters.name,
+                  age: member.parameters.age,
+                  profession: member.parameters.userType,
+                  budget: member.parameters.budget,
+                  avatarPath: "",
+                ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -116,3 +150,4 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(75);
 }
+

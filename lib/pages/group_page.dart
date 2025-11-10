@@ -77,7 +77,7 @@ class _GroupPageState extends State<GroupPage> {
         child: Center(
           child: Container(
             constraints: const BoxConstraints(
-              maxWidth: 846,
+              maxWidth: 1100,
             ),
             child: Column(
               children: [

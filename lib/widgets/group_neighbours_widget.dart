@@ -81,17 +81,13 @@ class NeighborGroupCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-
           const Text(
             "Заполненность группы:",
             style: AppTextStyles.whiteSmall,
           ),
-
           const SizedBox(
             height: 10,
           ),
-
-          // Прогресс
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
@@ -102,7 +98,6 @@ class NeighborGroupCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-
           LayoutBuilder(
             builder: (context, c) {
               final itemWidth = (c.maxWidth - 3 * 12) / 4;
@@ -135,15 +130,13 @@ class NeighborGroupCard extends StatelessWidget {
             },
           ),
           const SizedBox(height: 20),
-
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: members.map((m) => _MemberCard(member: m)).toList(),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: members.map((m) => _MemberCard(member: m)).toList(),
+            ),
           ),
-
           const SizedBox(height: 16),
-
-          // Кнопки справа
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -319,3 +312,4 @@ class _MemberCard extends StatelessWidget {
     );
   }
 }
+

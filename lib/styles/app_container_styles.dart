@@ -50,7 +50,15 @@ class AppContainerStyles {
   );
 
   static BoxDecoration profileCard = BoxDecoration(
-    borderRadius: BorderRadius.circular(10),
+    borderRadius: BorderRadius.circular(30),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.black.withOpacity(0.33),
+        blurRadius: 20,
+        spreadRadius: 2,
+        offset: const Offset(0, 0),
+      ),
+    ],
     border: Border.all(color: AppColors.borderTeal, width: 1),
     color: AppColors.darkCard,
   );
