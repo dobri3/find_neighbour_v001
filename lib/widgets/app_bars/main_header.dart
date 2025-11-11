@@ -42,45 +42,44 @@ class _HomeHeaderState extends State<HomeHeader> {
   Widget build(BuildContext context) {
     return Material(
       color: AppColors.midnight,
-      child: Container(
-        height: widget.preferredSize.height,
-        padding: const EdgeInsets.symmetric(horizontal: 48),
-        child: Row(
-          children: [
-            GestureDetector(
-              onTap: () => context.router.push(const RecommendationRoute()),
-              child: AppRichTextStyles.logoText(),
-            ),
-
-            const Spacer(),
-
-            if (isAuthorized) ...[
+      child: Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 1280),
+          width: double.infinity,
+          height: widget.preferredSize.height,
+          child: Row(
+            children: [
               GestureDetector(
                 onTap: () => context.router.push(const RecommendationRoute()),
-                child: const Text("Сообщения", style: AppTextStyles.whiteSmall),
+                child: AppRichTextStyles.logoText(),
               ),
-              const SizedBox(width: 32),
-
-              GestureDetector(
-                onTap: () => context.router.push(const RecommendationRoute()),
-                child: const Text("Группы", style: AppTextStyles.whiteSmall),
-              ),
-              const SizedBox(width: 40),
-
-              IconButton(
-                onPressed: () =>
-                    context.router.push(const RecommendationRoute()),
-                icon:
-                    const Icon(Icons.notifications_none, color: Colors.white),
-              ),
-              const SizedBox(width: 28),
+              const Spacer(),
+              if (isAuthorized) ...[
+                GestureDetector(
+                  onTap: () => context.router.push(const RecommendationRoute()),
+                  child:
+                      const Text("Сообщения", style: AppTextStyles.whiteSmall),
+                ),
+                const SizedBox(width: 32),
+                GestureDetector(
+                  onTap: () => context.router.push(const RecommendationRoute()),
+                  child: const Text("Группы", style: AppTextStyles.whiteSmall),
+                ),
+                const SizedBox(width: 40),
+                IconButton(
+                  onPressed: () =>
+                      context.router.push(const RecommendationRoute()),
+                  icon:
+                      const Icon(Icons.notifications_none, color: Colors.white),
+                ),
+                const SizedBox(width: 28),
+              ],
+              if (!isAuthorized)
+                _UnauthorizedButton()
+              else
+                _AuthorizedUserSection(user: user!),
             ],
-
-            if (!isAuthorized)
-              _UnauthorizedButton()
-            else
-              _AuthorizedUserSection(user: user!),
-          ],
+          ),
         ),
       ),
     );
@@ -121,7 +120,10 @@ class _UnauthorizedButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: () => context.router.push(const AuthRoute()),
       style: AppButtonStyles.primaryMedium,
-      child: const Text("Регистрация", style: AppTextStyles.buttonSmall,),
+      child: const Text(
+        "Регистрация",
+        style: AppTextStyles.buttonSmall,
+      ),
     );
   }
 }

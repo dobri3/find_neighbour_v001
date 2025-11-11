@@ -16,6 +16,8 @@ import 'package:find_neighbour_v001/widgets/group/member.dart';
 import 'package:find_neighbour_v001/widgets/map.dart';
 import 'package:latlong2/latlong.dart';
 
+import 'package:find_neighbour_v001/widgets/app_bars/main_header.dart';
+
 @RoutePage()
 class GroupPage extends StatefulWidget {
   final String id;
@@ -72,6 +74,7 @@ class _GroupPageState extends State<GroupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: HomeHeader(),
       backgroundColor: const Color(0xFF1C2B38),
       body: SingleChildScrollView(
         child: Center(

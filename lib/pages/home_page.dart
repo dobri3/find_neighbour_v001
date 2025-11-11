@@ -10,6 +10,7 @@ import 'package:find_neighbour_v001/styles/app_container_styles.dart';
 import 'package:find_neighbour_v001/utils/play_animation_widget.dart';
 import 'package:find_neighbour_v001/widgets/neighbour_introductory_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:find_neighbour_v001/widgets/app_bars/main_header.dart';
 
 @RoutePage()
 class HomePage extends StatelessWidget {
@@ -18,104 +19,95 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //appBar: HomeHeader(),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
-          child: Column(
-            children: [
-              HomeHeader(),
-              Container(
-                height: 530,
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                    gradient: AppColors.blueGradient),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "Найди идеального\nсоседа",
-                        textAlign: TextAlign.center,
-                        style: AppTextStyles.mediumHeading
-                      ),
-                      const SizedBox(
-                        height: 25,
-                      ),
-                      const Text(
-                        "Сервис для поиска людей с похожими привычками и интересами\nдля совместной аренды",
-                        textAlign: TextAlign.center,
-                        style: AppTextStyles.bodyLarge,
-                      ),
-                      const SizedBox(
-                        height: 25,
-                      ),
-                      AppButtonStyles.primaryButtonWithShadow(
-                                onPressed: () {
-                                context.router.push(const AuthRoute());
-                                    },
-                                text: "Войти",
-                                    )
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 48),
-                height: 700,
-                decoration: AppContainerStyles.sectionBorder,
+        child: Column(
+          children: [
+            HomeHeader(),
+            Container(
+              height: 530,
+              width: double.infinity,
+              decoration: const BoxDecoration(gradient: AppColors.blueGradient),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    const Text("Найди идеального\nсоседа",
+                        textAlign: TextAlign.center,
+                        style: AppTextStyles.mediumHeading),
+                    const SizedBox(
+                      height: 25,
+                    ),
                     const Text(
-                      "Прямо сейчас в поиске",
-                      style: AppTextStyles.largeHeadingWhite
+                      "Сервис для поиска людей с похожими привычками и интересами\nдля совместной аренды",
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.bodyLarge,
                     ),
                     const SizedBox(
-                      height: 80,
+                      height: 25,
                     ),
-                    SafeArea(
-                      child: SizedBox(
-                        height: 450,
-                        child: ScrollConfiguration(
-                          behavior: ScrollConfiguration.of(context).copyWith(
-                            dragDevices: {
-                              PointerDeviceKind.touch,
-                              PointerDeviceKind.mouse,
-                            },
-                          ),
-                          child: ListView.separated(
-                              separatorBuilder: (_, index) =>
-                                  const SizedBox(width: 15),
-                              scrollDirection: Axis.horizontal,
-                              itemCount: neighbourModels.length,
-                              itemBuilder: (context, index) {
-                                return GestureDetector(
-                                    onTap: () {},
-                                    child: PlayAnimatonWidget(
-                                      delay: 1.2,
-                                      child: NeighbourIntroductoryWidget(
-                                        neighbourModel: neighbourModels[index],
-                                      ),
-                                    ));
-                              }),
-                        ),
-                      ),
-                    ),
-
-                    
+                    AppButtonStyles.primaryButtonWithShadow(
+                      onPressed: () {
+                        context.router.push(const AuthRoute());
+                      },
+                      text: "Войти",
+                    )
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 48),
+              height: 700,
+              decoration: AppContainerStyles.sectionBorder,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Прямо сейчас в поиске",
+                      style: AppTextStyles.largeHeadingWhite),
+                  const SizedBox(
+                    height: 80,
+                  ),
+                  SafeArea(
+                    child: SizedBox(
+                      height: 450,
+                      child: ScrollConfiguration(
+                        behavior: ScrollConfiguration.of(context).copyWith(
+                          dragDevices: {
+                            PointerDeviceKind.touch,
+                            PointerDeviceKind.mouse,
+                          },
+                        ),
+                        child: ListView.separated(
+                            separatorBuilder: (_, index) =>
+                                const SizedBox(width: 15),
+                            scrollDirection: Axis.horizontal,
+                            itemCount: neighbourModels.length,
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                  onTap: () {},
+                                  child: PlayAnimatonWidget(
+                                    delay: 1.2,
+                                    child: NeighbourIntroductoryWidget(
+                                      neighbourModel: neighbourModels[index],
+                                    ),
+                                  ));
+                            }),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
+      ),
     );
   }
 }
-
-
-
 
 class HomeHeader extends StatelessWidget {
   @override

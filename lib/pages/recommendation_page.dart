@@ -15,6 +15,8 @@ import 'package:find_neighbour_v001/routing/app_router.dart';
 import 'package:find_neighbour_v001/pages/group_page.dart';
 import 'package:find_neighbour_v001/styles/app_text_styles.dart';
 
+import 'package:find_neighbour_v001/widgets/app_bars/main_header.dart';
+
 @RoutePage()
 class RecommendationPage extends StatefulWidget {
   const RecommendationPage({super.key});
@@ -55,7 +57,7 @@ class _RecommendationPageState extends State<RecommendationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF1C2B38),
-      appBar: MainAppBar(),
+      appBar: HomeHeader(),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : Center(
@@ -150,4 +152,3 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(75);
 }
-
