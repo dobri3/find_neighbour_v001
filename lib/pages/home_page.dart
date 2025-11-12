@@ -10,7 +10,8 @@ import 'package:find_neighbour_v001/styles/app_container_styles.dart';
 import 'package:find_neighbour_v001/utils/play_animation_widget.dart';
 import 'package:find_neighbour_v001/widgets/neighbour_introductory_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:find_neighbour_v001/widgets/app_bars/main_header.dart';
+import 'package:find_neighbour_v001/widgets/app_bars/main_header.dart'
+    as home_header;
 
 @RoutePage()
 class HomePage extends StatelessWidget {
@@ -19,12 +20,11 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //appBar: HomeHeader(),
+      appBar: home_header.HomeHeader(),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
-            HomeHeader(),
             Container(
               height: 530,
               width: double.infinity,
@@ -104,32 +104,6 @@ class HomePage extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class HomeHeader extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 80,
-      color: AppColors.midnight,
-      padding: const EdgeInsets.symmetric(horizontal: 48),
-      child: Row(
-        children: [
-          AppRichTextStyles.logoText(),
-          const Spacer(),
-          const Text("Как это работает", style: AppTextStyles.whiteSmall),
-          const SizedBox(width: 32),
-          const Text("Новости", style: AppTextStyles.whiteSmall),
-          const SizedBox(width: 32),
-          ElevatedButton(
-            onPressed: () => context.router.push(const AuthRoute()),
-            style: AppButtonStyles.primaryMedium,
-            child: const Text("Войти", style: AppTextStyles.buttonMedium),
-          )
-        ],
       ),
     );
   }
