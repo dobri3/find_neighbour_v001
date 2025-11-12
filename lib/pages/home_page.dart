@@ -13,6 +13,13 @@ import 'package:flutter/material.dart';
 import 'package:find_neighbour_v001/widgets/app_bars/main_header.dart'
     as home_header;
 
+// Твоя задача сделать точно такую же страницу, что и в фигме
+// Так же при наведении курсором на карточки в разделах "Прямо сейчас в поиске" и "Критерии поиска"
+// Долна проигрыватся прикольная анимация наведения (не сложная)
+// К примеру карточка чуть увеличивается и border меняется на светлый цвет
+//
+// Кнопка начать поиск просто пролистывает страницу на самый вверх
+
 @RoutePage()
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
