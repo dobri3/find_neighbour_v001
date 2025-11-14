@@ -31,7 +31,6 @@ class _CriteriaCardState extends State<CriteriaCard> {
         duration: const Duration(milliseconds: 200), 
         
       width: _isHovered ? 421 : 411,
-      // height: _isHovered ? 156 : 146,
       height: 146,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -58,10 +57,8 @@ class _CriteriaCardState extends State<CriteriaCard> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Иконка
           Container(
             padding: const EdgeInsets.all(14),
-            // height: context,
             decoration: BoxDecoration(
               color: AppColors.teal,
               borderRadius: BorderRadius.circular(14),
@@ -75,7 +72,6 @@ class _CriteriaCardState extends State<CriteriaCard> {
 
           const SizedBox(width: 20),
 
-          // Текст
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
