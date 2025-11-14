@@ -28,6 +28,74 @@ class AppRichTextStyles {
   }
 }
 
+// class GradientText extends StatelessWidget {
+//   final String text;
+//   final TextStyle style;
+//   final Gradient gradient;
+
+//   const GradientText(
+//     this.text, {
+//     super.key,
+//     required this.style,
+//     required this.gradient,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return ShaderMask(
+//       shaderCallback: (bounds) {
+//         return gradient.createShader(
+//           Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+//         );
+//       },
+//       child: Text(
+//         text,
+//         style: style.copyWith(color: Colors.white),
+//       ),
+//     );
+//   }
+// }
+
+class GradientText extends StatelessWidget {
+  final String text;
+  final TextStyle style;
+  final Gradient gradient;
+  final TextAlign textAlign;
+  final int? maxLines;
+
+  const GradientText(
+    this.text, {
+    super.key,
+    required this.style,
+    required this.gradient,
+    this.textAlign = TextAlign.left,
+    this.maxLines,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ShaderMask(
+      blendMode: BlendMode.srcIn,
+      shaderCallback: (bounds) {
+        return gradient.createShader(
+          Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+        );
+      },
+      child: Text(
+        text,
+        style: style.copyWith(
+          color: Colors.white, // обязательно, иначе не видно
+        ),
+        textAlign: textAlign,
+        maxLines: maxLines,
+        softWrap: true,
+      ),
+    );
+  }
+}
+
+
+
 class AppTextStyles {
   // Home Page Heading
   static const TextStyle homePageHeading = TextStyle(
@@ -120,7 +188,7 @@ class AppTextStyles {
 
   static const TextStyle neighbourName = TextStyle(
     fontFamily: "Inter",
-    fontSize: 24,
+    fontSize: 20,
     color: AppColors.white,
     fontWeight: FontWeight.w600,
   );

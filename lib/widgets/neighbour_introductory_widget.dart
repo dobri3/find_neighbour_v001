@@ -1,4 +1,5 @@
 import 'package:find_neighbour_v001/models/neighbour_model.dart';
+import 'package:find_neighbour_v001/styles/app_colors.dart';
 import 'package:find_neighbour_v001/styles/app_text_styles.dart';
 import 'package:find_neighbour_v001/styles/app_container_styles.dart';
 import 'package:flutter/material.dart';
@@ -12,63 +13,81 @@ class NeighbourIntroductoryWidget extends StatefulWidget {
 }
 
 class _NeighbourIntroductoryWidgetState extends State<NeighbourIntroductoryWidget> {
+
+  bool _isHovered = false;
+
+
   @override
   Widget build(BuildContext context) {
-    return  Container(
-      height: 500,
-      width: 500,
-      padding: const EdgeInsets.all(20),
-      decoration: AppContainerStyles.neighbourCard,
-      margin: const EdgeInsets.only(right: 15),
+    // return  Container(
+    //   height: 450,
+    //   width: 420,
+    //   padding: const EdgeInsets.all(20),
+    //   margin: const EdgeInsets.only(right: 15),
+    //   decoration: AppContainerStyles.neighbourCard,
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true), 
+      onExit: (_) => setState(() => _isHovered = false), 
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200), 
+        height: _isHovered ? 470 : 450,
+        width: _isHovered ? 440 : 420,
+        padding: const EdgeInsets.all(20),
+        margin: const EdgeInsets.only(right: 15),
+        decoration: AppContainerStyles.neighbourCard.copyWith(
+          border: Border.all(
+            color: _isHovered ? Colors.tealAccent :  AppColors.teal.withOpacity(0.5), 
+            width: 2,
+          ),
+        ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
                   height: 170,
                   width: 130,
-        padding: const EdgeInsets.all(20),
+
         decoration: AppContainerStyles.photoContainer.copyWith(
-          image: DecorationImage(image:  AssetImage(widget.neighbourModel.neighbourPhoto),
-                  fit: BoxFit.cover,)
-        )
+          border: Border.all(
+            color: AppColors.teal.withOpacity(0.5),
+          ),
+          image: DecorationImage(
+            image:  AssetImage(widget.neighbourModel.neighbourPhoto),
+                  fit: BoxFit.cover)
+        ),
                 ),
                 const SizedBox(
                   width: 20,
                 ),
-                Column(
+                Expanded(
+                  child: Column(
+                    children: [
+                      Align(
+                              alignment: Alignment.center,
+                              child: Text(widget.neighbourModel.neighbourFullName,
+                              textAlign: TextAlign.center, style: AppTextStyles.neighbourName
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),   
                   
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Column(
-                      children: [
-                        Align(
-            alignment: Alignment.center,
-            child: Text(widget.neighbourModel.neighbourFullName,
-            textAlign: TextAlign.center, style: AppTextStyles.neighbourName
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),   
-
-          // City
-    _buildDetailItem("Город: ${widget.neighbourModel.neighbourCity}"),
-    
-    // Address
-    _buildDetailItem("Район/метро: ${widget.neighbourModel.neighbourAddress}"),
-    
-    // Budget
-    _buildDetailItem("Бюджет: ${widget.neighbourModel.neighbourCost}"),
-    
-    // Neighbour Count
-    _buildDetailItem("Кол-во соседей: ${widget.neighbourModel.neighbourCount}"),
-                      ],
-                    )
-                       
-                  ],
+                            // City
+                      _buildDetailItem("Город: ${widget.neighbourModel.neighbourCity}"),
+                      
+                      // Address
+                      _buildDetailItem("Район/метро: ${widget.neighbourModel.neighbourAddress}"),
+                      
+                      // Budget
+                      _buildDetailItem("Бюджет: ${widget.neighbourModel.neighbourCost}"),
+                      
+                      // Neighbour Count
+                      _buildDetailItem("Кол-во соседей: ${widget.neighbourModel.neighbourCount}"),
+                    ],
+                  ),
                 )
 
 
@@ -79,7 +98,7 @@ class _NeighbourIntroductoryWidgetState extends State<NeighbourIntroductoryWidge
             alignment: Alignment.centerLeft,
             child: SizedBox(
               width:400,
-              child: Text("Описание: ${widget.neighbourModel.neighbourDescription}",
+              child: Text("Описание:\n${widget.neighbourModel.neighbourDescription}",
               textAlign: TextAlign.left, style: AppTextStyles.neighbourDescription,
               ),
             ),
@@ -88,41 +107,7 @@ class _NeighbourIntroductoryWidgetState extends State<NeighbourIntroductoryWidge
 
           ],
         )
-
-
-      // height: 440,
-      // width: 420,
-      // margin: const EdgeInsets.only(right: 15),
-      // decoration: BoxDecoration(
-      //   borderRadius: BorderRadius.circular(20),
-      //   image: DecorationImage(image:  AssetImage(widget.neighbourModel.neighbourPhoto),
-      //   fit: BoxFit.cover, )
-      // ),
-      // child: 
-      // Container(
-      //   padding: const EdgeInsets.all(20),
-      //   decoration: BoxDecoration(
-      //     borderRadius: BorderRadius.circular(20),
-      //     gradient: LinearGradient(
-      //         begin: Alignment.bottomRight,
-      //         colors: [
-      //           Colors.black.withOpacity(0.8),
-      //           Colors.black.withOpacity(0.2),
-      //         ]
-      //       ),
-            
-      //   ),
-      //   child: Align(
-      //       alignment: Alignment.bottomLeft,
-      //       child: Text(widget.neighbourModel.neighbourFullName,
-      //       textAlign: TextAlign.center, style: const TextStyle(
-      //         color: Colors.white, fontSize: 18
-      //       ),
-      //       ),
-      //     ),
-      // ),
-    
-    
+      )
     );
   }
 }

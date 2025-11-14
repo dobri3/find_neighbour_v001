@@ -27,13 +27,20 @@ class AppContainerStyles {
   );
 
   static BoxDecoration neighbourCard = BoxDecoration(
-    color: AppColors.black,
+    // color: AppColors.black,
+    gradient: LinearGradient(colors: [Color(0xFF32668D).withOpacity(0.20), Color(0xFF131718).withOpacity(0.80)],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight),
     borderRadius: BorderRadius.circular(20),
     border: Border.all(color: AppColors.blueDark),
   );
 
   static BoxDecoration photoContainer = BoxDecoration(
     borderRadius: BorderRadius.circular(20),
+    border: Border.all(
+              color: Color(0xFF6A999E), 
+              width: 2.0,        
+            ),
   );
 
   static BoxDecoration authCard = BoxDecoration(
