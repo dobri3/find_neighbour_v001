@@ -21,7 +21,15 @@ class UserService {
 
   Future<String> updateUser(User user) async {
     try {
-      final response = await _dio.put('/user', data: user.toJson());
+      var formData = FormData.fromMap({
+        "data": user.toJsonString(),
+      });
+
+      final response = await _dio.put('/user',
+          data: formData,
+          options: Options(
+              contentType: 'multipart/form-data',
+              headers: {'Content-Type': 'multipart/form-data'}));
       return response.data['ID'];
     } catch (e) {
       print(e);

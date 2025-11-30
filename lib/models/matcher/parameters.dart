@@ -16,6 +16,7 @@ class Parameters {
   final String sex;
   final String userType;
   final String description;
+  final String address;
 
   Parameters({
     required this.name,
@@ -33,6 +34,7 @@ class Parameters {
     required this.sex,
     required this.userType,
     required this.description,
+    required this.address,
   });
 
   Map<String, dynamic> toJson() {
@@ -52,6 +54,7 @@ class Parameters {
       'sex': sex,
       'user_type': userType,
       'description': description,
+      'address': address,
     };
   }
 
@@ -72,6 +75,7 @@ class Parameters {
       sex: json['sex'] ?? '',
       userType: json['user_type'] ?? '',
       description: json['description'] ?? '',
+      address: json['address'] ?? '',
     );
   }
 }

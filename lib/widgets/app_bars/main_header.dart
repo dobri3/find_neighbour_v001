@@ -56,13 +56,20 @@ class _HomeHeaderState extends State<HomeHeader> {
               const Spacer(),
               if (isAuthorized) ...[
                 GestureDetector(
-                  onTap: () => context.router.push(const RecommendationRoute()),
+                  onTap: () {
+                    context.router.push(ChatRoute());
+                  },
                   child:
                       const Text("Сообщения", style: AppTextStyles.whiteSmall),
                 ),
                 const SizedBox(width: 32),
                 GestureDetector(
-                  onTap: () => context.router.push(const RecommendationRoute()),
+                  onTap: () async {
+                    var group = await ApiService.matcherService
+                        .getGroupByUserId(user!.id);
+
+                    context.router.push(GroupRoute(id: group.id));
+                  },
                   child: const Text("Группы", style: AppTextStyles.whiteSmall),
                 ),
                 const SizedBox(width: 40),

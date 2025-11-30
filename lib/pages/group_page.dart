@@ -18,6 +18,9 @@ import 'package:latlong2/latlong.dart';
 
 import 'package:find_neighbour_v001/widgets/app_bars/main_header.dart';
 
+import 'package:find_neighbour_v001/widgets/group/request.dart';
+import 'package:find_neighbour_v001/models/matcher/request.dart';
+
 @RoutePage()
 class GroupPage extends StatefulWidget {
   final String id;
@@ -51,11 +54,14 @@ class _GroupPageState extends State<GroupPage> {
       sex: '',
       userType: '',
       description: '',
+      address: '',
     ),
     maxUsers: 0,
     createdAt: DateTime.now(),
     updatedAt: DateTime.now(),
   );
+  User? _session;
+  List<Request>? _requests;
 
   @override
   void initState() {
@@ -65,9 +71,19 @@ class _GroupPageState extends State<GroupPage> {
 
   void _loadGroupData() async {
     Group group = await ApiService.matcherService.getGroup(widget.id);
+    group.setMembers(
+        await ApiService.matcherService.getListGroupMembers(widget.id));
+    User session = await ApiService.authService.getSession();
+    var requests = null;
+    if (session.id == group.ownerId) {
+      requests = await ApiService.matcherService.getListRequests(widget.id);
+      print(requests);
+    }
 
     setState(() {
       _group = group;
+      _session = session;
+      _requests = requests;
     });
   }
 
@@ -131,6 +147,46 @@ class _GroupPageState extends State<GroupPage> {
                     ),
                   ),
                 ),
+                _session != null &&
+                        _session!.id == _group.ownerId &&
+                        _requests != null &&
+                        _requests!.length > 0
+                    ? Column(
+                        children: [
+                          const Text(
+                            "Запросы",
+                            style: AppTextStyles.sectionTitle,
+                          ),
+                          Container(
+                            padding: const EdgeInsets.only(top: 20),
+                            child: Column(
+                              spacing: 20,
+                              children: [
+                                for (var request in _requests!)
+                                  RequestCard(
+                                    request: request,
+                                    onAccept: () async {
+                                      await ApiService.matcherService
+                                          .acceptJoinRequest(
+                                              _session!.id, request.id);
+                                    },
+                                    onReject: () async {
+                                      await ApiService.matcherService
+                                          .rejectJoinRequest(
+                                              _session!.id, request.id);
+                                    },
+                                    onMore: () {
+                                      context.router.push(
+                                          UserProfileRoute(id: request.userId));
+                                    },
+                                  ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                        ],
+                      )
+                    : const SizedBox(),
                 const Text(
                   "Информация",
                   style: AppTextStyles.sectionTitle,
@@ -220,7 +276,15 @@ class _GroupPageState extends State<GroupPage> {
                                         ),
                                         const SizedBox(height: 10),
                                         OutlinedButton(
-                                          onPressed: () {},
+                                          onPressed: () async {
+                                            var session = await ApiService
+                                                .authService
+                                                .getSession();
+                                            await ApiService.matcherService
+                                                .sendJoinRequest(
+                                                    session.id, _group.id);
+                                            print('sent');
+                                          },
                                           style:
                                               AppButtonStyles.tealFiledButton(
                                                   const Size(200, 50)),
@@ -251,7 +315,14 @@ class _GroupPageState extends State<GroupPage> {
                   child: Column(
                     spacing: 20,
                     children: [
-                      for (var member in _group.members) Member(member: member)
+                      for (var member in _group.members)
+                        Member(
+                          member: member,
+                          onMore: () {
+                            context.router
+                                .push(UserProfileRoute(id: member.userId));
+                          },
+                        )
                     ],
                   ),
                 ),

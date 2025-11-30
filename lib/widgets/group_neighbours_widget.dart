@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:find_neighbour_v001/api/api.dart';
 import 'package:find_neighbour_v001/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:find_neighbour_v001/models/user.dart';
@@ -156,7 +157,12 @@ class NeighborGroupCard extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  var session = await ApiService.authService.getSession();
+                  await ApiService.matcherService
+                      .sendJoinRequest(session.id, id);
+                  print('sent');
+                },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(190, 60),
                   backgroundColor: AppColors.teal,
@@ -287,7 +293,6 @@ class _MemberCard extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 20,
-            backgroundImage: AssetImage(member.avatarPath),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -312,4 +317,3 @@ class _MemberCard extends StatelessWidget {
     );
   }
 }
-

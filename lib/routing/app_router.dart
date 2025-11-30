@@ -8,6 +8,7 @@ import 'package:find_neighbour_v001/pages/user_profile_page.dart';
 import 'package:find_neighbour_v001/pages/auth_google_callback_page.dart';
 import 'package:flutter/material.dart';
 import 'package:find_neighbour_v001/pages/group_page.dart';
+import 'package:find_neighbour_v001/pages/chat_page.dart';
 part 'app_router.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
@@ -42,6 +43,10 @@ class AppRouter extends RootStackRouter {
         AutoRoute(
           page: AuthYandexCallbackRoute.page,
           path: '/auth/yandex/callback',
+        ),
+        AutoRoute(
+          page: ChatRoute.page,
+          path: '/chat',
         ),
       ];
 }

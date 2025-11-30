@@ -42,6 +42,7 @@ class _MapWidgetState extends State<MapWidget> {
   String _selectedAddress = '';
   bool _isLoadingAddress = false;
   final List<Marker> _markers = [];
+  bool _isMapReady = false; // Флаг готовности карты
 
   static const String _geocodeApiKey = '6910b59539db4010801646wnk990ed3';
 
@@ -62,52 +63,106 @@ class _MapWidgetState extends State<MapWidget> {
   }
 
   void _initializeMap() {
+    // Устанавливаем начальные значения, но не перемещаем карту сразу
+    if (widget.isSelectable && widget.initialMarkerPoint != null) {
+      _selectedPoint = widget.initialMarkerPoint;
+      _selectedAddress = widget.initialAddress ?? '';
+      _addMarker(widget.initialMarkerPoint!);
+
+      if (widget.initialAddress == null) {
+        _getAddressFromGeocode(widget.initialMarkerPoint!);
+      }
+    } else if (!widget.isSelectable && widget.staticMarkerPoint != null) {
+      _selectedPoint = widget.staticMarkerPoint;
+      _selectedAddress = widget.staticAddress ?? '';
+      _addStaticMarker(widget.staticMarkerPoint!);
+
+      if (widget.staticAddress == null) {
+        _getAddressFromGeocode(widget.staticMarkerPoint!);
+      }
+    }
+  }
+
+  // Вызывается после первого рендера карты
+  void _onMapReady() {
+    if (!_isMapReady) {
+      setState(() {
+        _isMapReady = true;
+      });
+
+      // Теперь можно безопасно перемещать карту
+      _moveToInitialPosition();
+    }
+  }
+
+  void _moveToInitialPosition() {
+    final targetPoint = widget.isSelectable
+        ? (widget.initialMarkerPoint ??
+            widget.initialCenter ??
+            const LatLng(55.755793, 37.617134))
+        : (widget.staticMarkerPoint ??
+            widget.initialCenter ??
+            const LatLng(55.755793, 37.617134));
+
+    _mapController.move(targetPoint, widget.initialZoom);
+  }
+
+  @override
+  void didUpdateWidget(MapWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (_hasParametersChanged(oldWidget)) {
+      _updateMapFromParameters();
+    }
+  }
+
+  bool _hasParametersChanged(MapWidget oldWidget) {
+    return oldWidget.initialMarkerPoint != widget.initialMarkerPoint ||
+        oldWidget.initialAddress != widget.initialAddress ||
+        oldWidget.staticMarkerPoint != widget.staticMarkerPoint ||
+        oldWidget.staticAddress != widget.staticAddress;
+  }
+
+  void _updateMapFromParameters() {
     if (widget.isSelectable) {
-      // Режим выбора - устанавливаем начальную точку если передана
       if (widget.initialMarkerPoint != null) {
         _selectedPoint = widget.initialMarkerPoint;
         _selectedAddress = widget.initialAddress ?? '';
-
-        // Добавляем маркер (красный для обоих случаев)
         _addMarker(widget.initialMarkerPoint!);
 
-        // Если адрес не передан, получаем его через геокодирование
         if (widget.initialAddress == null) {
           _getAddressFromGeocode(widget.initialMarkerPoint!);
         }
 
-        // Перемещаем карту к маркеру
-        WidgetsBinding.instance.addPostFrameCallback((_) {
+        // Безопасное перемещение карты
+        if (_isMapReady) {
           _mapController.move(widget.initialMarkerPoint!, widget.initialZoom);
-        });
+        }
+      } else {
+        _clearSelection();
       }
     } else {
-      // Статичный режим - добавляем статичный маркер
       if (widget.staticMarkerPoint != null) {
         _selectedPoint = widget.staticMarkerPoint;
         _selectedAddress = widget.staticAddress ?? '';
-
-        // Добавляем маркер (зеленый для статичного режима)
         _addStaticMarker(widget.staticMarkerPoint!);
 
-        // Если адрес не передан, получаем его через геокодирование
         if (widget.staticAddress == null) {
           _getAddressFromGeocode(widget.staticMarkerPoint!);
         }
 
-        // Перемещаем карту к маркеру
-        WidgetsBinding.instance.addPostFrameCallback((_) {
+        // Безопасное перемещение карты
+        if (_isMapReady) {
           _mapController.move(widget.staticMarkerPoint!, widget.initialZoom);
-        });
+        }
+      } else {
+        _clearStaticMarker();
       }
     }
   }
 
   void _addMarker(LatLng point) {
-    // Очищаем все маркеры
     _markers.clear();
-
-    // Добавляем красный маркер (одинаковый для initial и selected)
     _markers.add(
       Marker(
         key: const Key('main_marker'),
@@ -116,20 +171,16 @@ class _MapWidgetState extends State<MapWidget> {
         point: point,
         child: Icon(
           Icons.location_pin,
-          color: Colors.red, // Всегда красный для режима выбора
+          color: Colors.red,
           size: 50,
         ),
       ),
     );
-
     setState(() {});
   }
 
   void _addStaticMarker(LatLng point) {
-    // Очищаем все маркеры
     _markers.clear();
-
-    // Добавляем зеленый маркер для статичного режима
     _markers.add(
       Marker(
         key: const Key('static_marker'),
@@ -138,13 +189,20 @@ class _MapWidgetState extends State<MapWidget> {
         point: point,
         child: Icon(
           Icons.location_pin,
-          color: AppColors.teal, // Зеленый для статичного режима
+          color: AppColors.teal,
           size: 50,
         ),
       ),
     );
-
     setState(() {});
+  }
+
+  void _clearStaticMarker() {
+    setState(() {
+      _selectedPoint = null;
+      _selectedAddress = '';
+      _markers.clear();
+    });
   }
 
   void _onMarkerTap(LatLng point) async {
@@ -161,11 +219,9 @@ class _MapWidgetState extends State<MapWidget> {
       _isLoadingAddress = true;
     });
 
-    // Используем тот же метод для добавления маркера
     _addMarker(point);
     await _getAddressFromGeocode(point);
 
-    // Вызываем callback если он задан
     if (widget.onPointSelected != null) {
       widget.onPointSelected!(_selectedPoint, _selectedAddress);
     }
@@ -238,7 +294,11 @@ class _MapWidgetState extends State<MapWidget> {
           final address = result['display_name'];
 
           await _selectPoint(point);
-          _mapController.move(point, 15.0);
+
+          // Безопасное перемещение карты
+          if (_isMapReady) {
+            _mapController.move(point, 15.0);
+          }
 
           setState(() {
             _selectedAddress = address;
@@ -270,10 +330,9 @@ class _MapWidgetState extends State<MapWidget> {
     setState(() {
       _selectedPoint = null;
       _selectedAddress = '';
-      _markers.clear(); // Очищаем все маркеры
+      _markers.clear();
     });
 
-    // Вызываем callback если он задан
     if (widget.onPointSelected != null) {
       widget.onPointSelected!(null, '');
     }
@@ -325,15 +384,11 @@ class _MapWidgetState extends State<MapWidget> {
         borderRadius: BorderRadius.circular(12),
         child: Column(
           children: [
-            // Панель поиска (только для режима выбора)
             if (widget.isSelectable) _buildSearchPanel(),
-            // Панель информации (для статичного режима)
             if (!widget.isSelectable && _selectedAddress.isNotEmpty)
               _buildInfoPanel(),
-            // Панель выбранного адреса (для режима выбора)
             if (widget.isSelectable && _selectedAddress.isNotEmpty)
               _buildAddressPanel(),
-            // Карта
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
@@ -356,6 +411,7 @@ class _MapWidgetState extends State<MapWidget> {
                                 _selectPoint(point);
                               }
                             : null,
+                        onMapReady: _onMapReady, // Колбэк готовности карты
                         interactionOptions: const InteractionOptions(
                           flags: InteractiveFlag.all & ~InteractiveFlag.rotate,
                         ),
@@ -369,7 +425,6 @@ class _MapWidgetState extends State<MapWidget> {
                         MarkerLayer(markers: _markers),
                       ],
                     ),
-                    // Индикатор загрузки
                     if (_isLoadingAddress)
                       const Center(
                         child: CircularProgressIndicator(),
@@ -378,7 +433,6 @@ class _MapWidgetState extends State<MapWidget> {
                 ),
               ),
             ),
-            // Панель управления
             _buildControlPanel(),
           ],
         ),
@@ -627,4 +681,3 @@ class _MapWidgetState extends State<MapWidget> {
     );
   }
 }
-

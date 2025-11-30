@@ -35,6 +35,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   User _user = User(id: '', name: '', surname: '', description: '');
   User sessionUser = User(id: '', name: '', surname: '', description: '');
   matcher.Point _userLocation = matcher.Point(lat: 55.755793, lon: 37.617134);
+  String? _address;
   String _name = '';
   String _surname = '';
   String _id = '';
@@ -64,6 +65,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
       _surname = _user.surname;
 
       _userLocation = _form.parameters.geo;
+      _address = _form.parameters.address;
+      print(_address);
+      print(_userLocation.toJson());
     });
 
     _nameController.text = _user.name;
@@ -100,7 +104,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     matcher.Parameters parameters = matcher.Parameters(
       name: _nameController.text,
       surname: _surnameController.text,
-      geo: matcher.Point(lat: 0, lon: 0),
+      geo: _userLocation,
       photos: [],
       budget:
           _moneyController.text.isEmpty ? 0 : int.parse(_moneyController.text),
@@ -120,6 +124,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
       sex: 'male',
       userType: 'student',
       description: _descController.text,
+      address: _address ?? '',
     );
 
     if (widget.auth) {
@@ -178,19 +183,50 @@ class _UserProfilePageState extends State<UserProfilePage> {
                               top: 27,
                               bottom: 27,
                             ),
-                            child: Row(spacing: 41, children: [
-                              CircleAvatar(
-                                radius: 60,
-                              ),
-                              Text(
-                                "$_name $_surname",
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w300,
-                                  color: Colors.white,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Row(spacing: 41, children: [
+                                    CircleAvatar(
+                                      radius: 60,
+                                    ),
+                                    Text(
+                                      "$_name $_surname",
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w300,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ]),
                                 ),
-                              ),
-                            ]),
+                                const SizedBox(width: 20),
+                                _id != sessionUser.id
+                                    ? ElevatedButton(
+                                        onPressed: () => context.router
+                                            .push(ChatRoute(userId: _id)),
+                                        style: OutlinedButton.styleFrom(
+                                          foregroundColor: AppColors.teal,
+                                          side: BorderSide(
+                                              color: AppColors.teal
+                                                  .withOpacity(0.25)),
+                                          minimumSize: const Size(190, 60),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 12),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          'Написать',
+                                          style: TextStyle(fontSize: 12),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      )
+                                    : const SizedBox(),
+                              ],
+                            ),
                           ),
                           _buildMainInfo(),
                           const SizedBox(height: 20),
@@ -299,13 +335,18 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 ? MapWidget(
                     width: double.infinity,
                     height: 500,
+                    isSelectable: true,
                     onPointSelected: (point, address) {
                       if (point != null) {
-                        _userLocation = matcher.Point(
-                            lat: point.latitude, lon: point.longitude);
+                        setState(() {
+                          _userLocation = matcher.Point(
+                              lat: point.latitude, lon: point.longitude);
+                          _address = address;
+                        });
                       }
                     },
-                    initialCenter: LatLng(55.755793, 37.617134),
+                    initialCenter: LatLng(_userLocation.lat, _userLocation.lon),
+                    initialAddress: _address,
                     initialMarkerPoint:
                         LatLng(_userLocation.lat, _userLocation.lon),
                     initialZoom: 10,
@@ -318,6 +359,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     isSelectable: false,
                     staticMarkerPoint:
                         LatLng(_userLocation.lat, _userLocation.lon),
+                    initialAddress: _address,
                   ),
           ],
         ),

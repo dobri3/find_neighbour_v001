@@ -151,6 +151,85 @@ class AuthYandexCallbackRouteArgs {
 }
 
 /// generated route for
+/// [ChatPage]
+class ChatRoute extends PageRouteInfo<ChatRouteArgs> {
+  ChatRoute({
+    Key? key,
+    String? userId,
+    String? groupId,
+    String? chatId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ChatRoute.name,
+          args: ChatRouteArgs(
+            key: key,
+            userId: userId,
+            groupId: groupId,
+            chatId: chatId,
+          ),
+          rawQueryParams: {
+            'user_id': userId,
+            'group_id': groupId,
+            'chat_id': chatId,
+          },
+          initialChildren: children,
+        );
+
+  static const String name = 'ChatRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final queryParams = data.queryParams;
+      final args = data.argsAs<ChatRouteArgs>(
+        orElse: () => ChatRouteArgs(
+          userId: queryParams.optString('user_id'),
+          groupId: queryParams.optString('group_id'),
+          chatId: queryParams.optString('chat_id'),
+        ),
+      );
+      return ChatPage(
+        key: args.key,
+        userId: args.userId,
+        groupId: args.groupId,
+        chatId: args.chatId,
+      );
+    },
+  );
+}
+
+class ChatRouteArgs {
+  const ChatRouteArgs({this.key, this.userId, this.groupId, this.chatId});
+
+  final Key? key;
+
+  final String? userId;
+
+  final String? groupId;
+
+  final String? chatId;
+
+  @override
+  String toString() {
+    return 'ChatRouteArgs{key: $key, userId: $userId, groupId: $groupId, chatId: $chatId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ChatRouteArgs) return false;
+    return key == other.key &&
+        userId == other.userId &&
+        groupId == other.groupId &&
+        chatId == other.chatId;
+  }
+
+  @override
+  int get hashCode =>
+      key.hashCode ^ userId.hashCode ^ groupId.hashCode ^ chatId.hashCode;
+}
+
+/// generated route for
 /// [GroupPage]
 class GroupRoute extends PageRouteInfo<GroupRouteArgs> {
   GroupRoute({required String id, Key? key, List<PageRouteInfo>? children})
