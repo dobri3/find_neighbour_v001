@@ -4,12 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:find_neighbour_v001/api/api.dart';
 import 'package:find_neighbour_v001/api/interceptor.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
-
 import 'package:auto_route/auto_route.dart';
 
 final appRouter = AppRouter();
 
-void main() {
+Future<void> main() async {
   usePathUrlStrategy();
 
   runApp(const MyApp());
@@ -42,4 +41,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

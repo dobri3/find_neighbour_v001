@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:find_neighbour_v001/api/api.dart';
 import 'package:find_neighbour_v001/models/chat/chat.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'dart:io';
 
@@ -40,9 +41,9 @@ class ChatService {
     String? groupId,
   ) async {
     try {
-      String url =
-          // const String.fromEnvironment('WS_BASE_URL') + "/chat/messages";
-          "ws://localhost:8080/api/v1/chat/messages";
+      String url = const String.fromEnvironment('WS_BASE_URL',
+              defaultValue: 'ws://localhost:8080/api/v1') +
+          "/chat/messages";
       int k = 0;
       if (chatId != null) {
         url += "?chat_id=$chatId";

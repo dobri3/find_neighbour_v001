@@ -1,0 +1,10 @@
+version: "3"
+
+tasks:
+  build_local:
+    cmds:
+      - docker buildx build -f Dockerfile.local --platform linux/amd64,linux/arm64,linux/arm/v7 -t find_neighbour_v001:local .
+
+  build_prod:
+    cmds:
+      - docker buildx build -f Dockerfile.prod --platform linux/amd64,linux/arm64,linux/arm/v7 -t hestm/nbf-frontend:prod . --push

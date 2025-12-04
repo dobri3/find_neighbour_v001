@@ -14,14 +14,12 @@ import 'package:flutter/material.dart';
 import 'package:find_neighbour_v001/widgets/app_bars/main_header.dart'
     as home_header;
 
-
 @RoutePage()
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
-  
 }
 
 class _HomePageState extends State<HomePage> {
@@ -35,7 +33,7 @@ class _HomePageState extends State<HomePage> {
 
   void _scrollToTop() {
     _scrollController.animateTo(
-      0, 
+      0,
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
@@ -59,15 +57,17 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const GradientText("Найди идеального\nсоседа",
-                        textAlign: TextAlign.center,
-                        style: AppTextStyles.mediumHeading,
-                        gradient: LinearGradient(
+                    const GradientText(
+                      "Найди идеального\nсоседа",
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.mediumHeading,
+                      gradient: LinearGradient(
                         colors: [
-                       Color(0xFFE7E9EC),
-                        Color(0xFF6A999E),
+                          Color(0xFFE7E9EC),
+                          Color(0xFF6A999E),
                         ],
-                        ),),
+                      ),
+                    ),
                     const SizedBox(
                       height: 25,
                     ),
@@ -90,10 +90,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Container(
-              height: 2,
-              width: double.infinity,
-              color: Colors.tealAccent
-            ),
+                height: 2, width: double.infinity, color: Colors.tealAccent),
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 48),
@@ -109,7 +106,8 @@ class _HomePageState extends State<HomePage> {
                   ),
                   SafeArea(
                     child: Container(
-                      constraints: BoxConstraints( maxHeight: 470,  minHeight: 450),
+                      constraints:
+                          BoxConstraints(maxHeight: 470, minHeight: 450),
                       child: ScrollConfiguration(
                         behavior: ScrollConfiguration.of(context).copyWith(
                           dragDevices: {
@@ -138,16 +136,16 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-             Container(
+            Container(
               height: 700,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [Color(0xFF32658D), Color(0xFF122330)],
-                  begin: AlignmentGeometry.topCenter,
-                  end: AlignmentGeometry.bottomCenter),
-
-                ),
-               child: Padding(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [Color(0xFF32658D), Color(0xFF122330)],
+                    begin: AlignmentGeometry.topCenter,
+                    end: AlignmentGeometry.bottomCenter),
+              ),
+              child: Padding(
                 padding: const EdgeInsets.all(48),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -158,9 +156,9 @@ class _HomePageState extends State<HomePage> {
                       style: AppTextStyles.largeHeadingWhite,
                     ),
                     const SizedBox(height: 30),
-                
                     Padding(
-                      padding: const EdgeInsets.only(left: 92, right: 92, bottom: 24),
+                      padding: const EdgeInsets.only(
+                          left: 92, right: 92, bottom: 24),
                       child: Column(
                         children: List.generate(_steps.length, (index) {
                           final step = _steps[index];
@@ -175,15 +173,17 @@ class _HomePageState extends State<HomePage> {
                                   child: Text(
                                     '${index + 1}',
                                     style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold, fontSize: 36,),
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 36,
+                                    ),
                                   ),
                                 ),
-                                      
                                 Expanded(
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
@@ -194,12 +194,12 @@ class _HomePageState extends State<HomePage> {
                                               fontSize: 24,
                                               fontFamily: "Inter",
                                               fontWeight: FontWeight.w600),
-                                              gradient: const LinearGradient(
-                                              colors: [
-                                                Color(0xFFF8F9FA),
-                                                Color(0xFF6A999E),
-                                              ],
-                                            ),
+                                          gradient: const LinearGradient(
+                                            colors: [
+                                              Color(0xFFF8F9FA),
+                                              Color(0xFF6A999E),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                       Container(
@@ -213,7 +213,7 @@ class _HomePageState extends State<HomePage> {
                                         child: Text(
                                           step['description']!,
                                           style: const TextStyle(
-                                            fontFamily: "Inter",
+                                              fontFamily: "Inter",
                                               color: Colors.white70,
                                               fontSize: 14),
                                         ),
@@ -229,9 +229,9 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-                           ),
-             ),
-             Container(
+              ),
+            ),
+            Container(
               height: 2,
               width: double.infinity,
               color: Colors.tealAccent,
@@ -245,45 +245,51 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("Критерии поиска",
-                        textAlign: TextAlign.center,
-                      style: AppTextStyles.largeHeadingWhite,),
+                    const Text(
+                      "Критерии поиска",
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.largeHeadingWhite,
+                    ),
                     const SizedBox(
                       height: 50,
                     ),
                     Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CriteriaCard(
-                        icon: Icons.attach_money,
-                        title: "Бюджет",
-                        subtitle: "Подберем соседа под ваши возможности оплачивать жильё",
-                      ),
-                      const SizedBox(width: 60),
-                      CriteriaCard(
-                        icon: Icons.add_location_alt_outlined,
-                        title: "Геопозиция",
-                        subtitle: "Найдём соседей, которые хотели бы жить в том же районе",
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 60),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CriteriaCard(
-                        icon: Icons.people_alt_rounded,
-                        title: "Количество соседей",
-                        subtitle: "Найдём ровно столько человек, сколько вы сами указали",
-                      ),
-                      const SizedBox(width: 60),
-                      CriteriaCard(
-                        icon: Icons.apartment_rounded,
-                        title: "Квартира",
-                        subtitle: "Выбирайте количество комнат по вашему желанию",
-                      ),
-                    ],
-                  ),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CriteriaCard(
+                          icon: Icons.attach_money,
+                          title: "Бюджет",
+                          subtitle:
+                              "Подберем соседа под ваши возможности оплачивать жильё",
+                        ),
+                        const SizedBox(width: 60),
+                        CriteriaCard(
+                          icon: Icons.add_location_alt_outlined,
+                          title: "Геопозиция",
+                          subtitle:
+                              "Найдём соседей, которые хотели бы жить в том же районе",
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 60),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CriteriaCard(
+                          icon: Icons.people_alt_rounded,
+                          title: "Количество соседей",
+                          subtitle:
+                              "Найдём ровно столько человек, сколько вы сами указали",
+                        ),
+                        const SizedBox(width: 60),
+                        CriteriaCard(
+                          icon: Icons.apartment_rounded,
+                          title: "Квартира",
+                          subtitle:
+                              "Выбирайте количество комнат по вашему желанию",
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -302,16 +308,17 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const GradientText("Готовы найти своего\nсоседа?",
-                        textAlign: TextAlign.center,
-                        style: AppTextStyles.mediumHeading,
-                        gradient: LinearGradient(
+                    const GradientText(
+                      "Готовы найти своего\nсоседа?",
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.mediumHeading,
+                      gradient: LinearGradient(
                         colors: [
-                       Color(0xFFE7E9EC),
-                        Color(0xFF6A999E),
+                          Color(0xFFE7E9EC),
+                          Color(0xFF6A999E),
                         ],
-                        ),
-                        ),
+                      ),
+                    ),
                     const SizedBox(
                       height: 25,
                     ),
@@ -338,7 +345,6 @@ class _HomePageState extends State<HomePage> {
               height: 2,
               width: double.infinity,
               color: Colors.tealAccent,
-              
             ),
           ],
         ),
@@ -363,5 +369,4 @@ class _HomePageState extends State<HomePage> {
           'Вам осталось лишь обсудить детали совместного быта. Знакомьтесь с новыми людьми и \nоговаривайте условия совместной аренды'
     },
   ];
-
 }
