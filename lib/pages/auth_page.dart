@@ -16,7 +16,7 @@ class AuthPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.darkBlue,
+      backgroundColor: AppColors.baseBright.withOpacity(0.7),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -38,7 +38,7 @@ class AuthPage extends StatelessWidget {
                       const Icon(
                         Icons.people_alt_rounded,
                         size: 80,
-                        color: AppColors.indigo,
+                        color: AppColors.textBase,
                       ),
 
                       const SizedBox(height: 24),
@@ -71,7 +71,8 @@ class AuthPage extends StatelessWidget {
                           html.window.location.href = url;
                         },
                         text: "Войти через Google",
-                        icon: Icons.g_mobiledata,
+                        icon: Icon(Icons.g_mobiledata, size: 28, color: AppColors.textBase,)
+                        //size: 28, color: AppColors.textBase,
                       ),
 
                       const SizedBox(height: 24),
@@ -85,7 +86,12 @@ class AuthPage extends StatelessWidget {
                           html.window.location.href = url;
                         },
                         text: "Войти через Yandex",
-                        icon: Icons.g_mobiledata,
+                        icon: Image.asset(
+                          "asset/icons/yandex.png",
+                          width: 14,
+                          height: 14,
+                          color: AppColors.textBase,
+                        ),
                       ),
 
                       const SizedBox(height: 24),

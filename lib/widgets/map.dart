@@ -189,7 +189,7 @@ class _MapWidgetState extends State<MapWidget> {
         point: point,
         child: Icon(
           Icons.location_pin,
-          color: AppColors.teal,
+          color: AppColors.detailBlue,
           size: 50,
         ),
       ),
@@ -444,7 +444,7 @@ class _MapWidgetState extends State<MapWidget> {
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: AppContainerStyles.sectionContainer.copyWith(
-        color: AppColors.transparentBlue,
+        color: AppColors.base1,
         border: Border(
           top: BorderSide(color: AppColors.borderTeal),
           left: BorderSide(color: AppColors.borderTeal),
@@ -459,6 +459,7 @@ class _MapWidgetState extends State<MapWidget> {
         children: [
           Expanded(
             child: TextField(
+              style: TextStyle(color: AppColors.textBase),
               decoration: AppContainerStyles.textInput('Введите адрес'),
               onSubmitted: _searchAddress,
             ),
@@ -473,7 +474,7 @@ class _MapWidgetState extends State<MapWidget> {
       width: double.infinity,
       padding: const EdgeInsets.all(12.0),
       decoration: AppContainerStyles.sectionContainer.copyWith(
-        color: AppColors.transparentBlue,
+        color: AppColors.base1,
         border: Border(
           top: BorderSide(color: AppColors.borderTeal),
           left: BorderSide(color: AppColors.borderTeal),
@@ -489,14 +490,14 @@ class _MapWidgetState extends State<MapWidget> {
         children: [
           Row(
             children: [
-              Icon(Icons.location_on, color: AppColors.teal, size: 18),
+              Icon(Icons.location_on, color: AppColors.detailBlue, size: 18),
               SizedBox(width: 6),
               Text(
                 'Адрес:',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
-                  color: AppColors.teal,
+                  color: AppColors.textBase,
                 ),
               ),
             ],
@@ -506,7 +507,7 @@ class _MapWidgetState extends State<MapWidget> {
             _selectedAddress,
             style: TextStyle(
               fontSize: 12,
-              color: AppColors.gray400,
+              color: AppColors.textBase.withOpacity(0.8),
               fontWeight: FontWeight.w500,
             ),
             maxLines: 2,
@@ -516,13 +517,13 @@ class _MapWidgetState extends State<MapWidget> {
             SizedBox(height: 6),
             Row(
               children: [
-                Icon(Icons.gps_fixed, size: 10, color: AppColors.gray400),
+                Icon(Icons.gps_fixed, size: 10, color: AppColors.textBase.withOpacity(0.8)),
                 SizedBox(width: 4),
                 Text(
                   'Координаты: ${_selectedPoint!.latitude.toStringAsFixed(6)}, ${_selectedPoint!.longitude.toStringAsFixed(6)}',
                   style: TextStyle(
                     fontSize: 10,
-                    color: AppColors.gray400,
+                    color: AppColors.textBase.withOpacity(0.8),
                   ),
                 ),
               ],
@@ -538,7 +539,7 @@ class _MapWidgetState extends State<MapWidget> {
       width: double.infinity,
       padding: const EdgeInsets.all(12.0),
       decoration: AppContainerStyles.sectionContainer.copyWith(
-        color: AppColors.transparentBlue,
+        color: AppColors.base1,
         border: Border(
           left: BorderSide(color: AppColors.borderTeal),
           right: BorderSide(color: AppColors.borderTeal),
@@ -550,14 +551,14 @@ class _MapWidgetState extends State<MapWidget> {
         children: [
           Row(
             children: [
-              Icon(Icons.location_on, color: AppColors.teal, size: 18),
+              Icon(Icons.location_on, color: AppColors.detailBlue, size: 18),
               SizedBox(width: 6),
               Text(
                 'Адрес:',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
-                  color: AppColors.teal,
+                  color: AppColors.textBase,
                 ),
               ),
             ],
@@ -567,7 +568,7 @@ class _MapWidgetState extends State<MapWidget> {
             _selectedAddress,
             style: TextStyle(
               fontSize: 12,
-              color: AppColors.gray400,
+              color: AppColors.textBase.withOpacity(0.8),
               fontWeight: FontWeight.w500,
             ),
             maxLines: 2,
@@ -577,13 +578,13 @@ class _MapWidgetState extends State<MapWidget> {
             SizedBox(height: 6),
             Row(
               children: [
-                Icon(Icons.gps_fixed, size: 10, color: AppColors.gray400),
+                Icon(Icons.gps_fixed, size: 10, color: AppColors.textBase.withOpacity(0.8),),
                 SizedBox(width: 4),
                 Text(
                   'Координаты: ${_selectedPoint!.latitude.toStringAsFixed(6)}, ${_selectedPoint!.longitude.toStringAsFixed(6)}',
                   style: TextStyle(
                     fontSize: 10,
-                    color: AppColors.gray400,
+                    color: AppColors.textBase.withOpacity(0.8),
                   ),
                 ),
               ],
@@ -598,7 +599,7 @@ class _MapWidgetState extends State<MapWidget> {
     return Container(
       padding: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
-        color: AppColors.transparentBlue,
+        color: AppColors.base1,
         borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(10),
           bottomRight: Radius.circular(10),
@@ -616,7 +617,7 @@ class _MapWidgetState extends State<MapWidget> {
             icon: Icons.map,
             label: 'Сменить карту',
             onPressed: _changeTileServer,
-            color: AppColors.gray400,
+            color: AppColors.textBase.withOpacity(0.8),
           ),
           if (widget.isSelectable)
             _buildControlButton(

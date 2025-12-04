@@ -59,7 +59,7 @@ class RequestCard extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: onMore,
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: AppColors.teal,
+                          foregroundColor: AppColors.baseBright,
                           side: BorderSide(
                               color: AppColors.teal.withOpacity(0.25)),
                           minimumSize: const Size(190, 60),
@@ -71,7 +71,7 @@ class RequestCard extends StatelessWidget {
                         ),
                         child: const Text(
                           'Подробнее',
-                          style: TextStyle(fontSize: 12),
+                          style: TextStyle(fontSize: 12, color: AppColors.white),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -84,8 +84,8 @@ class RequestCard extends StatelessWidget {
                         onPressed: onAccept,
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(190, 60),
-                          backgroundColor: AppColors.teal,
-                          foregroundColor: Colors.black,
+                          backgroundColor: AppColors.detailBlue,
+                          foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(
                               horizontal: 18, vertical: 12),
                           shape: RoundedRectangleBorder(

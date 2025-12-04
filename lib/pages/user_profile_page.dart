@@ -145,7 +145,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: HomeHeader(),
-      backgroundColor: const Color(0xFF1C2B38),
+      backgroundColor: AppColors.baseBright,
+      // backgroundColor: AppColors.white,
       body: SingleChildScrollView(
         child: Center(
           child: Container(
@@ -159,7 +160,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     top: 42,
                     bottom: 42,
                   ),
-                  child: AppRichTextStyles.logoText(),
+                  child: AppTextStyles.logo,
                 ),
                 Container(
                   margin: const EdgeInsets.only(bottom: 20),
@@ -195,7 +196,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                       style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w300,
-                                        color: Colors.white,
+                                        color: AppColors.textBase,
                                       ),
                                     ),
                                   ]),
@@ -206,7 +207,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                         onPressed: () => context.router
                                             .push(ChatRoute(userId: _id)),
                                         style: OutlinedButton.styleFrom(
-                                          foregroundColor: AppColors.teal,
+                                          foregroundColor: AppColors.textBase,
+                                          backgroundColor: AppColors.baseBright,
                                           side: BorderSide(
                                               color: AppColors.teal
                                                   .withOpacity(0.25)),
@@ -220,7 +222,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                         ),
                                         child: const Text(
                                           'Написать',
-                                          style: TextStyle(fontSize: 12),
+                                          style: TextStyle(fontSize: 12, color: AppColors.textBase),
                                           textAlign: TextAlign.center,
                                         ),
                                       )
@@ -263,6 +265,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             ),
             Container(
               padding: const EdgeInsets.only(top: 20),
+              
               child: Row(
                 spacing: 20,
                 children: [
@@ -383,10 +386,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
           const SizedBox(height: 10),
           sessionUser.id == widget.id
               ? TextField(
+                  style: TextStyle(color: AppColors.textBase),
                   controller: controller,
                   maxLines: maxLines,
                   minLines: minLines,
-                  cursorColor: AppColors.teal,
+                  cursorColor: AppColors.textBase,
                   decoration: AppContainerStyles.textInput(hint),
                 )
               : Align(

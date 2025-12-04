@@ -91,7 +91,7 @@ class _GroupPageState extends State<GroupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: HomeHeader(),
-      backgroundColor: const Color(0xFF1C2B38),
+      backgroundColor: AppColors.baseBright,
       body: SingleChildScrollView(
         child: Center(
           child: Container(
@@ -105,7 +105,7 @@ class _GroupPageState extends State<GroupPage> {
                     top: 42,
                     bottom: 42,
                   ),
-                  child: AppRichTextStyles.logoText(),
+                  child: AppTextStyles.logo,
                 ),
                 Container(
                   margin: const EdgeInsets.only(bottom: 20),
@@ -266,9 +266,23 @@ class _GroupPageState extends State<GroupPage> {
                                       children: [
                                         OutlinedButton(
                                           onPressed: () {},
-                                          style: AppButtonStyles
-                                              .tealOutlinedButton(
-                                                  const Size(200, 50)),
+                                          style: OutlinedButton.styleFrom(
+                                              // .tealOutlinedButton(
+                                                  fixedSize: const Size(200, 50),
+                                                  side: BorderSide(
+                                                  color: AppColors.teal.withOpacity(0.8), // Черная рамка
+                                                  width: 1,
+                                                ),
+                                                backgroundColor: Colors.transparent,
+                                                foregroundColor: AppColors.teal,
+                                                // minimumSize: minSize,
+                                                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  side: const BorderSide(color: AppColors.teal, width: 2),
+                                                ),
+                                                  ),
+                                                
                                           child: const Text(
                                             "Написать",
                                             style: AppTextStyles.whiteSmall,

@@ -28,9 +28,10 @@ class AppContainerStyles {
 
   static BoxDecoration neighbourCard = BoxDecoration(
     // color: AppColors.black,
-    gradient: LinearGradient(colors: [Color(0xFF32668D).withOpacity(0.20), Color(0xFF131718).withOpacity(0.80)],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight),
+    // gradient: LinearGradient(colors: [Color(0xFF32668D).withOpacity(0.20), Color(0xFF131718).withOpacity(0.80)],
+    //     begin: Alignment.topLeft,
+    //     end: Alignment.bottomRight),
+    color: AppColors.baseBright,
     borderRadius: BorderRadius.circular(20),
     border: Border.all(color: AppColors.blueDark),
   );
@@ -45,7 +46,7 @@ class AppContainerStyles {
 
   static BoxDecoration authCard = BoxDecoration(
     borderRadius: BorderRadius.circular(15),
-    color: AppColors.midnight,
+    color: AppColors.color1,
     boxShadow: [
       BoxShadow(
         color: Colors.black.withOpacity(0.25),
@@ -67,12 +68,13 @@ class AppContainerStyles {
       ),
     ],
     border: Border.all(color: AppColors.borderTeal, width: 1),
-    color: AppColors.darkCard,
+    color: AppColors.white,
   );
 
   static BoxDecoration sectionContainer = BoxDecoration(
     borderRadius: BorderRadius.circular(10),
-    color: AppColors.transparentBlue,
+    // color: AppColors.transparentBlue,
+    color: AppColors.baseBright.withOpacity(0.5),
     border: Border.all(color: AppColors.borderTeal, width: 1),
   );
 

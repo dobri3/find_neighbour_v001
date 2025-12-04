@@ -41,7 +41,7 @@ class _HomeHeaderState extends State<HomeHeader> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.midnight,
+      color: AppColors.baseBright,
       child: Center(
         child: Container(
           constraints: const BoxConstraints(maxWidth: 1280),
@@ -49,9 +49,12 @@ class _HomeHeaderState extends State<HomeHeader> {
           height: widget.preferredSize.height,
           child: Row(
             children: [
-              GestureDetector(
-                onTap: () => context.router.push(const RecommendationRoute()),
-                child: AppRichTextStyles.logoText(),
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: () => context.router.push(const RecommendationRoute()),
+                  child: AppTextStyles.logo,
+                ),
               ),
               const Spacer(),
               if (isAuthorized) ...[
@@ -77,7 +80,7 @@ class _HomeHeaderState extends State<HomeHeader> {
                   onPressed: () =>
                       context.router.push(const RecommendationRoute()),
                   icon:
-                      const Icon(Icons.notifications_none, color: Colors.white),
+                      const Icon(Icons.notifications_none, color: AppColors.textBase,),
                 ),
                 const SizedBox(width: 28),
               ],
@@ -124,13 +127,23 @@ class _AuthorizedUserSection extends StatelessWidget {
 class _UnauthorizedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
+    return 
+    ElevatedButton(
       onPressed: () => context.router.push(const AuthRoute()),
       style: AppButtonStyles.primaryMedium,
-      child: const Text(
+      child: Text(
         "Регистрация",
-        style: AppTextStyles.buttonSmall,
+        style: AppTextStyles.buttonSmall.copyWith(
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
+                    // Container(
+                    //   height: 60,
+                    //   child: AppButtonStyles.primaryButtonWithShadow.copyWith(
+                    //     onPressed: () => context.router.push(const AuthRoute()),
+                    //     text: "Регистрация",
+                    //   ),
+                    // );
   }
 }
