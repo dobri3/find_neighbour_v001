@@ -35,16 +35,9 @@ class _CriteriaCardState extends State<CriteriaCard> {
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        gradient: LinearGradient(
-          colors: [
-            const Color(0xFF32658D).withOpacity(0.20),
-            const Color(0xFF131718).withOpacity(0.80),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: AppColors.baseBright,
         border: Border.all(
-          color: _isHovered ? Colors.tealAccent : AppColors.teal,
+          color: _isHovered ? AppColors.textBase.withOpacity(0.8) : AppColors.teal,
         ),
         boxShadow: [
           BoxShadow(
@@ -60,12 +53,12 @@ class _CriteriaCardState extends State<CriteriaCard> {
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: AppColors.teal,
+              color: AppColors.color1,
               borderRadius: BorderRadius.circular(14),
             ),
             child: Icon(
               widget.icon,
-              color: const Color.fromARGB(255, 255, 255, 255),
+              color: AppColors.textBase,
               size: 56,
             ),
           ),
@@ -82,7 +75,7 @@ class _CriteriaCardState extends State<CriteriaCard> {
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
                     fontFamily: "Inter",
-                    color: Colors.white,
+                    color: AppColors.textBase,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -92,7 +85,7 @@ class _CriteriaCardState extends State<CriteriaCard> {
                     fontSize: 15,
                     height: 1.4,
                     fontFamily: "Inter",
-                    color: Colors.white.withOpacity(0.80),
+                    color: AppColors.textBase,
                   ),
                 ),
               ],

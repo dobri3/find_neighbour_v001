@@ -56,7 +56,7 @@ class _RecommendationPageState extends State<RecommendationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1C2B38),
+      backgroundColor:AppColors.baseBright,
       appBar: HomeHeader(),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
@@ -76,7 +76,7 @@ class _RecommendationPageState extends State<RecommendationPage> {
       return const Center(
         child: Text(
           'Нет доступных групп',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: AppColors.textBase),
         ),
       );
     }
@@ -105,7 +105,7 @@ class _RecommendationPageState extends State<RecommendationPage> {
             progress: (group.group.members.length / group.group.maxUsers),
             budget: group.group.parameters.budget,
             age: group.group.parameters.age,
-            housing: "${group.group.parameters.roomCount}-к кв",
+            housing: "${group.group.parameters.roomCount}-х кв",
             compatibility: (group.score * 100).round(),
             members: [
               for (var member in group.group.members)
@@ -131,11 +131,11 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return Container(
       height: preferredSize.height,
-      color: AppColors.blueDark,
+      color: AppColors.baseBright,
       padding: const EdgeInsets.symmetric(horizontal: 72),
       child: Row(
         children: [
-          AppRichTextStyles.logoText(),
+          AppTextStyles.logo,
           const Spacer(),
           const Text("Поиск", style: AppTextStyles.whiteSmall),
           const SizedBox(width: 32),

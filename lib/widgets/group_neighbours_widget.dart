@@ -39,7 +39,7 @@ class NeighborGroupCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 16),
       decoration: BoxDecoration(
-        color: AppColors.midnight,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -48,7 +48,7 @@ class NeighborGroupCard extends StatelessWidget {
             offset: const Offset(0, 10),
           ),
         ],
-        border: Border.all(color: AppColors.white.withOpacity(0.06)),
+        border: Border.all(color: AppColors.teal.withOpacity(0.06)),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
       child: Column(
@@ -58,15 +58,15 @@ class NeighborGroupCard extends StatelessWidget {
             children: [
               _Pill(
                 text: '$membersCount/$totalSpots • $title',
-                color: AppColors.teal,
-                textColor: AppColors.black,
+                color: AppColors.detailBlue,
+                textColor: AppColors.white,
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
                   location,
                   style: const TextStyle(
-                    color: AppColors.white,
+                    color: AppColors.textBase,
                     fontSize: 14,
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -75,7 +75,7 @@ class NeighborGroupCard extends StatelessWidget {
               Text(
                 '${totalSpots - membersCount} из $totalSpots мест',
                 style: TextStyle(
-                  color: AppColors.white.withOpacity(0.45),
+                  color: AppColors.textBase,
                   fontSize: 12,
                 ),
               ),
@@ -95,7 +95,7 @@ class NeighborGroupCard extends StatelessWidget {
               value: progress.clamp(0.0, 1.0),
               minHeight: 6,
               backgroundColor: Colors.white12,
-              valueColor: const AlwaysStoppedAnimation<Color>(AppColors.teal),
+              valueColor: const AlwaysStoppedAnimation<Color>(AppColors.accentBlue),
             ),
           ),
           const SizedBox(height: 16),
@@ -144,7 +144,8 @@ class NeighborGroupCard extends StatelessWidget {
               OutlinedButton(
                 onPressed: () => context.router.push(GroupRoute(id: id)),
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: AppColors.teal,
+                  backgroundColor: AppColors.baseBright,
+                  foregroundColor: AppColors.textBase,
                   side: BorderSide(color: AppColors.teal.withOpacity(0.25)),
                   minimumSize: const Size(190, 60),
                   padding:
@@ -165,15 +166,15 @@ class NeighborGroupCard extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(190, 60),
-                  backgroundColor: AppColors.teal,
-                  foregroundColor: Colors.black,
+                  backgroundColor: AppColors.detailBlue,
+                  foregroundColor: Colors.white,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: const Text('Занять место'),
+                child: const Text('Занять место', style: TextStyle(color: AppColors.white),),
               ),
             ],
           ),
@@ -234,9 +235,9 @@ class _InfoTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
-          color: const Color(0xFF20252B),
+          color: AppColors.base1,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.white.withOpacity(0.06)),
+          border: Border.all(color: AppColors.teal.withOpacity(0.7)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -244,13 +245,13 @@ class _InfoTile extends StatelessWidget {
             Text(
               value,
               style: const TextStyle(
-                color: AppColors.teal,
+                color: AppColors.textBase,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
             ),
             Text(label,
-                style: const TextStyle(color: Colors.white54, fontSize: 12)),
+                style: TextStyle(color: AppColors.textBase, fontSize: 12)),
             const SizedBox(height: 4),
           ],
         ),
@@ -285,7 +286,7 @@ class _MemberCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 6),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: const Color(0xFF1D2228),
+        color: AppColors.base1,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: Colors.white12),
       ),
@@ -301,12 +302,12 @@ class _MemberCard extends StatelessWidget {
               children: [
                 Text(
                   '${member.name}',
-                  style: const TextStyle(color: Colors.white, fontSize: 16),
+                  style: TextStyle(color: AppColors.textBase, fontSize: 16),
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   '${member.age} лет  ${member.profession}   ${member.budget} ₽',
-                  style: const TextStyle(color: Colors.white54, fontSize: 14),
+                  style: const TextStyle(color: AppColors.textLight, fontSize: 14),
                   overflow: TextOverflow.ellipsis,
                 ),
               ],

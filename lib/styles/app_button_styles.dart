@@ -1,75 +1,8 @@
-// import 'package:flutter/material.dart';
-
-// // is loading для чего, можно ли избежать, не сломает ли навигацию?
-// // переписать для container
-
-// class PrimaryButton extends StatelessWidget {
-//   final String text;
-//   final VoidCallback onPressed;
-//   final bool isLoading;
-//   final double? width;
-//   final Color? backgroundColor;
-
-//   const PrimaryButton({
-//     Key? key,
-//     required this.text,
-//     required this.onPressed,
-//     this.isLoading = false,
-//     this.width,
-//     this.backgroundColor,
-//   }) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return SizedBox(
-//       width: width ?? double.infinity,
-//       child: ElevatedButton(
-//         onPressed: isLoading ? null : onPressed,
-//         style: ElevatedButton.styleFrom(
-//           backgroundColor: backgroundColor ?? Theme.of(context).primaryColor,
-//           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-//           shape: RoundedRectangleBorder(
-//             borderRadius: BorderRadius.circular(8),
-//           ),
-//         ),
-//         child: isLoading
-//             ? const SizedBox(
-//                 height: 20,
-//                 width: 20,
-//                 child: CircularProgressIndicator(
-//                   strokeWidth: 2,
-//                   valueColor: AlwaysStoppedAnimation(Colors.white),
-//                 ),
-//               )
-//             : Text(
-//                 text,
-//                 style: const TextStyle(
-//                   fontSize: 16,
-//                   fontWeight: FontWeight.w600,
-//                   color: Colors.white,
-//                 ),
-//               ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:find_neighbour_v001/styles/app_colors.dart';
 import 'package:find_neighbour_v001/styles/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
 class AppButtonStyles {
-  // Primary Button Style
-  // static ButtonStyle primaryLarge = ElevatedButton.styleFrom(
-  //   backgroundColor: AppColors.teal,
-  //   minimumSize: const Size(350, 50),
-  //   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-  //   shape: RoundedRectangleBorder(
-  //     borderRadius: BorderRadius.circular(10),
-  //   ),
-  //   elevation: 4,
-  //   shadowColor: Colors.black.withOpacity(0.3),
-  // );
 
   static Widget primaryButtonWithShadow({
     required VoidCallback onPressed,
@@ -94,7 +27,7 @@ class AppButtonStyles {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.teal,
+          backgroundColor: AppColors.baseBright,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -106,16 +39,23 @@ class AppButtonStyles {
   }
 
   static ButtonStyle primaryMedium = ElevatedButton.styleFrom(
-    backgroundColor: AppColors.teal,
-    minimumSize: const Size(100, 40),
-    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(10),
+  backgroundColor: AppColors.baseBright,
+  foregroundColor: AppColors.textBase,
+  elevation: 5, 
+  shadowColor: Colors.black.withOpacity(0.3), 
+  minimumSize: const Size(100, 40),
+  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(10),
+    side: BorderSide(
+      color: AppColors.textBase.withOpacity(0.3),
+      width: 1.0,
     ),
-  );
+  ),
+);
 
   static ButtonStyle primarySmall = ElevatedButton.styleFrom(
-    backgroundColor: AppColors.teal,
+    backgroundColor: AppColors.baseBright,
     minimumSize: const Size(80, 32),
     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
     shape: RoundedRectangleBorder(
@@ -148,7 +88,8 @@ class AppButtonStyles {
       );
 
   static ButtonStyle tealFiledButton(Size minSize) => OutlinedButton.styleFrom(
-        backgroundColor: AppColors.teal,
+        // backgroundColor: AppColors.teal,
+        backgroundColor: AppColors.baseBright,
         foregroundColor: AppColors.white,
         minimumSize: minSize,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -165,8 +106,8 @@ class AppButtonStyles {
   );
 
   static ButtonStyle authButton = ElevatedButton.styleFrom(
-    backgroundColor: AppColors.gray700,
-    foregroundColor: AppColors.blueDark,
+    backgroundColor: AppColors.baseBright,
+    foregroundColor: AppColors.textBase,
     elevation: 0,
     side: const BorderSide(color: AppColors.blueDark, width: 1),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -176,7 +117,7 @@ class AppButtonStyles {
   static Widget socialButton({
     required VoidCallback onPressed,
     required String text,
-    required IconData icon,
+    required Widget icon,
   }) {
     return SizedBox(
       height: 56,
@@ -186,7 +127,8 @@ class AppButtonStyles {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 28, color: AppColors.lightGray),
+            // Icon(icon, size: 28, color: AppColors.textBase,),
+            icon,
             const SizedBox(width: 12),
             Text(text, style: AppTextStyles.buttonText),
           ],
@@ -198,8 +140,8 @@ class AppButtonStyles {
   static ButtonStyle primaryLarge = ElevatedButton.styleFrom(
     minimumSize: const Size(200, 60),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-    foregroundColor: AppColors.white,
-    backgroundColor: AppColors.teal,
+    foregroundColor: AppColors.textBase,
+    backgroundColor: AppColors.baseBright,
   );
 }
 

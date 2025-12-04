@@ -154,7 +154,7 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: HomeHeader(),
-      backgroundColor: const Color(0xFF1C2B38),
+      backgroundColor: AppColors.baseBright,
       body: Center(
         child: Container(
           constraints: const BoxConstraints(
@@ -202,11 +202,12 @@ class _ChatPageState extends State<ChatPage> {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.white, // Белый текст для темного фона
+                color: AppColors.textBase, // Белый текст для темного фона
               ),
             ),
             SizedBox(height: 20),
             TextField(
+              style: TextStyle(color: AppColors.textBase),
               decoration: AppContainerStyles.textInput('Найти диалог'),
             ),
           ],
@@ -237,14 +238,14 @@ class _ChatPageState extends State<ChatPage> {
                   title: Text(
                     chat.name,
                     style: TextStyle(
-                      color: Colors.white,
+                      color: AppColors.textBase,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                   subtitle: Text(
                     "", // chat.lastMessage,
                     style: TextStyle(
-                      color: Colors.grey[400],
+                      color: AppColors.textBase.withOpacity(0.8),
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -256,7 +257,7 @@ class _ChatPageState extends State<ChatPage> {
                       Text(
                         "", // chat.time,
                         style: TextStyle(
-                          color: Colors.grey[500],
+                          color: AppColors.textBase.withOpacity(0.8),
                           fontSize: 12,
                         ),
                       ),
@@ -326,7 +327,7 @@ class _ChatPageState extends State<ChatPage> {
                 leading: Padding(
                   padding: const EdgeInsets.only(left: 10, top: 10),
                   child: IconButton(
-                    icon: Icon(Icons.arrow_back, color: Colors.white),
+                    icon: Icon(Icons.arrow_back, color: AppColors.textBase,),
                     onPressed: () => {
                       setState(() {
                         _selectedChatId = null;
@@ -351,7 +352,7 @@ class _ChatPageState extends State<ChatPage> {
                             Text(
                               chat!.userName,
                               style: TextStyle(
-                                color: Colors.white,
+                                color: AppColors.textBase,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -420,7 +421,7 @@ class _ChatPageState extends State<ChatPage> {
                         Expanded(
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Color(0xFF2A3B47),
+                              color: AppColors.baseLight,
                               borderRadius: BorderRadius.circular(25),
                             ),
                             child: Row(
@@ -434,10 +435,10 @@ class _ChatPageState extends State<ChatPage> {
                                     decoration: InputDecoration(
                                       hintText: 'Напишите сообщение...',
                                       hintStyle:
-                                          TextStyle(color: Colors.grey[500]),
+                                          TextStyle(color: AppColors.textBase.withOpacity(0.8),),
                                       border: InputBorder.none,
                                     ),
-                                    style: TextStyle(color: Colors.white),
+                                    style: TextStyle(color: AppColors.textBase),
                                   ),
                                 ),
                               ],
@@ -491,7 +492,7 @@ class _ChatPageState extends State<ChatPage> {
               Container(
                 padding: EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: isMe ? Color(0xFF3A8DFF) : Color(0xFF2A3B47),
+                  color: isMe ? AppColors.textBase : Color(0xFF2A3B47),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(16),
                     topRight: Radius.circular(16),
@@ -503,7 +504,7 @@ class _ChatPageState extends State<ChatPage> {
                 child: Text(
                   message,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: AppColors.textBase,
                     fontSize: 14,
                   ),
                 ),
@@ -516,13 +517,13 @@ class _ChatPageState extends State<ChatPage> {
                   Text(
                     time,
                     style: TextStyle(
-                      color: Colors.grey[500],
+                      color: AppColors.textBase.withOpacity(0.8),
                       fontSize: 11,
                     ),
                   ),
                   if (showStatus && isMe) ...[
                     SizedBox(width: 4),
-                    Icon(Icons.done_all, color: Colors.blue, size: 14),
+                    Icon(Icons.done_all, color: AppColors.textBase, size: 14),
                   ],
                 ],
               ),
@@ -544,13 +545,13 @@ class _ChatPageState extends State<ChatPage> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       decoration: BoxDecoration(
-        color: Color(0xFF2A3B47).withOpacity(0.5),
+        color: AppColors.textBase.withOpacity(0.5),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Text(
         text,
         style: TextStyle(
-          color: Colors.grey[400],
+          color: AppColors.textBase.withOpacity(0.8),
           fontSize: 12,
           fontStyle: FontStyle.italic,
         ),

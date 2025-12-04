@@ -19,12 +19,6 @@ class _NeighbourIntroductoryWidgetState extends State<NeighbourIntroductoryWidge
 
   @override
   Widget build(BuildContext context) {
-    // return  Container(
-    //   height: 450,
-    //   width: 420,
-    //   padding: const EdgeInsets.all(20),
-    //   margin: const EdgeInsets.only(right: 15),
-    //   decoration: AppContainerStyles.neighbourCard,
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true), 
       onExit: (_) => setState(() => _isHovered = false), 
@@ -35,8 +29,9 @@ class _NeighbourIntroductoryWidgetState extends State<NeighbourIntroductoryWidge
         padding: const EdgeInsets.all(20),
         margin: const EdgeInsets.only(right: 15),
         decoration: AppContainerStyles.neighbourCard.copyWith(
+          color:  AppColors.baseBright,
           border: Border.all(
-            color: _isHovered ? Colors.tealAccent :  AppColors.teal.withOpacity(0.5), 
+            color: _isHovered ? AppColors.textBase.withOpacity(0.5) :  AppColors.teal.withOpacity(0.5), 
             width: 2,
           ),
         ),
@@ -52,7 +47,7 @@ class _NeighbourIntroductoryWidgetState extends State<NeighbourIntroductoryWidge
 
         decoration: AppContainerStyles.photoContainer.copyWith(
           border: Border.all(
-            color: AppColors.teal.withOpacity(0.5),
+            color: AppColors.baseBright,
           ),
           image: DecorationImage(
             image:  AssetImage(widget.neighbourModel.neighbourPhoto),
