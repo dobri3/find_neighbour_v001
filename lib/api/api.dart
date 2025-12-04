@@ -11,7 +11,7 @@ class ApiService {
   static final Dio _dio = Dio(
     BaseOptions(
       baseUrl: const String.fromEnvironment('BASE_URL',
-          defaultValue: 'https://topit.best/api/v1'),
+          defaultValue: 'http://localhost:8080/api/v1'),
       sendTimeout: const Duration(seconds: 15),
       connectTimeout: const Duration(seconds: 15),
       receiveTimeout: const Duration(seconds: 15),
