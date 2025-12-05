@@ -26,13 +26,10 @@ class AuthService {
 
   Future googleAuthorize(String code, String state) async {
     try {
-      final response = await _dio.get('/auth/google/callback',
+      await _dio.get('/auth/google/callback',
           queryParameters: {'code': code, 'state': state});
-
-      return response.data['access_token'];
     } catch (e) {
-      print(e);
-      return '';
+      throw e;
     }
   }
 
@@ -48,13 +45,11 @@ class AuthService {
 
   Future yandexAuthorize(String code, String state) async {
     try {
-      final response = await _dio.get('/auth/yandex/callback',
+      await _dio.get('/auth/yandex/callback',
           queryParameters: {'code': code, 'state': state});
-
-      return response.data['access_token'];
     } catch (e) {
       print(e);
-      return '';
+      throw e;
     }
   }
 
@@ -63,12 +58,10 @@ class AuthService {
       User? user = await TemporaryStorage.getValue('user');
 
       if (user != null) {
-        print('User from cache');
         return user;
       }
 
       final response = await _dio.get('/user/session');
-      print("User from server");
       user = User.fromJson(response.data);
 
       await TemporaryStorage.saveValue('user', user);
@@ -78,5 +71,11 @@ class AuthService {
       print(e);
       return User(id: '', name: '', surname: '', description: '');
     }
+  }
+
+  Future logout() async {
+    try {
+      await _dio.get('/auth/logout');
+    } catch (e) {}
   }
 }

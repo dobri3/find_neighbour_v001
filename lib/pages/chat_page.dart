@@ -58,7 +58,6 @@ class _ChatPageState extends State<ChatPage> {
 
   void _loadChatData() async {
     List<Chat> chats = await ApiService.chatService.getChatsByUserId();
-    print(chats);
     User? session = await ApiService.authService.getSession();
 
     if (widget.userId != null || widget.groupId != null) {
@@ -69,19 +68,22 @@ class _ChatPageState extends State<ChatPage> {
       );
 
       if (_webSocket != null) {
+        setState(() {
+          _selectedChatId = widget.chatId;
+          _messages.clear();
+          chat = ChatDetail(
+            id: "",
+            userName: "",
+            avatarUrl: "",
+            compatibility: 0,
+            isOnline: false,
+          );
+        });
         _webSocket!.stream.listen((event) {
-          print(event);
           setState(() {
-            chat = ChatDetail(
-              id: "",
-              userName: "",
-              avatarUrl: "",
-              compatibility: 0,
-              isOnline: false,
-            );
             _messages.add(OutputMessage.fromJson(jsonDecode(event)));
-            _scrollToBottom();
           });
+          _scrollToBottom();
         });
       }
     }
@@ -303,17 +305,24 @@ class _ChatPageState extends State<ChatPage> {
     );
 
     if (_webSocket != null) {
+      setState(() {
+        _messages.clear();
+        chat = ChatDetail(
+          id: "",
+          userName: "",
+          avatarUrl: "",
+          compatibility: 0,
+          isOnline: false,
+        );
+        _selectedChatId = chatId;
+      });
       _webSocket!.stream.listen((event) {
-        print(event);
         setState(() {
           _messages.add(OutputMessage.fromJson(jsonDecode(event)));
         });
+        _scrollToBottom();
       });
     }
-    setState(() {
-      _selectedChatId = chatId;
-      // chat = _getChatById(chatId);
-    });
   }
 
   Widget _buildChatDetail(BuildContext context) {
@@ -327,7 +336,10 @@ class _ChatPageState extends State<ChatPage> {
                 leading: Padding(
                   padding: const EdgeInsets.only(left: 10, top: 10),
                   child: IconButton(
-                    icon: Icon(Icons.arrow_back, color: AppColors.textBase,),
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: AppColors.textBase,
+                    ),
                     onPressed: () => {
                       setState(() {
                         _selectedChatId = null;
@@ -434,8 +446,10 @@ class _ChatPageState extends State<ChatPage> {
                                     onSubmitted: (value) => _sendMessage(),
                                     decoration: InputDecoration(
                                       hintText: 'Напишите сообщение...',
-                                      hintStyle:
-                                          TextStyle(color: AppColors.textBase.withOpacity(0.8),),
+                                      hintStyle: TextStyle(
+                                        color:
+                                            AppColors.textBase.withOpacity(0.8),
+                                      ),
                                       border: InputBorder.none,
                                     ),
                                     style: TextStyle(color: AppColors.textBase),
@@ -492,7 +506,7 @@ class _ChatPageState extends State<ChatPage> {
               Container(
                 padding: EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: isMe ? AppColors.textBase : Color(0xFF2A3B47),
+                  color: isMe ? AppColors.base1 : AppColors.baseDarkBright,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(16),
                     topRight: Radius.circular(16),

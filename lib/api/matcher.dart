@@ -252,4 +252,20 @@ class MatcherService {
       return [];
     }
   }
+
+  Future leaveGroup() async {
+    try {
+      await _dio.post('/matcher/group/user');
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future kickMember(String memberId) async {
+    try {
+      await _dio.post('matcher/group/kick/$memberId');
+    } catch (e) {
+      throw e;
+    }
+  }
 }
