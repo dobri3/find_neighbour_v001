@@ -59,13 +59,6 @@ class _NeighborGroupCardState extends State<NeighborGroupCard> {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: AppColors.black.withOpacity(0.2),
-        //     blurRadius: 9,
-        //     offset: const Offset(0, 5),
-        //   ),
-        // ],
         border: Border.all(color: AppColors.teal.withOpacity(0.06)),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
@@ -176,6 +169,11 @@ class _NeighborGroupCardState extends State<NeighborGroupCard> {
               ),
               const SizedBox(width: 12),
               ElevatedButton(
+                style: ElevatedButton.styleFrom( minimumSize: const Size(190, 60), 
+                backgroundColor: AppColors.detailBlue, 
+                foregroundColor: Colors.white, 
+                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12), 
+                shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(8), ), ),
                 onPressed: isSending ? null : () async {
                   setState(() => isSending = true);
 
@@ -188,8 +186,6 @@ class _NeighborGroupCardState extends State<NeighborGroupCard> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text("Ошибка отправки запроса: $e")),
                     );
-
-                    // Разблокируем, если ошибка
                     setState(() => isSending = false);
                   }
                 },
