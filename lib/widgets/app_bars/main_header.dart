@@ -42,56 +42,79 @@ class _HomeHeaderState extends State<HomeHeader> {
   Widget build(BuildContext context) {
     return Material(
       color: AppColors.baseBright,
-      child: Center(
+        child: Container(
+          // color: AppColors.baseBright,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            AppColors.baseBright, 
+            AppColors.baseBright, 
+            AppColors.baseBright, 
+            AppColors.baseDarkBright.withOpacity(0.6),  
+          ],
+        ),
+      ),
         child: Container(
           constraints: const BoxConstraints(maxWidth: 1280),
           width: double.infinity,
           height: widget.preferredSize.height,
-          child: Row(
-            children: [
-              MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: () => context.router.push(const RecommendationRoute()),
-                  child: AppTextStyles.logo,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 60.0, left: 60.0),
+            child: Row(
+              children: [
+                MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    onTap: () => context.router.push(const RecommendationRoute()),
+                    child: AppTextStyles.logo,
+                  ),
                 ),
-              ),
-              const Spacer(),
-              if (isAuthorized) ...[
-                GestureDetector(
-                  onTap: () {
-                    context.router.push(ChatRoute());
-                  },
-                  child:
-                      const Text("Сообщения", style: AppTextStyles.whiteSmall),
-                ),
-                const SizedBox(width: 32),
-                GestureDetector(
-                  onTap: () async {
-                    var group = await ApiService.matcherService
-                        .getGroupByUserId(user!.id);
-
-                    context.router.push(GroupRoute(id: group.id));
-                  },
-                  child: const Text("Группы", style: AppTextStyles.whiteSmall),
-                ),
-                const SizedBox(width: 40),
-                IconButton(
-                  onPressed: () =>
-                      context.router.push(const RecommendationRoute()),
-                  icon:
-                      const Icon(Icons.notifications_none, color: AppColors.textBase,),
-                ),
-                const SizedBox(width: 28),
+                const Spacer(),
+                if (isAuthorized) ...[
+                  MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: GestureDetector(
+                      onTap: () {
+                        context.router.push(ChatRoute());
+                      },
+                      child:
+                          const Text("Сообщения", style: AppTextStyles.whiteSmall),
+                    ),
+                  ),
+                  const SizedBox(width: 32),
+                  MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: GestureDetector(
+                      onTap: () async {
+                        var group = await ApiService.matcherService
+                            .getGroupByUserId(user!.id);
+                    
+                        context.router.push(GroupRoute(id: group.id));
+                      },
+                      child: const Text("Группы", style: AppTextStyles.whiteSmall),
+                    ),
+                  ),
+                  const SizedBox(width: 40),
+                  IconButton(
+                    onPressed: () =>
+                        context.router.push(const RecommendationRoute()),
+                    icon:
+                        const Icon(Icons.notifications_none, color: AppColors.textBase,),
+                  ),
+                  const SizedBox(width: 28),
+                ],
+                if (!isAuthorized)
+                  _UnauthorizedButton()
+                else
+                  _AuthorizedUserSection(user: user!),
               ],
-              if (!isAuthorized)
-                _UnauthorizedButton()
-              else
-                _AuthorizedUserSection(user: user!),
-            ],
+            ),
           ),
         ),
       ),
+      // ),
     );
   }
 }
@@ -138,12 +161,5 @@ class _UnauthorizedButton extends StatelessWidget {
         ),
       ),
     );
-                    // Container(
-                    //   height: 60,
-                    //   child: AppButtonStyles.primaryButtonWithShadow.copyWith(
-                    //     onPressed: () => context.router.push(const AuthRoute()),
-                    //     text: "Регистрация",
-                    //   ),
-                    // );
   }
 }
