@@ -5,13 +5,30 @@ class User {
   final String name;
   final String surname;
   final String description;
+  final String? photoUrl;
 
   User({
     required this.id,
     required this.name,
     required this.surname,
     required this.description,
+    this.photoUrl,
   });
+
+  User copyWith({
+    String? name,
+    String? surname,
+    String? description,
+    String? photoUrl,
+  }) {
+    return User(
+      id: id,
+      name: name ?? this.name,
+      surname: surname ?? this.surname,
+      description: description ?? this.description,
+      photoUrl: photoUrl ?? this.photoUrl,
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {

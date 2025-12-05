@@ -16,6 +16,12 @@ import 'package:find_neighbour_v001/routing/app_router.dart';
 
 import 'package:find_neighbour_v001/widgets/app_bars/main_header.dart';
 
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+
+
+
+
 @RoutePage()
 class UserProfilePage extends StatefulWidget {
   final String id;
@@ -39,6 +45,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   String _name = '';
   String _surname = '';
   String _id = '';
+
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _surnameController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
@@ -48,11 +55,25 @@ class _UserProfilePageState extends State<UserProfilePage> {
   final TextEditingController _monthsController = TextEditingController();
   final TextEditingController _regionController = TextEditingController();
 
+  bool _isFormValid = false;
+  bool _isModified = false;
+  bool _isSaving = false;
+
   @override
   void initState() {
     super.initState();
     _loadUserData();
+
+    _nameController.addListener(_validateForm);
+    _surnameController.addListener(_validateForm);
+    _descController.addListener(_validateForm);
+    _moneyController.addListener(_validateForm);
+    _neighboursController.addListener(_validateForm);
+    _roomCountController.addListener(_validateForm);
+    _monthsController.addListener(_validateForm);
   }
+
+  
 
   void _loadUserData() async {
     User _user = await ApiService.userService.getUserById(widget.id);
@@ -89,23 +110,75 @@ class _UserProfilePageState extends State<UserProfilePage> {
     _moneyController.dispose();
     _neighboursController.dispose();
     _roomCountController.dispose();
+    _monthsController.dispose();
     _regionController.dispose();
     super.dispose();
   }
 
-  void _saveProfile() async {
-    User user = User(
-      id: _id,
-      name: _nameController.text,
-      surname: _surnameController.text,
-      description: _descController.text,
+  bool _isStringValid(String value) {
+    return value.trim().isNotEmpty && RegExp(r'^[а-яА-Яa-zA-Z\s]+$').hasMatch(value);
+  }
+
+  bool _isNumberValid(String value) {
+    if (value.isEmpty) return false;
+    int? number = int.tryParse(value);
+    return number != null && number > 0;
+  }
+
+  void _validateForm() {
+  bool stringFieldsValid = _isStringValid(_nameController.text) &&
+      _isStringValid(_surnameController.text) &&
+      _isStringValid(_descController.text);
+
+  bool numberFieldsValid = _isNumberValid(_moneyController.text) &&
+      _isNumberValid(_neighboursController.text) &&
+      _isNumberValid(_roomCountController.text) &&
+      _isNumberValid(_monthsController.text);
+
+  bool modified = _nameController.text != _name ||
+      _surnameController.text != _surname ||
+      _descController.text != _user.description ||
+      _moneyController.text != '' ||
+      _neighboursController.text != '' ||
+      _roomCountController.text != '' ||
+      _monthsController.text != '';
+
+  setState(() {
+    _isModified = modified;
+    _isFormValid = stringFieldsValid && numberFieldsValid && _isModified;
+
+    if (_isSaving && _isModified) {
+      _isSaving = false;
+    }
+  });
+}
+
+
+void _saveProfile() async {
+  if (!_isFormValid || _isSaving) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Пожалуйста, исправьте ошибки в форме')),
     );
-    await ApiService.userService.updateUser(user);
-    matcher.Parameters parameters = matcher.Parameters(
-      name: _nameController.text,
-      surname: _surnameController.text,
-      geo: _userLocation,
-      photos: [],
+    return;
+  }
+
+  setState(() {
+    _isSaving = true; 
+  });
+
+  User user = User(
+    id: _id,
+    name: _nameController.text,
+    surname: _surnameController.text,
+    description: _descController.text,
+  );
+  await ApiService.userService.updateUser(user);
+
+  matcher.Parameters parameters = matcher.Parameters(
+    name: _nameController.text,
+    surname: _surnameController.text,
+    geo: _userLocation,
+    photos: [],
       budget:
           _moneyController.text.isEmpty ? 0 : int.parse(_moneyController.text),
       roomCount: _roomCountController.text.isEmpty
@@ -117,29 +190,55 @@ class _UserProfilePageState extends State<UserProfilePage> {
       months: _monthsController.text.isEmpty
           ? 0
           : int.parse(_monthsController.text),
-      age: 0,
-      smoking: false,
-      alko: false,
-      pet: false,
-      sex: 'male',
-      userType: 'student',
-      description: _descController.text,
-      address: _address ?? '',
-    );
+    age: 0,
+    smoking: false,
+    alko: false,
+    pet: false,
+    sex: 'male',
+    userType: 'student',
+    description: _descController.text,
+    address: _address ?? '',
+  );
 
-    if (widget.auth) {
+  if (widget.auth) {
       await ApiService.matcherService.createForm(
         _id,
         parameters,
       );
-      context.router.push(RecommendationRoute());
-    } else {
-      await ApiService.matcherService.updateForm(
-        _id,
-        parameters,
-      );
-    }
+    context.router.push(RecommendationRoute());
+  } else {
+    await ApiService.matcherService.updateForm(_id, parameters);
   }
+
+  setState(() {
+    _isModified = false;
+    _validateForm();
+  });
+}
+
+Future<void> _pickAvatar() async {
+  final ImagePicker picker = ImagePicker();
+  final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+  if (image == null) return;
+
+  File file = File(image.path);
+
+  // String? uploadedUrl = await ApiService.userService.uploadAvatar(_id, file);
+  String? uploadedUrl = '';
+
+  if (uploadedUrl == null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Ошибка загрузки фотографии")),
+    );
+    return;
+  }
+
+  setState(() {
+    _user = _user.copyWith(photoUrl: uploadedUrl);
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -173,76 +272,84 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       bottom: 60,
                     ),
                     child: Center(
-                      child: Column(
-                        children: [
-                          const Text(
-                            'Профиль',
-                            style: AppTextStyles.profileTitle,
-                          ),
-                          Container(
-                            margin: const EdgeInsets.only(
-                              top: 27,
-                              bottom: 27,
-                            ),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Row(spacing: 41, children: [
-                                    CircleAvatar(
-                                      radius: 60,
-                                    ),
-                                    Text(
-                                      "$_name $_surname",
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w300,
-                                        color: AppColors.textBase,
-                                      ),
-                                    ),
-                                  ]),
+                    child: Column(
+                      children: [
+                        const Text('Профиль', style: AppTextStyles.profileTitle),
+                        const SizedBox(height: 27),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Row(spacing: 41, children: [
+                                GestureDetector(
+                                  onTap: _id == sessionUser.id ? _pickAvatar : null,
+                                  child: CircleAvatar(
+                                    radius: 60,
+                                    backgroundColor: AppColors.teal.withOpacity(0.1),
+                                    backgroundImage: _user.photoUrl != null ? NetworkImage(_user.photoUrl!) : null,
+                                    child: _user.photoUrl == null
+                                        ? const Icon(Icons.camera_alt, color: AppColors.textBase, size: 32)
+                                        : null,
+                                  ),
                                 ),
-                                const SizedBox(width: 20),
-                                _id != sessionUser.id
-                                    ? ElevatedButton(
+                                // CircleAvatar(
+                                //     radius: 60,),
+                                Text(
+                                  "$_name $_surname",
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w300,
+                                    color: AppColors.textBase,
+                                  ),
+                                ),
+                              ]),
+                            ),
+                            const SizedBox(width: 20),
+                            _id != sessionUser.id
+                                ? ElevatedButton(
                                         onPressed: () => context.router
                                             .push(ChatRoute(userId: _id)),
-                                        style: OutlinedButton.styleFrom(
-                                          foregroundColor: AppColors.textBase,
-                                          backgroundColor: AppColors.baseBright,
-                                          side: BorderSide(
+                                    style: OutlinedButton.styleFrom(
+                                      foregroundColor: AppColors.textBase,
+                                      backgroundColor: AppColors.baseBright,
+                                      side: BorderSide(
                                               color: AppColors.teal
                                                   .withOpacity(0.25)),
-                                          minimumSize: const Size(190, 60),
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 16, vertical: 12),
-                                          shape: RoundedRectangleBorder(
+                                      minimumSize: const Size(190, 60),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16, vertical: 12),
+                                      shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(8),
                                           ),
-                                        ),
-                                        child: const Text(
-                                          'Написать',
+                                    ),
+                                    child: const Text(
+                                      'Написать',
                                           style: TextStyle(fontSize: 12, color: AppColors.textBase),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      )
-                                    : const SizedBox(),
-                              ],
-                            ),
-                          ),
-                          _buildMainInfo(),
-                          const SizedBox(height: 20),
-                          _buildHomeInfo(),
-                          const SizedBox(height: 20),
-                          ElevatedButton(
-                            onPressed: _saveProfile,
-                            style: AppButtonStyles.primaryLarge,
-                            child: const Text("Сохранить"),
-                          ),
-                        ],
-                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  )
+                                : const SizedBox(),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        _buildMainInfo(),
+                        const SizedBox(height: 20),
+                        _buildHomeInfo(),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                        onPressed: (_isFormValid && !_isSaving) ? _saveProfile : null,
+                        style: (_isFormValid && !_isSaving)
+                            ? AppButtonStyles.primaryLarge
+                            : AppButtonStyles.primaryLarge.copyWith(
+                                backgroundColor: MaterialStateProperty.all(AppColors.baseBright.withOpacity(0.5)),
+                                foregroundColor: MaterialStateProperty.all(AppColors.textBase.withOpacity(0.5)),
+                              ),
+                        child: const Text("Сохранить"),
+                      )
+                      ],
                     ),
                   ),
+                ),
                 ),
               ],
             ),
@@ -267,16 +374,16 @@ class _UserProfilePageState extends State<UserProfilePage> {
               padding: const EdgeInsets.only(top: 20),
               
               child: Row(
-                spacing: 20,
-                children: [
-                  Expanded(
+              spacing: 20,
+              children: [
+                Expanded(
                     child: _buildInput("Имя", _nameController, "Введите имя"),
                   ),
-                  Expanded(
+                Expanded(
                     child: _buildInput(
                         "Фамилия", _surnameController, "Введите фамилию"),
                   ),
-                ],
+              ],
               ),
             ),
             const SizedBox(height: 20),
@@ -302,37 +409,30 @@ class _UserProfilePageState extends State<UserProfilePage> {
             Container(
               padding: const EdgeInsets.only(top: 20),
               child: Row(
-                spacing: 20,
-                children: [
-                  Expanded(
+              spacing: 20,
+              children: [
+                Expanded(
                     child: _buildInput(
-                        "Бюджет", _moneyController, "Введите бюджет в рублях"),
+                        "Бюджет ₽", _moneyController, "Введите бюджет в рублях"),
                   ),
-                  Expanded(
-                    child: _buildInput("Количество соседей",
-                        _neighboursController, "Введите количество соседей"),
-                  ),
-                ],
-              ),
+                Expanded(
+                    child: _buildInput("Количество соседей", _neighboursController,
+                        "Введите количество соседей")),
+              ],
+            ),
             ),
             const SizedBox(height: 20),
-            Container(
-              padding: const EdgeInsets.only(top: 20),
-              child: Row(
-                spacing: 20,
-                children: [
-                  Expanded(
-                    child: _buildInput("Срок съема", _monthsController,
-                        "Введите срок съема в месяцах"),
-                  ),
-                  Expanded(
-                    child: _buildInput("Количество комнат",
-                        _roomCountController, "Введите количество комнат"),
-                  ),
-                ],
-              ),
+            Row(
+              spacing: 20,
+              children: [
+                Expanded(
+                    child: _buildInput(
+                        "Срок съема (мес.)", _monthsController, "Введите срок съема в месяцах")),
+                Expanded(
+                    child: _buildInput("Количество комнат", _roomCountController,
+                        "Введите количество комнат")),
+              ],
             ),
-            const SizedBox(height: 20),
             const SizedBox(height: 20),
             widget.id == sessionUser.id
                 ? MapWidget(
@@ -342,9 +442,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     onPointSelected: (point, address) {
                       if (point != null) {
                         setState(() {
-                          _userLocation = matcher.Point(
-                              lat: point.latitude, lon: point.longitude);
+                          _userLocation =
+                              matcher.Point(lat: point.latitude, lon: point.longitude);
                           _address = address;
+                          _validateForm();
                         });
                       }
                     },
@@ -364,49 +465,45 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         LatLng(_userLocation.lat, _userLocation.lon),
                     initialAddress: _address,
                   ),
+            
           ],
         ),
       ),
     );
   }
 
-  Widget _buildInput(
-      String title, TextEditingController controller, String hint,
+  Widget _buildInput(String title, TextEditingController controller, String hint,
       {maxLines = 1, minLines = 1}) {
-    return Container(
-      child: Column(
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              title,
-              style: AppTextStyles.smallSecondary,
-            ),
-          ),
-          const SizedBox(height: 10),
-          sessionUser.id == widget.id
-              ? TextField(
-                  style: TextStyle(color: AppColors.textBase),
-                  controller: controller,
-                  maxLines: maxLines,
-                  minLines: minLines,
-                  cursorColor: AppColors.textBase,
-                  decoration: AppContainerStyles.textInput(hint),
-                )
-              : Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 5),
-                    child: Text(
-                      controller.text,
-                      style: AppTextStyles.inputLabel,
-                      textAlign: TextAlign.start,
-                      maxLines: maxLines,
-                    ),
-                  ),
+    bool isStringField =
+        [ _nameController, _surnameController, _descController].contains(controller);
+    bool isValid = isStringField
+        ? _isStringValid(controller.text)
+        : _isNumberValid(controller.text);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style: AppTextStyles.smallSecondary),
+        const SizedBox(height: 10),
+        sessionUser.id == widget.id
+            ? TextField(
+              style: TextStyle(color: AppColors.textBase),
+                controller: controller,
+                maxLines: maxLines,
+                minLines: minLines,
+                cursorColor: AppColors.textBase,
+                decoration: AppContainerStyles.textInput(hint).copyWith(
+                  errorText: isValid ? null : 'Некорректное значение',
                 ),
-        ],
-      ),
+              )
+            : Padding(
+                padding: const EdgeInsets.only(left: 5),
+                child: Text(controller.text,
+                    style: AppTextStyles.inputLabel,
+                    textAlign: TextAlign.start,
+                    maxLines: maxLines),
+              ),
+      ],
     );
   }
 }

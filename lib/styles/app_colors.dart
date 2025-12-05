@@ -22,6 +22,7 @@ class AppColors {
   static const Color teal = Color(0xFF6A999E);
   static const Color black = Color(0xFF000000);
   static const Color baseBright = Color(0xFFD2E2F7);
+  static const Color baseDarkBright =Color.fromARGB(255, 178, 191, 209);
   static const Color white = Colors.white;
   static const Color color1 = Colors.white;
   static const Color base1 = Color(0xFFEBF0F7);

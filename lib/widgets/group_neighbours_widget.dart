@@ -6,7 +6,7 @@ import 'package:find_neighbour_v001/models/user.dart';
 import 'package:find_neighbour_v001/styles/app_colors.dart';
 import 'package:find_neighbour_v001/styles/app_text_styles.dart';
 
-class NeighborGroupCard extends StatelessWidget {
+class NeighborGroupCard extends StatefulWidget {
   final String id;
   final String title;
   final String location;
@@ -35,19 +35,37 @@ class NeighborGroupCard extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<NeighborGroupCard> createState() => _NeighborGroupCardState();
+}
+
+class _NeighborGroupCardState extends State<NeighborGroupCard> {
+  bool isSending = false;
+
+  @override
+  void didUpdateWidget(covariant NeighborGroupCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.membersCount != oldWidget.membersCount ||
+        widget.totalSpots != oldWidget.totalSpots ||
+        widget.progress != oldWidget.progress) {
+      setState(() => isSending = false);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 16),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.withOpacity(0.45),
-            blurRadius: 18,
-            offset: const Offset(0, 10),
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: AppColors.black.withOpacity(0.2),
+        //     blurRadius: 9,
+        //     offset: const Offset(0, 5),
+        //   ),
+        // ],
         border: Border.all(color: AppColors.teal.withOpacity(0.06)),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
@@ -57,14 +75,14 @@ class NeighborGroupCard extends StatelessWidget {
           Row(
             children: [
               _Pill(
-                text: '$membersCount/$totalSpots • $title',
+                text: '${widget.membersCount}/${widget.totalSpots} • ${widget.title}',
                 color: AppColors.detailBlue,
                 textColor: AppColors.white,
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
-                  location,
+                  widget.location,
                   style: const TextStyle(
                     color: AppColors.textBase,
                     fontSize: 14,
@@ -73,7 +91,7 @@ class NeighborGroupCard extends StatelessWidget {
                 ),
               ),
               Text(
-                '${totalSpots - membersCount} из $totalSpots мест',
+                '${widget.totalSpots - widget.membersCount} из ${widget.totalSpots} мест',
                 style: TextStyle(
                   color: AppColors.textBase,
                   fontSize: 12,
@@ -92,7 +110,7 @@ class NeighborGroupCard extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
-              value: progress.clamp(0.0, 1.0),
+              value: widget.progress.clamp(0.0, 1.0),
               minHeight: 6,
               backgroundColor: Colors.white12,
               valueColor: const AlwaysStoppedAnimation<Color>(AppColors.accentBlue),
@@ -109,22 +127,22 @@ class NeighborGroupCard extends StatelessWidget {
                   _InfoTile(
                     width: itemWidth,
                     label: 'Бюджет',
-                    value: '$budget',
+                    value: '${widget.budget}',
                   ),
                   _InfoTile(
                     width: itemWidth,
                     label: 'Возраст',
-                    value: '$age лет',
+                    value: '${widget.age} лет',
                   ),
                   _InfoTile(
                     width: itemWidth,
                     label: 'Жильё',
-                    value: housing,
+                    value: widget.housing,
                   ),
                   _InfoTile(
                     width: itemWidth,
                     label: 'Совместимость',
-                    value: '$compatibility%',
+                    value: '${widget.compatibility}%',
                   ),
                 ],
               );
@@ -134,7 +152,7 @@ class NeighborGroupCard extends StatelessWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: members.map((m) => _MemberCard(member: m)).toList(),
+              children: widget.members.map((m) => _MemberCard(member: m)).toList(),
             ),
           ),
           const SizedBox(height: 16),
@@ -142,7 +160,7 @@ class NeighborGroupCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               OutlinedButton(
-                onPressed: () => context.router.push(GroupRoute(id: id)),
+                onPressed: () => context.router.push(GroupRoute(id: widget.id)),
                 style: OutlinedButton.styleFrom(
                   backgroundColor: AppColors.baseBright,
                   foregroundColor: AppColors.textBase,
@@ -158,23 +176,47 @@ class NeighborGroupCard extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               ElevatedButton(
-                onPressed: () async {
-                  var session = await ApiService.authService.getSession();
-                  await ApiService.matcherService
-                      .sendJoinRequest(session.id, id);
-                  print('sent');
+                onPressed: isSending ? null : () async {
+                  setState(() => isSending = true);
+
+                  try {
+                    var session = await ApiService.authService.getSession();
+                    await ApiService.matcherService.sendJoinRequest(session.id, widget.id);
+
+                    print('sent');
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Ошибка отправки запроса: $e")),
+                    );
+
+                    // Разблокируем, если ошибка
+                    setState(() => isSending = false);
+                  }
                 },
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(190, 60),
-                  backgroundColor: AppColors.detailBlue,
-                  foregroundColor: Colors.white,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: const Text('Занять место', style: TextStyle(color: AppColors.white),),
+                child: isSending
+                  ? const SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Text('Занять место', style: TextStyle(color: AppColors.white)),
+                // onPressed: () async {
+                //   var session = await ApiService.authService.getSession();
+                //   await ApiService.matcherService
+                //       .sendJoinRequest(session.id, widget.id);
+                //   print('sent');
+                // },
+                // style: ElevatedButton.styleFrom(
+                //   minimumSize: const Size(190, 60),
+                //   backgroundColor: AppColors.detailBlue,
+                //   foregroundColor: Colors.white,
+                //   padding:
+                //       const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+                //   shape: RoundedRectangleBorder(
+                //     borderRadius: BorderRadius.circular(8),
+                //   ),
+                // ),
+                // child: const Text('Занять место', style: TextStyle(color: AppColors.white),),
               ),
             ],
           ),
@@ -288,7 +330,7 @@ class _MemberCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.base1,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.white12),
+        border: Border.all(color: AppColors.teal.withOpacity(0.7)),
       ),
       child: Row(
         children: [

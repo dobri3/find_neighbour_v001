@@ -35,6 +35,10 @@ class GroupPage extends StatefulWidget {
 }
 
 class _GroupPageState extends State<GroupPage> {
+
+  bool _isJoinButtonLoading = false;
+  bool _isJoinButtonSuccess = false;
+
   Group _group = Group(
     id: '',
     ownerId: '',
@@ -290,22 +294,68 @@ class _GroupPageState extends State<GroupPage> {
                                         ),
                                         const SizedBox(height: 10),
                                         OutlinedButton(
-                                          onPressed: () async {
-                                            var session = await ApiService
-                                                .authService
-                                                .getSession();
-                                            await ApiService.matcherService
-                                                .sendJoinRequest(
-                                                    session.id, _group.id);
-                                            print('sent');
-                                          },
-                                          style:
-                                              AppButtonStyles.tealFiledButton(
-                                                  const Size(200, 50)),
-                                          child: const Text(
-                                            "Занять место",
-                                            style: AppTextStyles.whiteSmall,
-                                          ),
+                                          onPressed: _isJoinButtonSuccess || _isJoinButtonLoading
+                                              ? null
+                                              : () async {
+                                                  setState(() {
+                                                    _isJoinButtonLoading = true;
+                                                  });
+
+                                                  try {
+                                                    var session = await ApiService.authService.getSession();
+
+                                                    final ok = await ApiService.matcherService
+                                                        .sendJoinRequest(session.id, _group.id);
+
+                                                    setState(() {
+                                                      _isJoinButtonLoading = false;
+                                                      _isJoinButtonSuccess = true;
+                                                    });
+
+                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                      const SnackBar(
+                                                        content: Text("Заявка успешно отправлена"),
+                                                      ),
+                                                    );
+                                                  } catch (e) {
+                                                    setState(() {
+                                                      _isJoinButtonLoading = false;
+                                                    });
+
+                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                      const SnackBar(
+                                                        content: Text("Ошибка при отправке запроса"),
+                                                      ),
+                                                    );
+                                                  }
+                                                },
+                                                child: _isJoinButtonLoading
+                                                  ? const SizedBox(
+                                                      width: 20,
+                                                      height: 20,
+                                                      child: CircularProgressIndicator(strokeWidth: 2),
+                                                    )
+                                                  : Text(
+                                                      _isJoinButtonSuccess ? "Заявка отправлена" : "Занять место",
+                                                      style: AppTextStyles.whiteSmall,
+                                                    ),
+
+                                          // onPressed: () async {
+                                          //   var session = await ApiService
+                                          //       .authService
+                                          //       .getSession();
+                                          //   await ApiService.matcherService
+                                          //       .sendJoinRequest(
+                                          //           session.id, _group.id);
+                                          //   print('sent');
+                                          // },
+                                          // style:
+                                          //     AppButtonStyles.tealFiledButton(
+                                          //         const Size(200, 50)),
+                                          // child: const Text(
+                                          //   "Занять место",
+                                          //   style: AppTextStyles.whiteSmall,
+                                          // ),
                                         ),
                                       ],
                                     ),

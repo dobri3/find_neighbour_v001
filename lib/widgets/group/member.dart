@@ -55,6 +55,7 @@ class Member extends StatelessWidget {
                   onPressed: onMore,
                   style: OutlinedButton.styleFrom(
                     foregroundColor: AppColors.baseBright,
+                    backgroundColor: AppColors.textBase,
                     side: BorderSide(color: AppColors.teal.withOpacity(0.25)),
                     minimumSize: const Size(190, 60),
                     padding: const EdgeInsets.symmetric(
