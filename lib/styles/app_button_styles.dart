@@ -15,14 +15,6 @@ class AppButtonStyles {
       height: height,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.25),
-            blurRadius: 20,
-            spreadRadius: 2,
-            offset: const Offset(0, 0),
-          ),
-        ],
       ),
       child: ElevatedButton(
         onPressed: onPressed,
@@ -42,7 +34,6 @@ class AppButtonStyles {
   backgroundColor: AppColors.baseBright,
   foregroundColor: AppColors.textBase,
   elevation: 5, 
-  shadowColor: Colors.black.withOpacity(0.3), 
   minimumSize: const Size(100, 40),
   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
   shape: RoundedRectangleBorder(

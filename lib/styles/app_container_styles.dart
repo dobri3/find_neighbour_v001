@@ -7,13 +7,6 @@ class AppContainerStyles {
   static BoxDecoration cardDecoration = BoxDecoration(
     color: AppColors.white,
     borderRadius: BorderRadius.circular(12),
-    boxShadow: [
-      BoxShadow(
-        color: Colors.black.withOpacity(0.1),
-        blurRadius: 8,
-        offset: const Offset(0, 2),
-      ),
-    ],
   );
 
   // Section Border
@@ -47,26 +40,10 @@ class AppContainerStyles {
   static BoxDecoration authCard = BoxDecoration(
     borderRadius: BorderRadius.circular(15),
     color: AppColors.color1,
-    boxShadow: [
-      BoxShadow(
-        color: Colors.black.withOpacity(0.25),
-        blurRadius: 20,
-        spreadRadius: 2,
-        offset: const Offset(0, 0),
-      ),
-    ],
   );
 
   static BoxDecoration profileCard = BoxDecoration(
     borderRadius: BorderRadius.circular(30),
-    boxShadow: [
-      BoxShadow(
-        color: Colors.black.withOpacity(0.33),
-        blurRadius: 20,
-        spreadRadius: 2,
-        offset: const Offset(0, 0),
-      ),
-    ],
     border: Border.all(color: AppColors.borderTeal, width: 1),
     color: AppColors.white,
   );

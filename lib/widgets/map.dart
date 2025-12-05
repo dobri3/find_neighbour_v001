@@ -372,13 +372,6 @@ class _MapWidgetState extends State<MapWidget> {
       height: widget.height,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: 8,
-            offset: Offset(0, 4),
-          ),
-        ],
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),

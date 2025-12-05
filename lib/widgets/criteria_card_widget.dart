@@ -39,13 +39,6 @@ class _CriteriaCardState extends State<CriteriaCard> {
         border: Border.all(
           color: _isHovered ? AppColors.textBase.withOpacity(0.8) : AppColors.teal,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.35),
-            blurRadius: 20,
-            offset: const Offset(0, 6),
-          ),
-        ],
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -41,81 +41,82 @@ class _HomeHeaderState extends State<HomeHeader> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.baseBright,
+      // color: AppColors.baseBright,
         child: Container(
-          // color: AppColors.baseBright,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            AppColors.baseBright, 
-            AppColors.baseBright, 
-            AppColors.baseBright, 
-            AppColors.baseDarkBright.withOpacity(0.6),  
-          ],
-        ),
-      ),
-        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.baseBright,
+          ),
           constraints: const BoxConstraints(maxWidth: 1280),
           width: double.infinity,
           height: widget.preferredSize.height,
-          child: Padding(
-            padding: const EdgeInsets.only(right: 60.0, left: 60.0),
-            child: Row(
-              children: [
-                MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: GestureDetector(
-                    onTap: () => context.router.push(const RecommendationRoute()),
-                    child: AppTextStyles.logo,
-                  ),
-                ),
-                const Spacer(),
-                if (isAuthorized) ...[
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children:[
+               Padding(
+              padding: const EdgeInsets.only(right: 60.0, left: 60.0, top: 15.0),
+              child: Row(
+                children: [
                   MouseRegion(
                     cursor: SystemMouseCursors.click,
                     child: GestureDetector(
-                      onTap: () {
-                        context.router.push(ChatRoute());
-                      },
-                      child:
-                          const Text("Сообщения", style: AppTextStyles.whiteSmall),
+                      onTap: () => context.router.push(const RecommendationRoute()),
+                      child: AppTextStyles.logo,
                     ),
                   ),
-                  const SizedBox(width: 32),
-                  MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: GestureDetector(
-                      onTap: () async {
-                        var group = await ApiService.matcherService
-                            .getGroupByUserId(user!.id);
-                    
-                        context.router.push(GroupRoute(id: group.id));
-                      },
-                      child: const Text("Группы", style: AppTextStyles.whiteSmall),
+                  const Spacer(),
+                  if (isAuthorized) ...[
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: () {
+                          context.router.push(ChatRoute());
+                        },
+                        child:
+                            const Text("Сообщения", style: AppTextStyles.whiteSmall),
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 40),
-                  IconButton(
-                    onPressed: () =>
-                        context.router.push(const RecommendationRoute()),
-                    icon:
-                        const Icon(Icons.notifications_none, color: AppColors.textBase,),
-                  ),
-                  const SizedBox(width: 28),
+                    const SizedBox(width: 32),
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: () async {
+                          var group = await ApiService.matcherService
+                              .getGroupByUserId(user!.id);
+                      
+                          context.router.push(GroupRoute(id: group.id));
+                        },
+                        child: const Text("Группы", style: AppTextStyles.whiteSmall),
+                      ),
+                    ),
+                    const SizedBox(width: 40),
+                    IconButton(
+                      onPressed: () =>
+                          context.router.push(const RecommendationRoute()),
+                      icon:
+                          const Icon(Icons.notifications_none, color: AppColors.textBase,),
+                    ),
+                    const SizedBox(width: 28),
+                  ],
+                  if (!isAuthorized)
+                    _UnauthorizedButton()
+                  else
+                    _AuthorizedUserSection(user: user!),
                 ],
-                if (!isAuthorized)
-                  _UnauthorizedButton()
-                else
-                  _AuthorizedUserSection(user: user!),
-              ],
+              ),
+            ),
+            const Spacer(),
+            Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              height: 1,
+              color: AppColors.teal.withOpacity(0.7),
             ),
           ),
+            ],
+          ),
         ),
-      ),
-      // ),
-    );
+        
+      );
   }
 }
 
