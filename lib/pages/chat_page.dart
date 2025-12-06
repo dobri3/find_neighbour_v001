@@ -68,23 +68,40 @@ class _ChatPageState extends State<ChatPage> {
       );
 
       if (_webSocket != null) {
+        Chat currentChat = chats.firstWhere((chat) => chat.id == widget.chatId);
+
         setState(() {
-          _selectedChatId = widget.chatId;
           _messages.clear();
           chat = ChatDetail(
-            id: "",
-            userName: "",
-            avatarUrl: "",
+            id: currentChat.id,
+            userName: currentChat.name,
+            avatarUrl: currentChat.avatarUrl,
             compatibility: 0,
             isOnline: false,
           );
         });
-        _webSocket!.stream.listen((event) {
-          setState(() {
-            _messages.add(OutputMessage.fromJson(jsonDecode(event)));
-          });
-          _scrollToBottom();
-        });
+        _webSocket!.stream.listen(
+          (event) {
+            setState(() {
+              _messages.add(OutputMessage.fromJson(jsonDecode(event)));
+            });
+            _scrollToBottom();
+          },
+          onError: (error) {
+            setState(() {
+              _messages.clear();
+              chat = null;
+              _selectedChatId = null;
+            });
+          },
+          onDone: () {
+            setState(() {
+              _messages.clear();
+              chat = null;
+              _selectedChatId = null;
+            });
+          },
+        );
       }
     }
 
@@ -305,23 +322,42 @@ class _ChatPageState extends State<ChatPage> {
     );
 
     if (_webSocket != null) {
+      Chat currentChat = _chats.firstWhere((chat) => chat.id == chatId);
+
       setState(() {
         _messages.clear();
         chat = ChatDetail(
-          id: "",
-          userName: "",
-          avatarUrl: "",
+          id: currentChat.id,
+          userName: currentChat.name,
+          avatarUrl: currentChat.avatarUrl,
           compatibility: 0,
           isOnline: false,
         );
-        _selectedChatId = chatId;
+        _selectedChatId = currentChat.id;
       });
-      _webSocket!.stream.listen((event) {
-        setState(() {
-          _messages.add(OutputMessage.fromJson(jsonDecode(event)));
-        });
-        _scrollToBottom();
-      });
+      _webSocket!.stream.listen(
+        (event) {
+          setState(() {
+            _messages.add(OutputMessage.fromJson(jsonDecode(event)));
+            print(event);
+          });
+          _scrollToBottom();
+        },
+        onError: (error) {
+          setState(() {
+            _messages.clear();
+            chat = null;
+            _selectedChatId = null;
+          });
+        },
+        onDone: () {
+          setState(() {
+            _messages.clear();
+            chat = null;
+            _selectedChatId = null;
+          });
+        },
+      );
     }
   }
 
@@ -344,6 +380,9 @@ class _ChatPageState extends State<ChatPage> {
                       setState(() {
                         _selectedChatId = null;
                         chat = null;
+                        _messages.clear();
+                        _webSocket?.sink.close();
+                        _webSocket = null;
                       }),
                     },
                   ),
@@ -418,6 +457,7 @@ class _ChatPageState extends State<ChatPage> {
                             isMe: message.sender.id == _session!.id,
                             time: formatDate(message.createdAt.toLocal()),
                             showStatus: true,
+                            userName: message.sender.name,
                           ),
                         );
                       }).toList(),
@@ -461,6 +501,10 @@ class _ChatPageState extends State<ChatPage> {
                         ),
                         SizedBox(width: 8),
                         ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Color(0xFF3A8DFF),
+                            backgroundColor: Color(0xFF3A8DFF),
+                          ),
                           onPressed: () => _sendMessage(),
                           child: Container(
                             width: 50,
@@ -486,6 +530,7 @@ class _ChatPageState extends State<ChatPage> {
     required bool isMe,
     required String time,
     bool showStatus = false,
+    String? userName,
   }) {
     return Row(
       mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
@@ -504,7 +549,8 @@ class _ChatPageState extends State<ChatPage> {
                 isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.all(12),
+                padding:
+                    EdgeInsets.only(left: 10, right: 10, top: 8, bottom: 8),
                 decoration: BoxDecoration(
                   color: isMe ? AppColors.base1 : AppColors.baseDarkBright,
                   borderRadius: BorderRadius.only(
@@ -515,15 +561,28 @@ class _ChatPageState extends State<ChatPage> {
                         isMe ? Radius.circular(4) : Radius.circular(16),
                   ),
                 ),
-                child: Text(
-                  message,
-                  style: TextStyle(
-                    color: AppColors.textBase,
-                    fontSize: 14,
+                child: Column(children: [
+                  if (!isMe && userName != null) ...[
+                    Text(
+                      textAlign: TextAlign.start,
+                      userName,
+                      style: TextStyle(
+                        color: AppColors.textBase.withOpacity(0.8),
+                        fontSize: 12,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                  ],
+                  Text(
+                    message,
+                    style: TextStyle(
+                      color: AppColors.textBase,
+                      fontSize: 14,
+                    ),
                   ),
-                ),
+                ]),
               ),
-              SizedBox(height: 4),
+              SizedBox(height: 2),
               Row(
                 mainAxisAlignment:
                     isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
