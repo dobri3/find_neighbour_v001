@@ -43,7 +43,7 @@ class RequestCard extends StatelessWidget {
                     children: [
                       Text(
                         "${request.user!.name} ${request.user!.surname}",
-                        style: AppTextStyles.smallHeaderBold,
+                        style: AppTextStyles.smallHeaderBold(context),
                         textAlign: TextAlign.left,
                       ),
                     ],
@@ -130,7 +130,7 @@ class RequestCard extends StatelessWidget {
             const SizedBox(height: 20),
             Text(
               "${request.user!.description}",
-              style: AppTextStyles.whiteSmall,
+              style: AppTextStyles.whiteSmall(context),
               textAlign: TextAlign.left,
             ),
           ],

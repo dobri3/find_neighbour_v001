@@ -453,7 +453,7 @@ class _MapWidgetState extends State<MapWidget> {
           Expanded(
             child: TextField(
               style: TextStyle(color: AppColors.textBase),
-              decoration: AppContainerStyles.textInput('Введите адрес'),
+              decoration: AppContainerStyles.textInput(context, 'Введите адрес'),
               onSubmitted: _searchAddress,
             ),
           ),

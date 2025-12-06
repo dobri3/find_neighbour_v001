@@ -259,7 +259,7 @@ Future<void> _pickAvatar() async {
                     top: 42,
                     bottom: 42,
                   ),
-                  child: AppTextStyles.logo,
+                  child: AppTextStyles.logo(context),
                 ),
                 Container(
                   margin: const EdgeInsets.only(bottom: 20),
@@ -274,7 +274,7 @@ Future<void> _pickAvatar() async {
                     child: Center(
                     child: Column(
                       children: [
-                        const Text('Профиль', style: AppTextStyles.profileTitle),
+                         Text('Профиль', style: AppTextStyles.profileTitle(context)),
                         const SizedBox(height: 27),
                         Row(
                           children: [
@@ -366,9 +366,9 @@ Future<void> _pickAvatar() async {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            const Text(
+             Text(
               "Основная информация",
-              style: AppTextStyles.smallHeaderBold,
+              style: AppTextStyles.smallHeaderBold(context),
             ),
             Container(
               padding: const EdgeInsets.only(top: 20),
@@ -402,9 +402,9 @@ Future<void> _pickAvatar() async {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            const Text(
+             Text(
               "Параметры жилья",
-              style: AppTextStyles.smallHeaderBold,
+              style: AppTextStyles.smallHeaderBold(context),
             ),
             Container(
               padding: const EdgeInsets.only(top: 20),
@@ -492,14 +492,14 @@ Future<void> _pickAvatar() async {
                 maxLines: maxLines,
                 minLines: minLines,
                 cursorColor: AppColors.textBase,
-                decoration: AppContainerStyles.textInput(hint).copyWith(
+                decoration: AppContainerStyles.textInput(context, hint).copyWith(
                   errorText: isValid ? null : 'Некорректное значение',
                 ),
               )
             : Padding(
                 padding: const EdgeInsets.only(left: 5),
                 child: Text(controller.text,
-                    style: AppTextStyles.inputLabel,
+                    style: AppTextStyles.inputLabel(context),
                     textAlign: TextAlign.start,
                     maxLines: maxLines),
               ),

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 class AppButtonStyles {
 
   static Widget primaryButtonWithShadow({
+    required BuildContext context,
     required VoidCallback onPressed,
     required String text,
     double width = 350,
@@ -25,7 +26,7 @@ class AppButtonStyles {
           ),
           elevation: 0,
         ),
-        child: Text(text, style: AppTextStyles.buttonLarge),
+        child: Text(text, style: AppTextStyles.buttonLarge(context)),
       ),
     );
   }
@@ -106,6 +107,7 @@ class AppButtonStyles {
   );
 
   static Widget socialButton({
+    required BuildContext context,
     required VoidCallback onPressed,
     required String text,
     required Widget icon,
@@ -121,7 +123,7 @@ class AppButtonStyles {
             // Icon(icon, size: 28, color: AppColors.textBase,),
             icon,
             const SizedBox(width: 12),
-            Text(text, style: AppTextStyles.buttonText),
+            Text(text, style: AppTextStyles.buttonText(context)),
           ],
         ),
       ),

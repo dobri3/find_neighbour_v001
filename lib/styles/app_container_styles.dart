@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:find_neighbour_v001/styles/app_text_styles.dart';
 
 class AppContainerStyles {
+  
   // Card Style
   static BoxDecoration cardDecoration = BoxDecoration(
     color: AppColors.white,
@@ -55,44 +56,76 @@ class AppContainerStyles {
     border: Border.all(color: AppColors.borderTeal, width: 1),
   );
 
-  static InputDecoration textInput(String hint) => InputDecoration(
-        hintText: hint,
-        hintStyle: AppTextStyles.inputHint,
-        filled: true,
-        fillColor: AppColors.transparentBlue,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide(
-            color: AppColors.borderTeal,
-            width: 1,
-            style: BorderStyle.solid,
-          ),
+
+  static InputDecoration textInput(BuildContext context, String hint) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 750;
+
+    return InputDecoration(
+      hintText: hint,
+      hintStyle: TextStyle(
+        fontFamily: "Inter",
+        fontSize: isMobile ? 14 : 16,
+        color: AppColors.textBase,
+      ),
+      filled: true,
+      fillColor: AppColors.transparentBlue,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(
+          color: AppColors.borderTeal,
+          width: 1,
+          style: BorderStyle.solid,
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide(
-            color: AppColors.teal,
-            width: 1,
-            style: BorderStyle.solid,
-          ),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(
+          color: AppColors.teal,
+          width: 1,
+          style: BorderStyle.solid,
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide(
-            color: AppColors.borderBlue,
-            width: 1,
-            style: BorderStyle.solid,
-          ),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(
+          color: AppColors.borderBlue,
+          width: 1,
+          style: BorderStyle.solid,
         ),
-      );
-  // static BoxDecoration gradientOverlay = BoxDecoration(
-  //   borderRadius: BorderRadius.circular(20),
-  //   gradient: const LinearGradient(
-  //     begin: Alignment.bottomRight,
-  //     colors: [
-  //       Colors.black.withOpacity(0.8),
-  //       Colors.black.withOpacity(0.2),
-  //     ],
-  //   ),
-  // );
+      ),
+    );
+  
+}
+
+  // static InputDecoration textInput(String hint) => InputDecoration(
+  //       hintText: hint,
+  //       hintStyle: AppTextStyles.inputHint,
+  //       filled: true,
+  //       fillColor: AppColors.transparentBlue,
+  //       border: OutlineInputBorder(
+  //         borderRadius: BorderRadius.all(Radius.circular(10)),
+  //         borderSide: BorderSide(
+  //           color: AppColors.borderTeal,
+  //           width: 1,
+  //           style: BorderStyle.solid,
+  //         ),
+  //       ),
+  //       focusedBorder: OutlineInputBorder(
+  //         borderRadius: BorderRadius.all(Radius.circular(10)),
+  //         borderSide: BorderSide(
+  //           color: AppColors.teal,
+  //           width: 1,
+  //           style: BorderStyle.solid,
+  //         ),
+  //       ),
+  //       enabledBorder: OutlineInputBorder(
+  //         borderRadius: BorderRadius.all(Radius.circular(10)),
+  //         borderSide: BorderSide(
+  //           color: AppColors.borderBlue,
+  //           width: 1,
+  //           style: BorderStyle.solid,
+  //         ),
+  //       ),
+  //     );
 }

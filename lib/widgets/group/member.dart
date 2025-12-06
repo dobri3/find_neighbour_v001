@@ -37,7 +37,7 @@ class Member extends StatelessWidget {
                         children: [
                           Text(
                             "${member.parameters.name} ${member.parameters.surname}",
-                            style: AppTextStyles.smallHeaderBold,
+                            style: AppTextStyles.smallHeaderBold(context),
                             textAlign: TextAlign.left,
                           ),
                           const SizedBox(height: 10),
@@ -75,7 +75,7 @@ class Member extends StatelessWidget {
             const SizedBox(height: 20),
             Text(
               member.parameters.description,
-              style: AppTextStyles.whiteSmall,
+              style: AppTextStyles.whiteSmall(context),
               textAlign: TextAlign.left,
             ),
           ],
