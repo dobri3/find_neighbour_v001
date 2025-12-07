@@ -1,6 +1,11 @@
 import 'package:find_neighbour_v001/models/user.dart';
 import 'package:find_neighbour_v001/api/api.dart';
 import 'package:dio/dio.dart';
+import 'package:find_neighbour_v001/storage/session.dart';
+import 'dart:typed_data';
+
+import 'package:image_picker/image_picker.dart';
+import 'package:http_parser/http_parser.dart';
 
 class UserService {
   static final Dio _dio = ApiService.dio;
@@ -8,29 +13,37 @@ class UserService {
   Future<User> getUserById(String id) async {
     try {
       Response response = await _dio.get('/user/$id');
-      return User(
-          id: response.data['ID'],
-          name: response.data['Name'],
-          surname: response.data['Surname'],
-          description: response.data['Description']);
+      return User.fromJson(response.data);
     } catch (e) {
       print(e);
       return User(id: '', name: '', surname: '', description: '');
     }
   }
 
-  Future<String> updateUser(User user) async {
+  Future<String> updateUser(User user, XFile? avatar) async {
     try {
       var formData = FormData.fromMap({
-        "data": user.toJsonString(),
+        "data": user.toJsonForServerString(),
+        "avatar": avatar == null
+            ? null
+            : MultipartFile.fromBytes(
+                await avatar.readAsBytes(),
+                filename: avatar.path.split('/').last,
+                contentType: MediaType.parse(avatar.mimeType!),
+              ),
       });
 
-      final response = await _dio.put('/user',
-          data: formData,
-          options: Options(
-              contentType: 'multipart/form-data',
-              headers: {'Content-Type': 'multipart/form-data'}));
-      return response.data['ID'];
+      final response = await _dio.put(
+        '/user',
+        data: formData,
+        options: Options(
+            contentType: 'multipart/form-data',
+            headers: {'Content-Type': 'multipart/form-data'}),
+      );
+
+      await TemporaryStorage.clear();
+
+      return response.data['Id'];
     } catch (e) {
       print(e);
       return '';

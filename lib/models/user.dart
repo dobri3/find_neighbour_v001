@@ -6,6 +6,7 @@ class User {
   final String surname;
   final String description;
   final String? photoUrl;
+  final List<String>? contacts;
 
   User({
     required this.id,
@@ -13,6 +14,7 @@ class User {
     required this.surname,
     required this.description,
     this.photoUrl,
+    this.contacts,
   });
 
   User copyWith({
@@ -20,6 +22,7 @@ class User {
     String? surname,
     String? description,
     String? photoUrl,
+    List<String>? contacts,
   }) {
     return User(
       id: id,
@@ -27,6 +30,7 @@ class User {
       surname: surname ?? this.surname,
       description: description ?? this.description,
       photoUrl: photoUrl ?? this.photoUrl,
+      contacts: contacts ?? this.contacts,
     );
   }
 
@@ -36,20 +40,41 @@ class User {
       'Name': name,
       'Surname': surname,
       'Description': description,
+      'Avatar': photoUrl,
+      'Contacts': contacts,
+    };
+  }
+
+  Map<String, dynamic> toJsonForServer() {
+    return {
+      'ID': id,
+      'Name': name,
+      'Surname': surname,
+      'Description': description,
+      'Contacts': contacts,
     };
   }
 
   static User fromJson(Map<String, dynamic> json) {
+    List<String>? contacts =
+        json['Contacts'] != null ? List<String>.from(json['Contacts']) : null;
+
     return User(
       id: json['ID'] ?? '',
       name: json['Name'] ?? '',
       surname: json['Surname'] ?? '',
       description: json['Description'] ?? '',
+      photoUrl: json['Avatar'],
+      contacts: contacts,
     );
   }
 
   String toJsonString() {
     return jsonEncode(toJson());
+  }
+
+  String toJsonForServerString() {
+    return jsonEncode(toJsonForServer());
   }
 
   static User fromJsonString(String jsonString) {

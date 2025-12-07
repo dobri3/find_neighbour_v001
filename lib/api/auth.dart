@@ -63,6 +63,7 @@ class AuthService {
 
       final response = await _dio.get('/user/session');
       user = User.fromJson(response.data);
+      print(response.data);
 
       await TemporaryStorage.saveValue('user', user);
 
