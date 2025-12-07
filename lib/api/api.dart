@@ -5,8 +5,6 @@ import 'package:find_neighbour_v001/api/user.dart';
 import 'package:find_neighbour_v001/api/matcher.dart';
 import 'package:find_neighbour_v001/api/chat.dart';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 class ApiService {
   static final Dio _dio = Dio(
     BaseOptions(

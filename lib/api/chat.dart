@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:find_neighbour_v001/api/api.dart';
 import 'package:find_neighbour_v001/models/chat/chat.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 import 'dart:io';
 
 import 'package:web_socket_channel/html.dart';
