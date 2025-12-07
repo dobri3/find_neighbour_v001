@@ -35,9 +35,38 @@ class GroupPage extends StatefulWidget {
 }
 
 class _GroupPageState extends State<GroupPage> {
-
+  
   bool _isJoinButtonLoading = false;
-  bool _isJoinButtonSuccess = false;
+bool _isJoinButtonSuccess = false;
+
+Future<void> _sendJoinRequest() async {
+  setState(() {
+    _isJoinButtonLoading = true;
+  });
+
+  try {
+    final session = await ApiService.authService.getSession();
+
+    await ApiService.matcherService.sendJoinRequest(
+      session.id,
+      _group.id,
+    );
+
+    setState(() {
+      _isJoinButtonSuccess = true;
+    });
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Ошибка отправки заявки: $e'),
+      ),
+    );
+  } finally {
+    setState(() {
+      _isJoinButtonLoading = false;
+    });
+  }
+}
 
   Group _group = Group(
     id: '',
@@ -93,6 +122,12 @@ class _GroupPageState extends State<GroupPage> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
+    final isMobile = width < 700;
+    final isTablet = width >= 700 && width < 1000;
+    final isDesktop = width >= 1000;
+
     return Scaffold(
       appBar: HomeHeader(),
       backgroundColor: AppColors.baseBright,
@@ -111,16 +146,21 @@ class _GroupPageState extends State<GroupPage> {
                   ),
                   child: AppTextStyles.logo(context),
                 ),
+                // Container(
+                //   margin: const EdgeInsets.only(bottom: 20),
+                //   decoration: AppContainerStyles.profileCard,
+                //   child: Padding(
+                //     padding: const EdgeInsets.only(
+                //       top: 20,
+                //       left: 60,
+                //       right: 60,
+                //       bottom: 60,
+                //     ),
                 Container(
-                  margin: const EdgeInsets.only(bottom: 20),
-                  decoration: AppContainerStyles.profileCard,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      top: 20,
-                      left: 60,
-                      right: 60,
-                      bottom: 60,
-                    ),
+                      constraints: const BoxConstraints(maxWidth: 1100),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isMobile ? 16 : 32,
+                      ),
                     child: Center(
                       child: Column(
                         children: [
@@ -129,28 +169,47 @@ class _GroupPageState extends State<GroupPage> {
                             style: AppTextStyles.profileTitle(context),
                           ),
                           const SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              container("${_group.parameters.budget} ₽",
+                          isMobile
+                          ? Column(
+                              children: [
+                                _StatRowMobile(group: _group),
+                                const SizedBox(height: 12),
+                              ],
+                            )
+                          : Row(
+                              children: [
+                                container("${_group.parameters.budget} ₽",
                                   "Средний бюджет"),
                               const SizedBox(width: 20),
                               container("${_group.members.length}",
                                   "Человек в группе"),
-                              const SizedBox(width: 20),
-                              container(
+                                const SizedBox(width: 20),
+                                container(
                                   "${_group.parameters.roommatesCount - _group.members.length}",
                                   "Нужно соседей"),
-                              const SizedBox(width: 20),
-                              container(
+                                const SizedBox(width: 20),
+                                container(
                                   "${_group.parameters.age} лет", "Возраст"),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                              ],
+                            ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          //   children: [
+                          //     container("${_group.parameters.budget} ₽",
+                          //         "Средний бюджет"),
+                          //     const SizedBox(width: 20),
+                          //     container("${_group.members.length}",
+                          //         "Человек в группе"),
+                          //     const SizedBox(width: 20),
+                          //     container(
+                          //         "${_group.parameters.roommatesCount - _group.members.length}",
+                          //         "Нужно соседей"),
+                          //     const SizedBox(width: 20),
+                          //     container(
+                          //         "${_group.parameters.age} лет", "Возраст"),
+                          //   ],
+                          // ),
+                        
                 _session != null &&
                         _session!.id == _group.ownerId &&
                         _requests != null &&
@@ -191,184 +250,38 @@ class _GroupPageState extends State<GroupPage> {
                         ],
                       )
                     : const SizedBox(),
+                    const SizedBox(height: 20,),
                  Text(
                   "Информация",
                   style: AppTextStyles.sectionTitle(context),
                 ),
-                IntrinsicHeight(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    spacing: 20,
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: Container(
-                          padding: const EdgeInsets.all(20),
-                          decoration: AppContainerStyles.profileCard,
-                          margin: const EdgeInsets.only(top: 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Описание',
-                                style: AppTextStyles.smallHeaderBold(context),
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                '${_group.parameters.description}',
-                                style: AppTextStyles.whiteSmall(context),
-                              ),
-                              const SizedBox(height: 20),
-                              Text(
-                                'Расположение',
-                                style: AppTextStyles.smallHeaderBold(context),
-                              ),
-                              const SizedBox(height: 10),
-                              MapWidget(
-                                width: double.infinity,
-                                height: 500,
-                                initialCenter: LatLng(55.755793, 37.617134),
-                                initialZoom: 10,
-                                isSelectable: false,
-                                staticMarkerPoint: LatLng(
-                                    _group.parameters.geo.lat,
-                                    _group.parameters.geo.lon),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          padding: const EdgeInsets.all(20),
-                          decoration: AppContainerStyles.profileCard,
-                          margin: const EdgeInsets.only(top: 20),
-                          child: Column(
-                            children: [
-                              Text(
-                                'Контакты',
-                                style: AppTextStyles.smallHeaderBold(context),
-                              ),
-                              const SizedBox(height: 10),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'E-mail: email@email.com',
-                                    style: AppTextStyles.whiteSmall(context),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Text(
-                                    'Телефон: телефон владельца',
-                                    style: AppTextStyles.whiteSmall(context),
-                                  ),
-                                  const SizedBox(height: 20),
-                                  Align(
-                                    alignment: Alignment.center,
-                                    child: Column(
-                                      children: [
-                                        OutlinedButton(
-                                          onPressed: () {},
-                                          style: OutlinedButton.styleFrom(
-                                              // .tealOutlinedButton(
-                                                  fixedSize: const Size(200, 50),
-                                                  side: BorderSide(
-                                                  color: AppColors.teal.withOpacity(0.8), // Черная рамка
-                                                  width: 1,
-                                                ),
-                                                backgroundColor: Colors.transparent,
-                                                foregroundColor: AppColors.teal,
-                                                // minimumSize: minSize,
-                                                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(10),
-                                                  side: const BorderSide(color: AppColors.teal, width: 2),
-                                                ),
-                                                  ),
-                                                
-                                          child: Text(
-                                            "Написать",
-                                            style: AppTextStyles.whiteSmall(context),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 10),
-                                        OutlinedButton(
-                                          onPressed: _isJoinButtonSuccess || _isJoinButtonLoading
-                                              ? null
-                                              : () async {
-                                                  setState(() {
-                                                    _isJoinButtonLoading = true;
-                                                  });
-
-                                                  try {
-                                                    var session = await ApiService.authService.getSession();
-
-                                                    final ok = await ApiService.matcherService
-                                                        .sendJoinRequest(session.id, _group.id);
-
-                                                    setState(() {
-                                                      _isJoinButtonLoading = false;
-                                                      _isJoinButtonSuccess = true;
-                                                    });
-
-                                                    ScaffoldMessenger.of(context).showSnackBar(
-                                                      const SnackBar(
-                                                        content: Text("Заявка успешно отправлена"),
-                                                      ),
-                                                    );
-                                                  } catch (e) {
-                                                    setState(() {
-                                                      _isJoinButtonLoading = false;
-                                                    });
-
-                                                    ScaffoldMessenger.of(context).showSnackBar(
-                                                      const SnackBar(
-                                                        content: Text("Ошибка при отправке запроса"),
-                                                      ),
-                                                    );
-                                                  }
-                                                },
-                                                child: _isJoinButtonLoading
-                                                  ? const SizedBox(
-                                                      width: 20,
-                                                      height: 20,
-                                                      child: CircularProgressIndicator(strokeWidth: 2),
-                                                    )
-                                                  : Text(
-                                                      _isJoinButtonSuccess ? "Заявка отправлена" : "Занять место",
-                                                      style: AppTextStyles.whiteSmall(context),
-                                                    ),
-
-                                          // onPressed: () async {
-                                          //   var session = await ApiService
-                                          //       .authService
-                                          //       .getSession();
-                                          //   await ApiService.matcherService
-                                          //       .sendJoinRequest(
-                                          //           session.id, _group.id);
-                                          //   print('sent');
-                                          // },
-                                          // style:
-                                          //     AppButtonStyles.tealFiledButton(
-                                          //         const Size(200, 50)),
-                                          // child: const Text(
-                                          //   "Занять место",
-                                          //   style: AppTextStyles.whiteSmall,
-                                          // ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                const SizedBox(height: 20,),
+                isMobile
+                  ? Column(
+                      children: [
+                        _InfoCard(group: _group),
+                        const SizedBox(height: 20),
+                        _ContactsCard(
+          isJoinLoading: _isJoinButtonLoading,
+          isJoinSuccess: _isJoinButtonSuccess,
+          onWrite: () {},
+          onJoin: _sendJoinRequest,
+          ),
+                      ],
+                    )
+                  : Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(flex: 3, child: _InfoCard(group: _group)),
+                        const SizedBox(width: 20),
+                        Expanded(flex: 2, child: _ContactsCard(
+          isJoinLoading: _isJoinButtonLoading,
+          isJoinSuccess: _isJoinButtonSuccess,
+          onWrite: () {},
+          onJoin: _sendJoinRequest,
+          )),
+                      ],
+                    ),
                 const SizedBox(height: 20),
                 Text(
                   "Участники",
@@ -395,7 +308,11 @@ class _GroupPageState extends State<GroupPage> {
             ),
           ),
         ),
-      ),
+              ],
+          )
+        )
+      )
+      )
     );
   }
 
@@ -422,6 +339,241 @@ class _GroupPageState extends State<GroupPage> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _InfoCard extends StatelessWidget {
+  final Group group;
+
+  const _InfoCard({
+    super.key,
+    required this.group,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: AppContainerStyles.profileCard,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Описание',
+            style: AppTextStyles.smallHeaderBold(context),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            group.parameters.description.isEmpty
+                ? 'Описание отсутствует'
+                : group.parameters.description,
+            style: AppTextStyles.whiteSmall(context),
+          ),
+          const SizedBox(height: 24),
+          Text(
+            'Расположение',
+            style: AppTextStyles.smallHeaderBold(context),
+          ),
+          const SizedBox(height: 12),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: MapWidget(
+              width: double.infinity,
+              height: isMobile ? 240 : 400,
+              initialCenter: LatLng(
+                group.parameters.geo.lat,
+                group.parameters.geo.lon,
+              ),
+              initialZoom: 10,
+              isSelectable: false,
+              staticMarkerPoint: LatLng(
+                group.parameters.geo.lat,
+                group.parameters.geo.lon,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+class _ContactsCard extends StatelessWidget {
+  final bool isJoinLoading;
+  final bool isJoinSuccess;
+  final VoidCallback onWrite;
+  final Future<void> Function() onJoin;
+
+  const _ContactsCard({
+    super.key,
+    required this.isJoinLoading,
+    required this.isJoinSuccess,
+    required this.onWrite,
+    required this.onJoin,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: AppContainerStyles.profileCard,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Контакты',
+            style: AppTextStyles.smallHeaderBold(context),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'E-mail: email@email.com',
+            style: AppTextStyles.whiteSmall(context),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Телефон: телефон владельца',
+            style: AppTextStyles.whiteSmall(context),
+          ),
+          const SizedBox(height: 24),
+          Column(
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(
+                  onPressed: onWrite,
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    side: BorderSide(
+                      color: AppColors.teal.withOpacity(0.8),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Text(
+                    'Написать',
+                    style: AppTextStyles.whiteSmall(context),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                
+                child: OutlinedButton(
+                  onPressed:
+                      isJoinLoading || isJoinSuccess ? null : onJoin,
+                  style:OutlinedButton.styleFrom(
+                   fixedSize: const Size(200, 50),
+                  // side: BorderSide(
+                  // color: AppColors.teal.withOpacity(0.8), 
+                  // width: 1,
+                  // ),
+                  backgroundColor: Colors.transparent,
+                  foregroundColor: AppColors.textBase,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: isJoinLoading
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : Text(
+                          isJoinSuccess
+                              ? 'Заявка отправлена'
+                              : 'Занять место',
+                          style: AppTextStyles.whiteSmall(context),
+                        ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StatRowMobile extends StatelessWidget {
+  final Group group;
+
+  const _StatRowMobile({
+    required this.group,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 12,
+      runSpacing: 12,
+      children: [
+        _StatItem(
+          title: "${group.parameters.budget} ₽",
+          subtitle: "Средний бюджет",
+        ),
+        _StatItem(
+          title: "${group.members.length}",
+          subtitle: "В группе",
+        ),
+        _StatItem(
+          title:
+              "${group.parameters.roommatesCount - group.members.length}",
+          subtitle: "Нужно соседей",
+        ),
+        _StatItem(
+          title: "${group.parameters.age} лет",
+          subtitle: "Возраст",
+        ),
+      ],
+    );
+  }
+}
+
+class _StatItem extends StatelessWidget {
+  final String title;
+  final String subtitle;
+
+  const _StatItem({
+    required this.title,
+    required this.subtitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
+    return SizedBox(
+      width: (width - 48) / 2, 
+      child: Container(
+        height: 100,
+        decoration: AppContainerStyles.sectionContainer,
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              title,
+              style: AppTextStyles.sectionTitle(context),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              subtitle,
+              style: AppTextStyles.whiteSmall(context),
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
       ),
     );

@@ -71,57 +71,73 @@ class _RecommendationPageState extends State<RecommendationPage> {
     );
   }
 
-  Widget _buildContent() {
-    if (_groups.isEmpty) {
-      return const Center(
-        child: Text(
-          'Нет доступных групп',
-          style: TextStyle(color: AppColors.textBase),
-        ),
-      );
-    }
-
-    return ScrollConfiguration(
-      behavior: ScrollConfiguration.of(context).copyWith(
-        scrollbars: false,
-      ),
-      child: GridView.builder(
-        physics: const BouncingScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 0,
-          crossAxisSpacing: 20,
-          childAspectRatio: 1,
-        ),
-        itemCount: _groups.length,
-        itemBuilder: (context, index) {
-          final group = _groups[index];
-          return NeighborGroupCard(
-            id: group.group.id,
-            title: group.group.parameters.name,
-            location: "",
-            membersCount: group.group.members.length,
-            totalSpots: group.group.maxUsers,
-            progress: (group.group.members.length / group.group.maxUsers),
-            budget: group.group.parameters.budget,
-            age: group.group.parameters.age,
-            housing: "${group.group.parameters.roomCount}-х кв",
-            compatibility: (group.score * 100).round(),
-            members: [
-              for (var member in group.group.members)
-                Member(
-                  name: member.parameters.name,
-                  age: member.parameters.age,
-                  profession: member.parameters.userType,
-                  budget: member.parameters.budget,
-                  avatarPath: "",
-                ),
-            ],
-          );
-        },
+Widget _buildContent() {
+  if (_groups.isEmpty) {
+    return const Center(
+      child: Text(
+        'Нет доступных групп',
+        style: TextStyle(color: AppColors.textBase),
       ),
     );
   }
+
+  final width = MediaQuery.of(context).size.width;
+
+  int crossAxisCount;
+  double aspectRatio;
+
+  if (width < 600) {
+    crossAxisCount = 1;       
+    aspectRatio = 0.85;
+  } else if (width < 800) {
+    crossAxisCount = 1;        
+    aspectRatio = 1.4;
+  }
+  else if (width < 1000) {
+    crossAxisCount = 1;        
+    aspectRatio = 1.6;
+  }
+  else {
+    crossAxisCount = 2;        
+    aspectRatio = 1.1;
+  }
+
+  return GridView.builder(
+    padding: const EdgeInsets.all(16),
+    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: crossAxisCount,
+      crossAxisSpacing: 20,
+      mainAxisSpacing: 20,
+      childAspectRatio: aspectRatio,
+    ),
+    itemCount: _groups.length,
+    itemBuilder: (context, index) {
+      final group = _groups[index];
+      return NeighborGroupCard(
+        id: group.group.id,
+        title: group.group.parameters.name,
+        location: "",
+        membersCount: group.group.members.length,
+        totalSpots: group.group.maxUsers,
+        progress: (group.group.members.length / group.group.maxUsers),
+        budget: group.group.parameters.budget,
+        age: group.group.parameters.age,
+        housing: "${group.group.parameters.roomCount}-х кв",
+        compatibility: (group.score * 100).round(),
+        members: [
+          for (var member in group.group.members)
+            Member(
+              name: member.parameters.name,
+              age: member.parameters.age,
+              profession: member.parameters.userType,
+              budget: member.parameters.budget,
+              avatarPath: "",
+            ),
+        ],
+      );
+    },
+  );
+}
 }
 
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {

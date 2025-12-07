@@ -10,77 +10,229 @@ class Member extends StatelessWidget {
   final form.Form member;
   final VoidCallback? onMore;
 
-  const Member({required this.member, this.onMore});
+  const Member({
+    required this.member,
+    this.onMore,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 700;
+
     return Container(
       decoration: AppContainerStyles.profileCard,
       width: double.infinity,
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 30,
-                      ),
-                      const SizedBox(width: 20),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "${member.parameters.name} ${member.parameters.surname}",
-                            style: AppTextStyles.smallHeaderBold(context),
-                            textAlign: TextAlign.left,
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            "Участник - ${member.parameters.age} лет",
-                            style: AppTextStyles.smallSecondary,
-                            textAlign: TextAlign.left,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: onMore,
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: AppColors.baseBright,
-                    backgroundColor: AppColors.textBase,
-                    side: BorderSide(color: AppColors.teal.withOpacity(0.25)),
-                    minimumSize: const Size(190, 60),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Text(
-                    'Подробнее',
-                    style: TextStyle(fontSize: 12),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Text(
-              member.parameters.description,
-              style: AppTextStyles.whiteSmall(context),
-              textAlign: TextAlign.left,
-            ),
-          ],
-        ),
-      ),
+      padding: const EdgeInsets.all(20),
+      child: isMobile
+          ? _MemberMobile(member: member, onMore: onMore)
+          : _MemberDesktop(member: member, onMore: onMore),
     );
   }
 }
+
+class _MemberMobile extends StatelessWidget {
+  final form.Form member;
+  final VoidCallback? onMore;
+
+  const _MemberMobile({
+    required this.member,
+    this.onMore,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            const CircleAvatar(radius: 26),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "${member.parameters.name} ${member.parameters.surname}",
+                    style: AppTextStyles.smallHeaderBold(context),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    "Участник • ${member.parameters.age} лет",
+                    style: AppTextStyles.smallSecondary,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Text(
+          member.parameters.description,
+          style: AppTextStyles.whiteSmall(context),
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: onMore,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.textBase,
+              foregroundColor: AppColors.baseBright,
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: const Text("Подробнее"),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+
+class _MemberDesktop extends StatelessWidget {
+  final form.Form member;
+  final VoidCallback? onMore;
+
+  const _MemberDesktop({
+    required this.member,
+    this.onMore,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Row(
+                children: [
+                  const CircleAvatar(radius: 30),
+                  const SizedBox(width: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${member.parameters.name} ${member.parameters.surname}",
+                        style: AppTextStyles.smallHeaderBold(context),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "Участник • ${member.parameters.age} лет",
+                        style: AppTextStyles.smallSecondary,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            ElevatedButton(
+              onPressed: onMore,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.textBase,
+                foregroundColor: AppColors.baseBright,
+                minimumSize: const Size(160, 48),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text("Подробнее"),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        Text(
+          member.parameters.description,
+          style: AppTextStyles.whiteSmall(context),
+        ),
+      ],
+    );
+  }
+}
+
+
+// class Member extends StatelessWidget {
+//   final form.Form member;
+//   final VoidCallback? onMore;
+
+//   const Member({required this.member, this.onMore});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       decoration: AppContainerStyles.profileCard,
+//       width: double.infinity,
+//       child: Padding(
+//         padding: const EdgeInsets.all(20),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             Row(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Expanded(
+//                   child: Row(
+//                     children: [
+//                       CircleAvatar(
+//                         radius: 30,
+//                       ),
+//                       const SizedBox(width: 20),
+//                       Column(
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: [
+//                           Text(
+//                             "${member.parameters.name} ${member.parameters.surname}",
+//                             style: AppTextStyles.smallHeaderBold(context),
+//                             textAlign: TextAlign.left,
+//                           ),
+//                           const SizedBox(height: 10),
+//                           Text(
+//                             "Участник - ${member.parameters.age} лет",
+//                             style: AppTextStyles.smallSecondary,
+//                             textAlign: TextAlign.left,
+//                           ),
+//                         ],
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//                 ElevatedButton(
+//                   onPressed: onMore,
+//                   style: OutlinedButton.styleFrom(
+//                     foregroundColor: AppColors.baseBright,
+//                     backgroundColor: AppColors.textBase,
+//                     side: BorderSide(color: AppColors.teal.withOpacity(0.25)),
+//                     minimumSize: const Size(190, 60),
+//                     padding: const EdgeInsets.symmetric(
+//                         horizontal: 16, vertical: 12),
+//                     shape: RoundedRectangleBorder(
+//                       borderRadius: BorderRadius.circular(8),
+//                     ),
+//                   ),
+//                   child: const Text(
+//                     'Подробнее',
+//                     style: TextStyle(fontSize: 12),
+//                     textAlign: TextAlign.center,
+//                   ),
+//                 ),
+//               ],
+//             ),
+//             const SizedBox(height: 20),
+//             Text(
+//               member.parameters.description,
+//               style: AppTextStyles.whiteSmall(context),
+//               textAlign: TextAlign.left,
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
