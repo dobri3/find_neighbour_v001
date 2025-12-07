@@ -45,6 +45,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   String _name = '';
   String _surname = '';
   String _id = '';
+  ImageProvider? _avatar;
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _surnameController = TextEditingController();
@@ -54,10 +55,25 @@ class _UserProfilePageState extends State<UserProfilePage> {
   final TextEditingController _roomCountController = TextEditingController();
   final TextEditingController _monthsController = TextEditingController();
   final TextEditingController _regionController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
+  final List<TextEditingController> _contactsControllers = [
+  TextEditingController(),
+
+  
+];
 
   bool _isFormValid = false;
   bool _isModified = false;
   bool _isSaving = false;
+  int _age = 0;
+
+File? _localAvatar;
+
+  void _addContactField() {
+  setState(() {
+    _contactsControllers.add(TextEditingController());
+  });
+}
 
   @override
   void initState() {
@@ -71,22 +87,36 @@ class _UserProfilePageState extends State<UserProfilePage> {
     _neighboursController.addListener(_validateForm);
     _roomCountController.addListener(_validateForm);
     _monthsController.addListener(_validateForm);
+    _ageController.addListener(_validateForm);
+    
   }
 
   
 
   void _loadUserData() async {
-    User _user = await ApiService.userService.getUserById(widget.id);
+    // User _user = await ApiService.userService.getUserById(widget.id);
+    final user = await ApiService.userService.getUserById(widget.id);
     sessionUser = await ApiService.authService.getSession();
     form.Form _form = await ApiService.matcherService.getFormByUser(widget.id);
 
     setState(() {
-      _id = _user.id;
-      _name = _user.name;
-      _surname = _user.surname;
+      // _id = _user.id;
+      // _name = _user.name;
+      // _surname = _user.surname;
+      //   _age = _form.parameters.age; 
+      //   _user = user;
 
-      _userLocation = _form.parameters.geo;
-      _address = _form.parameters.address;
+      // _userLocation = _form.parameters.geo;
+      // _address = _form.parameters.address;
+
+        _user = user;
+        _id = user.id;
+        _name = user.name;
+        _surname = user.surname;
+        _age = _form.parameters.age;
+
+  _userLocation = _form.parameters.geo;
+  _address = _form.parameters.address;
       print(_address);
       print(_userLocation.toJson());
     });
@@ -94,6 +124,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     _nameController.text = _user.name;
     _surnameController.text = _user.surname;
     _descController.text = _user.description;
+    _ageController.text = _form.parameters.age.toString();
 
     _moneyController.text = _form.parameters.budget.toString();
     _neighboursController.text = _form.parameters.roommatesCount.toString();
@@ -104,6 +135,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   @override
   void dispose() {
+    _ageController.dispose();
     _nameController.dispose();
     _surnameController.dispose();
     _descController.dispose();
@@ -112,6 +144,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
     _roomCountController.dispose();
     _monthsController.dispose();
     _regionController.dispose();
+    for (final c in _contactsControllers) {
+  c.dispose();
+}
     super.dispose();
   }
 
@@ -133,12 +168,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
   bool numberFieldsValid = _isNumberValid(_moneyController.text) &&
       _isNumberValid(_neighboursController.text) &&
       _isNumberValid(_roomCountController.text) &&
-      _isNumberValid(_monthsController.text);
+      _isNumberValid(_monthsController.text) &&
+      _isNumberValid(_ageController.text);
 
   bool modified = _nameController.text != _name ||
       _surnameController.text != _surname ||
       _descController.text != _user.description ||
       _moneyController.text != '' ||
+      _ageController.text != _age.toString() || 
       _neighboursController.text != '' ||
       _roomCountController.text != '' ||
       _monthsController.text != '';
@@ -177,6 +214,7 @@ void _saveProfile() async {
   matcher.Parameters parameters = matcher.Parameters(
     name: _nameController.text,
     surname: _surnameController.text,
+    age: int.parse(_ageController.text),
     geo: _userLocation,
     photos: [],
       budget:
@@ -190,7 +228,7 @@ void _saveProfile() async {
       months: _monthsController.text.isEmpty
           ? 0
           : int.parse(_monthsController.text),
-    age: 0,
+    // age: 0,
     smoking: false,
     alko: false,
     pet: false,
@@ -220,11 +258,23 @@ Future<void> _pickAvatar() async {
   final ImagePicker picker = ImagePicker();
   final XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
+
   if (image == null) return;
 
   File file = File(image.path);
 
-  // String? uploadedUrl = await ApiService.userService.uploadAvatar(_id, file);
+    setState(() {
+    _avatar = NetworkImage(image.path); 
+  });
+
+  // загрузка на сервер
+  // final url = await ApiService.userService.uploadAvatar(_id, file);
+  // if (url != null) {
+  //   setState(() {
+  //     _avatar = NetworkImage(url);
+  //   });
+  // }
+
   String? uploadedUrl = '';
 
   if (uploadedUrl == null) {
@@ -235,6 +285,7 @@ Future<void> _pickAvatar() async {
   }
 
   setState(() {
+   _localAvatar = null;              
     _user = _user.copyWith(photoUrl: uploadedUrl);
   });
 }
@@ -242,10 +293,13 @@ Future<void> _pickAvatar() async {
 
   @override
   Widget build(BuildContext context) {
+
+      final isMobile = MediaQuery.of(context).size.width < 600;
+
+
     return Scaffold(
       appBar: HomeHeader(),
       backgroundColor: AppColors.baseBright,
-      // backgroundColor: AppColors.white,
       body: SingleChildScrollView(
         child: Center(
           child: Container(
@@ -254,6 +308,7 @@ Future<void> _pickAvatar() async {
             ),
             child: Column(
               children: [
+                if (!isMobile)
                 Padding(
                   padding: const EdgeInsets.only(
                     top: 42,
@@ -261,16 +316,16 @@ Future<void> _pickAvatar() async {
                   ),
                   child: AppTextStyles.logo(context),
                 ),
+                if (!isMobile)
+                const SizedBox(height: 20,),
                 Container(
                   margin: const EdgeInsets.only(bottom: 20),
                   decoration: AppContainerStyles.profileCard,
                   child: Padding(
-                    padding: const EdgeInsets.only(
-                      top: 20,
-                      left: 60,
-                      right: 60,
-                      bottom: 60,
-                    ),
+                    padding: EdgeInsets.symmetric(
+                    horizontal: isMobile ? 20 : 60,
+                    vertical: isMobile ? 32 : 60,  
+                  ),
                     child: Center(
                     child: Column(
                       children: [
@@ -281,24 +336,28 @@ Future<void> _pickAvatar() async {
                             Expanded(
                               child: Row(spacing: 41, children: [
                                 GestureDetector(
-                                  onTap: _id == sessionUser.id ? _pickAvatar : null,
+                                  onTap: (_user.id.isNotEmpty && _user.id == sessionUser.id)
+                                    ? _pickAvatar
+                                    : null,
                                   child: CircleAvatar(
-                                    radius: 60,
-                                    backgroundColor: AppColors.teal.withOpacity(0.1),
-                                    backgroundImage: _user.photoUrl != null ? NetworkImage(_user.photoUrl!) : null,
-                                    child: _user.photoUrl == null
-                                        ? const Icon(Icons.camera_alt, color: AppColors.textBase, size: 32)
-                                        : null,
-                                  ),
+                                        radius: 60,
+                                        backgroundColor: AppColors.teal.withOpacity(0.1),
+                                        backgroundImage:
+                                          _avatar ??
+                                          (_user.photoUrl != null ? NetworkImage(_user.photoUrl!) : null),
+                                      child: _avatar == null && _user.photoUrl == null
+                                          ? const Icon(Icons.camera_alt, size: 32)
+                                          : null,
+                                      )
                                 ),
-                                // CircleAvatar(
-                                //     radius: 60,),
-                                Text(
-                                  "$_name $_surname",
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w300,
-                                    color: AppColors.textBase,
+                                Expanded(
+                                  child: Text(
+                                    "$_name $_surname",
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: AppTextStyles.profileName(context).copyWith(
+                                      fontSize: MediaQuery.of(context).size.width < 600 ? 16 : 20,
+                                    ),
                                   ),
                                 ),
                               ]),
@@ -314,7 +373,10 @@ Future<void> _pickAvatar() async {
                                       side: BorderSide(
                                               color: AppColors.teal
                                                   .withOpacity(0.25)),
-                                      minimumSize: const Size(190, 60),
+                                      minimumSize: Size(
+                                      MediaQuery.of(context).size.width < 600 ? 140 : 190, 
+                                      48,
+                                    ),
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 16, vertical: 12),
                                       shape: RoundedRectangleBorder(
@@ -333,6 +395,8 @@ Future<void> _pickAvatar() async {
                         ),
                         const SizedBox(height: 20),
                         _buildMainInfo(),
+                        const SizedBox(height: 20),
+                        _buildAdditionalInfo(),
                         const SizedBox(height: 20),
                         _buildHomeInfo(),
                         const SizedBox(height: 20),
@@ -394,6 +458,87 @@ Future<void> _pickAvatar() async {
       ),
     );
   }
+
+  Widget _buildAdditionalInfo() {
+  return Container(
+    decoration: AppContainerStyles.sectionContainer,
+    child: Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            "Дополнительная информация",
+            style: AppTextStyles.smallHeaderBold(context),
+          ),
+          const SizedBox(height: 20),
+
+          Row(
+            spacing: 20,
+            children: [
+              Expanded(
+                child: _buildInput(
+                  "Возраст",
+                  _ageController,
+                  "Введите возраст",
+                ),
+              ),
+
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildInput(
+                            "Контакты",
+                            _contactsControllers[0],
+                            "Введите контакт",
+                            validate: false,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        IconButton(
+                          onPressed: _addContactField,
+                          icon: const Icon(Icons.add),
+                          tooltip: 'Добавить контакт',
+                          color: AppColors.accentBlue,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+          if (_contactsControllers.length > 1) ...[
+            const SizedBox(height: 16),
+            Column(
+              children: List.generate(
+                _contactsControllers.length - 1,
+                (index) {
+                  final controller = _contactsControllers[index + 1];
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: _buildInput(
+                      "Контакт ${index + 2}",
+                      controller,
+                      "Введите контакт",
+                      validate: false,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ],
+      ),
+    ),
+  );
+}
+
 
   Widget _buildHomeInfo() {
     return Container(
@@ -472,13 +617,25 @@ Future<void> _pickAvatar() async {
     );
   }
 
-  Widget _buildInput(String title, TextEditingController controller, String hint,
-      {maxLines = 1, minLines = 1}) {
+  Widget _buildInput(String title,
+  TextEditingController controller,
+  String hint, {
+  int maxLines = 1,
+  int minLines = 1,
+  bool validate = true,
+}) {
     bool isStringField =
         [ _nameController, _surnameController, _descController].contains(controller);
-    bool isValid = isStringField
-        ? _isStringValid(controller.text)
-        : _isNumberValid(controller.text);
+    bool isValid = true;
+
+if (validate) {
+  bool isStringField =
+      [_nameController, _surnameController, _descController].contains(controller);
+
+  isValid = isStringField
+      ? _isStringValid(controller.text)
+      : _isNumberValid(controller.text);
+}
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

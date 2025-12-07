@@ -478,4 +478,22 @@ static TextStyle largeHeadingWhite(BuildContext context, {bool isSmall = false})
       fontFamily: "Inter",
     );
   }
+
+   // Text(
+                                //   "$_name $_surname",
+                                //   style: const TextStyle(
+                                //     fontSize: 20,
+                                //     fontWeight: FontWeight.w300,
+                                //     color: AppColors.textBase,
+                                //   ),
+  static TextStyle profileName(BuildContext context, {bool isSmall = false}) {
+    // final screenWidth = MediaQuery.of(context).size.width;
+    // final isMobile = screenWidth < 750;
+    return TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.w300,
+      color: AppColors.textBase,
+      fontFamily: "Inter",
+    );
+  }
 }
