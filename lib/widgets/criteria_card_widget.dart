@@ -31,7 +31,7 @@ class _CriteriaCardState extends State<CriteriaCard> {
         duration: const Duration(milliseconds: 200), 
         
       width: _isHovered ? 421 : 411,
-      height: 146,
+      height: 148,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
@@ -75,7 +75,7 @@ class _CriteriaCardState extends State<CriteriaCard> {
                 Text(
                   widget.subtitle,
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 14,
                     height: 1.4,
                     fontFamily: "Inter",
                     color: AppColors.textBase,

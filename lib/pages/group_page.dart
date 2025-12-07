@@ -109,7 +109,7 @@ class _GroupPageState extends State<GroupPage> {
                     top: 42,
                     bottom: 42,
                   ),
-                  child: AppTextStyles.logo,
+                  child: AppTextStyles.logo(context),
                 ),
                 Container(
                   margin: const EdgeInsets.only(bottom: 20),
@@ -126,7 +126,7 @@ class _GroupPageState extends State<GroupPage> {
                         children: [
                           Text(
                             '${_group.parameters.name}',
-                            style: AppTextStyles.profileTitle,
+                            style: AppTextStyles.profileTitle(context),
                           ),
                           const SizedBox(height: 20),
                           Row(
@@ -157,9 +157,9 @@ class _GroupPageState extends State<GroupPage> {
                         _requests!.length > 0
                     ? Column(
                         children: [
-                          const Text(
+                           Text(
                             "Запросы",
-                            style: AppTextStyles.sectionTitle,
+                            style: AppTextStyles.sectionTitle(context),
                           ),
                           Container(
                             padding: const EdgeInsets.only(top: 20),
@@ -191,9 +191,9 @@ class _GroupPageState extends State<GroupPage> {
                         ],
                       )
                     : const SizedBox(),
-                const Text(
+                 Text(
                   "Информация",
-                  style: AppTextStyles.sectionTitle,
+                  style: AppTextStyles.sectionTitle(context),
                 ),
                 IntrinsicHeight(
                   child: Row(
@@ -211,17 +211,17 @@ class _GroupPageState extends State<GroupPage> {
                             children: [
                               Text(
                                 'Описание',
-                                style: AppTextStyles.smallHeaderBold,
+                                style: AppTextStyles.smallHeaderBold(context),
                               ),
                               const SizedBox(height: 10),
                               Text(
                                 '${_group.parameters.description}',
-                                style: AppTextStyles.whiteSmall,
+                                style: AppTextStyles.whiteSmall(context),
                               ),
                               const SizedBox(height: 20),
                               Text(
                                 'Расположение',
-                                style: AppTextStyles.smallHeaderBold,
+                                style: AppTextStyles.smallHeaderBold(context),
                               ),
                               const SizedBox(height: 10),
                               MapWidget(
@@ -248,7 +248,7 @@ class _GroupPageState extends State<GroupPage> {
                             children: [
                               Text(
                                 'Контакты',
-                                style: AppTextStyles.smallHeaderBold,
+                                style: AppTextStyles.smallHeaderBold(context),
                               ),
                               const SizedBox(height: 10),
                               Column(
@@ -256,12 +256,12 @@ class _GroupPageState extends State<GroupPage> {
                                 children: [
                                   Text(
                                     'E-mail: email@email.com',
-                                    style: AppTextStyles.whiteSmall,
+                                    style: AppTextStyles.whiteSmall(context),
                                   ),
                                   const SizedBox(height: 10),
                                   Text(
                                     'Телефон: телефон владельца',
-                                    style: AppTextStyles.whiteSmall,
+                                    style: AppTextStyles.whiteSmall(context),
                                   ),
                                   const SizedBox(height: 20),
                                   Align(
@@ -287,9 +287,9 @@ class _GroupPageState extends State<GroupPage> {
                                                 ),
                                                   ),
                                                 
-                                          child: const Text(
+                                          child: Text(
                                             "Написать",
-                                            style: AppTextStyles.whiteSmall,
+                                            style: AppTextStyles.whiteSmall(context),
                                           ),
                                         ),
                                         const SizedBox(height: 10),
@@ -337,7 +337,7 @@ class _GroupPageState extends State<GroupPage> {
                                                     )
                                                   : Text(
                                                       _isJoinButtonSuccess ? "Заявка отправлена" : "Занять место",
-                                                      style: AppTextStyles.whiteSmall,
+                                                      style: AppTextStyles.whiteSmall(context),
                                                     ),
 
                                           // onPressed: () async {
@@ -370,9 +370,9 @@ class _GroupPageState extends State<GroupPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Text(
+                Text(
                   "Участники",
-                  style: AppTextStyles.sectionTitle,
+                  style: AppTextStyles.sectionTitle(context),
                 ),
                 Container(
                   padding: const EdgeInsets.only(top: 20),
@@ -411,13 +411,13 @@ class _GroupPageState extends State<GroupPage> {
             children: [
               Text(
                 title,
-                style: AppTextStyles.sectionTitle,
+                style: AppTextStyles.sectionTitle(context),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 10),
               Text(
                 value,
-                style: AppTextStyles.whiteSmall,
+                style: AppTextStyles.whiteSmall(context),
                 textAlign: TextAlign.center,
               ),
             ],

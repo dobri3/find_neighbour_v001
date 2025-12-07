@@ -44,18 +44,18 @@ class AuthPage extends StatelessWidget {
                       const SizedBox(height: 24),
 
                       // Title
-                      const Text(
+                       Text(
                         "Добро пожаловать!",
-                        style: AppTextStyles.authTitle,
+                        style: AppTextStyles.authTitle(context),
                         textAlign: TextAlign.center,
                       ),
 
                       const SizedBox(height: 8),
 
                       // Subtitle
-                      const Text(
+                       Text(
                         "Войдите через Google, чтобы продолжить",
-                        style: AppTextStyles.authSubtitle,
+                        style: AppTextStyles.authSubtitle(context),
                         textAlign: TextAlign.center,
                       ),
 
@@ -63,6 +63,7 @@ class AuthPage extends StatelessWidget {
 
                       // Google Button
                       AppButtonStyles.socialButton(
+                        context: context,
                         onPressed: () async {
                           // launchUrl(Uri.parse(await ApiService.googleAuthURL()));
                           final url =
@@ -79,6 +80,7 @@ class AuthPage extends StatelessWidget {
 
                       // Yandex Button
                       AppButtonStyles.socialButton(
+                        context: context,
                         onPressed: () async {
                           // launchUrl(Uri.parse(await ApiService.googleAuthURL()));
                           final url =
@@ -98,7 +100,7 @@ class AuthPage extends StatelessWidget {
                       const SizedBox(height: 24),
 
                       // Footer text
-                      const Text(
+                       Text(
                         "Продолжая, вы соглашаетесь с нашими\nУсловиями использования и Политикой конфиденциальности",
                         style: AppTextStyles.authFooter,
                         textAlign: TextAlign.center,

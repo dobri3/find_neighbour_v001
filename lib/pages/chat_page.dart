@@ -227,7 +227,7 @@ class _ChatPageState extends State<ChatPage> {
             SizedBox(height: 20),
             TextField(
               style: TextStyle(color: AppColors.textBase),
-              decoration: AppContainerStyles.textInput('Найти диалог'),
+              decoration: AppContainerStyles.textInput(context, 'Найти диалог'),
             ),
           ],
         ),

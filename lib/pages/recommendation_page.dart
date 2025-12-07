@@ -135,15 +135,15 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
       padding: const EdgeInsets.symmetric(horizontal: 72),
       child: Row(
         children: [
-          AppTextStyles.logo,
+          AppTextStyles.logo(context),
           const Spacer(),
-          const Text("Поиск", style: AppTextStyles.whiteSmall),
+           Text("Поиск", style: AppTextStyles.whiteSmall(context)),
           const SizedBox(width: 32),
-          const Text("Сообщения", style: AppTextStyles.whiteSmall),
+           Text("Сообщения", style: AppTextStyles.whiteSmall(context)),
           const SizedBox(width: 32),
-          const Text("Заявки", style: AppTextStyles.whiteSmall),
+           Text("Заявки", style: AppTextStyles.whiteSmall(context)),
           const SizedBox(width: 32),
-          const Text("Мой профиль", style: AppTextStyles.whiteSmall),
+           Text("Мой профиль", style: AppTextStyles.whiteSmall(context)),
         ],
       ),
     );

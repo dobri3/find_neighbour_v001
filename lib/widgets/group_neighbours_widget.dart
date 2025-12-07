@@ -93,9 +93,9 @@ class _NeighborGroupCardState extends State<NeighborGroupCard> {
             ],
           ),
           const SizedBox(height: 16),
-          const Text(
+           Text(
             "Заполненность группы:",
-            style: AppTextStyles.whiteSmall,
+            style: AppTextStyles.whiteSmall(context),
           ),
           const SizedBox(
             height: 10,
