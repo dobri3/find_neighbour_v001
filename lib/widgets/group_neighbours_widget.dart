@@ -52,19 +52,158 @@ class _NeighborGroupCardState extends State<NeighborGroupCard> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
+//   @override
+//   Widget build(BuildContext context) {
+//     final isMobile = MediaQuery.of(context).size.width < 600;
+//     return ConstrainedBox(
+//   constraints: BoxConstraints(
+//     maxHeight: 400, // максимум для всей карточки
+//     minHeight: 200,
+//   ),
+//   child: Container(
+//     margin: const EdgeInsets.symmetric(vertical: 16),
+//     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+//     decoration: BoxDecoration(
+//       color: AppColors.white,
+//       borderRadius: BorderRadius.circular(16),
+//       border: Border.all(color: AppColors.teal.withOpacity(0.06)),
+//     ),
+//     child: Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         // Верхняя информация
+//         Row(
+//           children: [
+//             _Pill(
+//               text: '${widget.membersCount}/${widget.totalSpots} • ${widget.title}',
+//               color: AppColors.detailBlue,
+//               textColor: AppColors.white,
+//             ),
+//             const SizedBox(width: 12),
+//             Text(
+//               widget.location,
+//               style: const TextStyle(color: AppColors.textBase, fontSize: 14),
+//               overflow: TextOverflow.ellipsis,
+//             ),
+//             Text(
+//               '${widget.totalSpots - widget.membersCount} из ${widget.totalSpots} мест',
+//               style: const TextStyle(color: AppColors.textBase, fontSize: 12),
+//             ),
+//           ],
+//         ),
+//         const SizedBox(height: 16),
+//         Text("Заполненность группы:", style: AppTextStyles.whiteSmall(context)),
+//         const SizedBox(height: 10),
+//         ClipRRect(
+//           borderRadius: BorderRadius.circular(4),
+//           child: LinearProgressIndicator(
+//             value: widget.progress.clamp(0.0, 1.0),
+//             minHeight: 6,
+//             backgroundColor: Colors.white12,
+//             valueColor: const AlwaysStoppedAnimation<Color>(AppColors.accentBlue),
+//           ),
+//         ),
+//         const SizedBox(height: 16),
+//         LayoutBuilder(
+//           builder: (context, c) {
+//             final isMobile = c.maxWidth < 500;
+//             final columns = isMobile ? 2 : 4;
+//             final itemWidth = (c.maxWidth - (columns - 1) * 12) / columns;
+//             return Wrap(
+//               spacing: 12,
+//               runSpacing: 12,
+//               children: [
+//                 _InfoTile(width: itemWidth, label: 'Бюджет', value: '${widget.budget}'),
+//                 _InfoTile(width: itemWidth, label: 'Возраст', value: '${widget.age} лет'),
+//                 _InfoTile(width: itemWidth, label: 'Жильё', value: widget.housing),
+//                 _InfoTile(width: itemWidth, label: 'Совместимость', value: '${widget.compatibility}%'),
+//               ],
+//             );
+//           },
+//         ),
+//         const SizedBox(height: 20),
+//         // Скролл для участников
+//         ConstrainedBox(
+//           constraints: const BoxConstraints(maxHeight: 120),
+//           child: SingleChildScrollView(
+//             child: Column(
+//               children: widget.members.take(3).map((m) => _MemberCard(member: m)).toList(),
+//             ),
+//           ),
+//         ),
+//         const SizedBox(height: 16),
+//         // Кнопки
+//         Row(
+//           mainAxisAlignment: MainAxisAlignment.end,
+//           children: [
+//             OutlinedButton(
+//               onPressed: () => context.router.push(GroupRoute(id: widget.id)),
+//               style: OutlinedButton.styleFrom(
+//                 backgroundColor: AppColors.baseBright,
+//                 foregroundColor: AppColors.textBase,
+//                 side: BorderSide(color: AppColors.teal.withOpacity(0.25)),
+//                 minimumSize: Size(isMobile ? 140 : 190, isMobile ? 48 : 60),
+//                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+//                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+//               ),
+//               child: const Text('Подробнее'),
+//             ),
+//             const SizedBox(width: 12),
+//             ElevatedButton(
+//               style: ElevatedButton.styleFrom(
+//                 minimumSize: Size(isMobile ? 140 : 190, isMobile ? 48 : 60),
+//                 backgroundColor: AppColors.detailBlue,
+//                 foregroundColor: Colors.white,
+//                 padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+//                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+//               ),
+//               onPressed: isSending ? null : () async {
+//                 setState(() => isSending = true);
+//                 try {
+//                   var session = await ApiService.authService.getSession();
+//                   await ApiService.matcherService.sendJoinRequest(session.id, widget.id);
+//                   print('sent');
+//                 } catch (e) {
+//                   ScaffoldMessenger.of(context).showSnackBar(
+//                     SnackBar(content: Text("Ошибка отправки запроса: $e")),
+//                   );
+//                   setState(() => isSending = false);
+//                 }
+//               },
+//               child: isSending
+//                   ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2))
+//                   : const Text('Занять место', style: TextStyle(color: AppColors.white)),
+//             ),
+//           ],
+//         ),
+//       ],
+//     ),
+//   ),
+// );
+//   }
+// }
+
+@override
+Widget build(BuildContext context) {
+  final isMobile = MediaQuery.of(context).size.width < 600;
+
+  return ConstrainedBox(
+    constraints: const BoxConstraints(
+      maxHeight: 350, // Максимальная высота карточки
+      minHeight: 250, // Минимальная высота карточки
+    ),
+    child: Container(
       margin: const EdgeInsets.symmetric(vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.teal.withOpacity(0.06)),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Верхняя информация
           Row(
             children: [
               _Pill(
@@ -73,33 +212,23 @@ class _NeighborGroupCardState extends State<NeighborGroupCard> {
                 textColor: AppColors.white,
               ),
               const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  widget.location,
-                  style: const TextStyle(
-                    color: AppColors.textBase,
-                    fontSize: 14,
-                  ),
-                  overflow: TextOverflow.ellipsis,
+              Text(
+                widget.location,
+                style: const TextStyle(
+                  color: AppColors.textBase,
+                  fontSize: 14,
                 ),
+                overflow: TextOverflow.ellipsis,
               ),
               Text(
                 '${widget.totalSpots - widget.membersCount} из ${widget.totalSpots} мест',
-                style: TextStyle(
-                  color: AppColors.textBase,
-                  fontSize: 12,
-                ),
+                style: const TextStyle(color: AppColors.textBase, fontSize: 12),
               ),
             ],
           ),
           const SizedBox(height: 16),
-           Text(
-            "Заполненность группы:",
-            style: AppTextStyles.whiteSmall(context),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
+          Text("Заполненность группы:", style: AppTextStyles.whiteSmall(context)),
+          const SizedBox(height: 10),
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
@@ -110,45 +239,35 @@ class _NeighborGroupCardState extends State<NeighborGroupCard> {
             ),
           ),
           const SizedBox(height: 16),
+          // Инфо-блоки
           LayoutBuilder(
             builder: (context, c) {
-              final itemWidth = (c.maxWidth - 3 * 12) / 4;
+              final isMobile = c.maxWidth < 500;
+              final columns = isMobile ? 2 : 4;
+              final itemWidth = (c.maxWidth - (columns - 1) * 12) / columns;
               return Wrap(
                 spacing: 12,
                 runSpacing: 12,
                 children: [
-                  _InfoTile(
-                    width: itemWidth,
-                    label: 'Бюджет',
-                    value: '${widget.budget}',
-                  ),
-                  _InfoTile(
-                    width: itemWidth,
-                    label: 'Возраст',
-                    value: '${widget.age} лет',
-                  ),
-                  _InfoTile(
-                    width: itemWidth,
-                    label: 'Жильё',
-                    value: widget.housing,
-                  ),
-                  _InfoTile(
-                    width: itemWidth,
-                    label: 'Совместимость',
-                    value: '${widget.compatibility}%',
-                  ),
+                  _InfoTile(width: itemWidth, label: 'Бюджет', value: '${widget.budget}'),
+                  _InfoTile(width: itemWidth, label: 'Возраст', value: '${widget.age} лет'),
+                  _InfoTile(width: itemWidth, label: 'Жильё', value: widget.housing),
+                  _InfoTile(width: itemWidth, label: 'Совместимость', value: '${widget.compatibility}%'),
                 ],
               );
             },
           ),
           const SizedBox(height: 20),
+          // Список участников со скроллом
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: widget.members.map((m) => _MemberCard(member: m)).toList(),
+            child: SingleChildScrollView(
+              child: Column(
+                children: widget.members.take(3).map((m) => _MemberCard(member: m)).toList(),
+              ),
             ),
           ),
           const SizedBox(height: 16),
+          // Кнопки
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -158,29 +277,26 @@ class _NeighborGroupCardState extends State<NeighborGroupCard> {
                   backgroundColor: AppColors.baseBright,
                   foregroundColor: AppColors.textBase,
                   side: BorderSide(color: AppColors.teal.withOpacity(0.25)),
-                  minimumSize: const Size(190, 60),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                  minimumSize: Size(isMobile ? 140 : 190, isMobile ? 48 : 60),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
                 child: const Text('Подробнее'),
               ),
               const SizedBox(width: 12),
               ElevatedButton(
-                style: ElevatedButton.styleFrom( minimumSize: const Size(190, 60), 
-                backgroundColor: AppColors.detailBlue, 
-                foregroundColor: Colors.white, 
-                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12), 
-                shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(8), ), ),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(isMobile ? 140 : 190, isMobile ? 48 : 60),
+                  backgroundColor: AppColors.detailBlue,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                ),
                 onPressed: isSending ? null : () async {
                   setState(() => isSending = true);
-
                   try {
                     var session = await ApiService.authService.getSession();
                     await ApiService.matcherService.sendJoinRequest(session.id, widget.id);
-
                     print('sent');
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -190,38 +306,18 @@ class _NeighborGroupCardState extends State<NeighborGroupCard> {
                   }
                 },
                 child: isSending
-                  ? const SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Text('Занять место', style: TextStyle(color: AppColors.white)),
-                // onPressed: () async {
-                //   var session = await ApiService.authService.getSession();
-                //   await ApiService.matcherService
-                //       .sendJoinRequest(session.id, widget.id);
-                //   print('sent');
-                // },
-                // style: ElevatedButton.styleFrom(
-                //   minimumSize: const Size(190, 60),
-                //   backgroundColor: AppColors.detailBlue,
-                //   foregroundColor: Colors.white,
-                //   padding:
-                //       const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-                //   shape: RoundedRectangleBorder(
-                //     borderRadius: BorderRadius.circular(8),
-                //   ),
-                // ),
-                // child: const Text('Занять место', style: TextStyle(color: AppColors.white),),
+                    ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2))
+                    : const Text('Занять место', style: TextStyle(color: AppColors.white)),
               ),
             ],
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
 }
-
+}
+  
 class _Pill extends StatelessWidget {
   final String text;
   final Color color;
@@ -254,6 +350,7 @@ class _Pill extends StatelessWidget {
   }
 }
 
+
 class _InfoTile extends StatelessWidget {
   final String label;
   final String value;
@@ -268,10 +365,12 @@ class _InfoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
+
     return SizedBox(
       width: width,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        padding: EdgeInsets.symmetric(horizontal: isMobile ? 8: 14, vertical: isMobile ? 6 : 12),
         decoration: BoxDecoration(
           color: AppColors.base1,
           borderRadius: BorderRadius.circular(10),
@@ -297,6 +396,7 @@ class _InfoTile extends StatelessWidget {
     );
   }
 }
+
 
 class Member {
   final String name;
@@ -334,25 +434,358 @@ class _MemberCard extends StatelessWidget {
             radius: 20,
           ),
           const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '${member.name}',
-                  style: TextStyle(color: AppColors.textBase, fontSize: 16),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  '${member.age} лет  ${member.profession}   ${member.budget} ₽',
-                  style: const TextStyle(color: AppColors.textLight, fontSize: 14),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '${member.name}',
+                style: TextStyle(color: AppColors.textBase, fontSize: 16),
+                overflow: TextOverflow.ellipsis,
+              ),
+              Text(
+                '${member.age} лет  ${member.profession}   ${member.budget} ₽',
+                style: const TextStyle(color: AppColors.textLight, fontSize: 14),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
           ),
         ],
       ),
     );
   }
 }
+
+
+//     return ConstrainedBox(
+//       constraints: BoxConstraints(
+//         maxHeight: 300,
+//         minHeight: 200,
+//       ),
+//       child: Container(
+//         margin: const EdgeInsets.symmetric(vertical: 16),
+//         decoration: BoxDecoration(
+//           color: AppColors.white,
+//           borderRadius: BorderRadius.circular(16),
+//           border: Border.all(color: AppColors.teal.withOpacity(0.06)),
+//         ),
+//         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             Row(
+//               children: [
+//                 Expanded(
+//                   child: _Pill(
+//                     text: '${widget.membersCount}/${widget.totalSpots} • ${widget.title}',
+//                     color: AppColors.detailBlue,
+//                     textColor: AppColors.white,
+//                   ),
+//                 ),
+//                 const SizedBox(width: 12),
+//                 Expanded(
+//                   child: Text(
+//                     widget.location,
+//                     style: const TextStyle(
+//                       color: AppColors.textBase,
+//                       fontSize: 14,
+//                     ),
+//                     overflow: TextOverflow.ellipsis,
+//                   ),
+//                 ),
+//                 Text(
+//                   '${widget.totalSpots - widget.membersCount} из ${widget.totalSpots} мест',
+//                   style: TextStyle(
+//                     color: AppColors.textBase,
+//                     fontSize: 12,
+//                   ),
+//                 ),
+//               ],
+//             ),
+//             const SizedBox(height: 16),
+//              Text(
+//               "Заполненность группы:",
+//               style: AppTextStyles.whiteSmall(context),
+//             ),
+//             const SizedBox(
+//               height: 10,
+//             ),
+//             ClipRRect(
+//               borderRadius: BorderRadius.circular(4),
+//               child: LinearProgressIndicator(
+//                 value: widget.progress.clamp(0.0, 1.0),
+//                 minHeight: 6,
+//                 backgroundColor: Colors.white12,
+//                 valueColor: const AlwaysStoppedAnimation<Color>(AppColors.accentBlue),
+//               ),
+//             ),
+//             const SizedBox(height: 16),
+//             LayoutBuilder(
+//               builder: (context, c) {
+//               final isMobile = c.maxWidth < 500;
+//               final columns = isMobile ? 2 : 4;
+//               final itemWidth = (c.maxWidth - (columns - 1) * 12) / columns;
+              
+//                 return Wrap(
+//                   spacing: 12,
+//                   runSpacing: 12,
+//                   children: [
+//                     _InfoTile(
+//                       width: itemWidth,
+//                       label: 'Бюджет',
+//                       value: '${widget.budget}',
+//                     ),
+//                     _InfoTile(
+//                       width: itemWidth,
+//                       label: 'Возраст',
+//                       value: '${widget.age} лет',
+//                     ),
+//                     _InfoTile(
+//                       width: itemWidth,
+//                       label: 'Жильё',
+//                       value: widget.housing,
+//                     ),
+//                     _InfoTile(
+//                       width: itemWidth,
+//                       label: 'Совместимость',
+//                       value: '${widget.compatibility}%',
+//                     ),
+//                   ],
+//                 );
+//               },
+//             ),
+//             const SizedBox(height: 20),
+//             // Expanded(
+//             //   child: Column(
+//             //     crossAxisAlignment: CrossAxisAlignment.start,
+//             //     children: widget.members.take(3).map((m) => _MemberCard(member: m)).toList(),
+//             //   // child: SizedBox(
+//             //   // height: 180,
+//             //   // child: ListView(
+//             //   //   physics: const NeverScrollableScrollPhysics(),
+//             //   //   children: widget.members.map((m) => _MemberCard(member: m)).toList(),
+//             //   // ),
+//             //   ),
+//             // ),
+//             ConstrainedBox(
+//           constraints: BoxConstraints(maxHeight: 120),
+//           child: SingleChildScrollView(
+//             child: Column(
+//               children: widget.members
+//                   .take(3)
+//                   .map((m) => _MemberCard(member: m))
+//                   .toList(),
+//                 ),
+//               ),
+//             ),
+//             Spacer(),
+//             Row(
+//               mainAxisAlignment: MainAxisAlignment.end,
+//               children: [
+//                 OutlinedButton(
+//                   onPressed: () => context.router.push(GroupRoute(id: widget.id)),
+//                   style: OutlinedButton.styleFrom(
+//                     backgroundColor: AppColors.baseBright,
+//                     foregroundColor: AppColors.textBase,
+//                     side: BorderSide(color: AppColors.teal.withOpacity(0.25)),
+//                     // minimumSize: const Size(190, 60),
+//                     minimumSize: Size(isMobile ? 140 : 190, isMobile ? 48 : 60),
+//                     padding:
+//                         const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+//                     shape: RoundedRectangleBorder(
+//                       borderRadius: BorderRadius.circular(8),
+//                     ),
+//                   ),
+//                   child: const Text('Подробнее'),
+//                 ),
+//                 const SizedBox(width: 12),
+//                 ElevatedButton(
+//                   style: ElevatedButton.styleFrom( 
+//                     // minimumSize: const Size(190, 60), 
+//                     minimumSize: Size(isMobile ? 140 : 190, isMobile ? 48 : 60),
+//                   backgroundColor: AppColors.detailBlue, 
+//                   foregroundColor: Colors.white, 
+//                   padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12), 
+//                   shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(8), ), ),
+//                   onPressed: isSending ? null : () async {
+//                     setState(() => isSending = true);
+              
+//                     try {
+//                       var session = await ApiService.authService.getSession();
+//                       await ApiService.matcherService.sendJoinRequest(session.id, widget.id);
+              
+//                       print('sent');
+//                     } catch (e) {
+//                       ScaffoldMessenger.of(context).showSnackBar(
+//                         SnackBar(content: Text("Ошибка отправки запроса: $e")),
+//                       );
+//                       setState(() => isSending = false);
+//                     }
+//                   },
+//                   child: isSending
+//                     ? const SizedBox(
+//                         width: 24,
+//                         height: 24,
+//                         child: CircularProgressIndicator(strokeWidth: 2),
+//                       )
+//                     : const Text('Занять место', style: TextStyle(color: AppColors.white)),
+//                   // onPressed: () async {
+//                   //   var session = await ApiService.authService.getSession();
+//                   //   await ApiService.matcherService
+//                   //       .sendJoinRequest(session.id, widget.id);
+//                   //   print('sent');
+//                   // },
+//                   // style: ElevatedButton.styleFrom(
+//                   //   minimumSize: const Size(190, 60),
+//                   //   backgroundColor: AppColors.detailBlue,
+//                   //   foregroundColor: Colors.white,
+//                   //   padding:
+//                   //       const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+//                   //   shape: RoundedRectangleBorder(
+//                   //     borderRadius: BorderRadius.circular(8),
+//                   //   ),
+//                   // ),
+//                   // child: const Text('Занять место', style: TextStyle(color: AppColors.white),),
+//                 ),
+//               ],
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// class _Pill extends StatelessWidget {
+//   final String text;
+//   final Color color;
+//   final Color textColor;
+
+//   const _Pill({
+//     Key? key,
+//     required this.text,
+//     required this.color,
+//     required this.textColor,
+//   }) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+//       decoration: BoxDecoration(
+//         color: color,
+//         borderRadius: BorderRadius.circular(999),
+//       ),
+//       child: Text(
+//         text,
+//         style: TextStyle(
+//           color: textColor,
+//           fontWeight: FontWeight.w700,
+//           fontSize: 13,
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// class _InfoTile extends StatelessWidget {
+//   final String label;
+//   final String value;
+//   final double width;
+
+//   const _InfoTile({
+//     Key? key,
+//     required this.label,
+//     required this.value,
+//     required this.width,
+//   }) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return SizedBox(
+//       width: width,
+//       child: Container(
+//         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+//         decoration: BoxDecoration(
+//           color: AppColors.base1,
+//           borderRadius: BorderRadius.circular(10),
+//           border: Border.all(color: AppColors.teal.withOpacity(0.7)),
+//         ),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.center,
+//           children: [
+//             Text(
+//               value,
+//               style: const TextStyle(
+//                 color: AppColors.textBase,
+//                 fontSize: 16,
+//                 fontWeight: FontWeight.w600,
+//               ),
+//             ),
+//             Text(label,
+//                 style: TextStyle(color: AppColors.textBase, fontSize: 12)),
+//             const SizedBox(height: 4),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// class Member {
+//   final String name;
+//   final int age;
+//   final String profession;
+//   final int budget;
+//   final String avatarPath;
+
+//   const Member({
+//     required this.name,
+//     required this.age,
+//     required this.profession,
+//     required this.budget,
+//     required this.avatarPath,
+//   });
+// }
+
+// class _MemberCard extends StatelessWidget {
+//   final Member member;
+//   const _MemberCard({Key? key, required this.member}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       margin: const EdgeInsets.symmetric(vertical: 6),
+//       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+//       decoration: BoxDecoration(
+//         color: AppColors.base1,
+//         borderRadius: BorderRadius.circular(14),
+//         border: Border.all(color: AppColors.teal.withOpacity(0.7)),
+//       ),
+//       child: Row(
+//         children: [
+//           CircleAvatar(
+//             radius: 20,
+//           ),
+//           const SizedBox(width: 12),
+//           Expanded(
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Text(
+//                   '${member.name}',
+//                   style: TextStyle(color: AppColors.textBase, fontSize: 16),
+//                   overflow: TextOverflow.ellipsis,
+//                 ),
+//                 Text(
+//                   '${member.age} лет  ${member.profession}   ${member.budget} ₽',
+//                   style: const TextStyle(color: AppColors.textLight, fontSize: 14),
+//                   overflow: TextOverflow.ellipsis,
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
