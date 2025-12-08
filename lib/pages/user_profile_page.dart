@@ -503,6 +503,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             ),
             const SizedBox(height: 20),
             _buildInput("О себе", _descController, "Расскажите о себе",
+                            validate: false,
                 minLines: 3, maxLines: 5),
           ],
         ),

@@ -86,16 +86,25 @@ Widget _buildContent() {
   int crossAxisCount;
   double aspectRatio;
 
-  if (width < 600) {
+  if (width < 500) {
     crossAxisCount = 1;       
-    aspectRatio = 0.85;
-  } else if (width < 800) {
+    aspectRatio = 0.88;
+  } else 
+  if (width < 590) {
+    crossAxisCount = 1;        
+    aspectRatio = 1.2;
+  } 
+  else if (width < 800) {
     crossAxisCount = 1;        
     aspectRatio = 1.4;
   }
   else if (width < 1000) {
     crossAxisCount = 1;        
-    aspectRatio = 1.6;
+    aspectRatio = 1.7;
+  }
+  else if (width < 1170) {
+    crossAxisCount = 1;        
+    aspectRatio = 1.9;
   }
   else {
     crossAxisCount = 2;        
