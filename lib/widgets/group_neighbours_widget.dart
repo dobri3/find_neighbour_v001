@@ -126,12 +126,12 @@ Widget build(BuildContext context) {
             },
           ),
           const SizedBox(height: 20),
-          if (!isMobile)
+          
           Expanded(
             child: SingleChildScrollView(
-              child: Column(
+              child: (!isMobile) ? Column(
                 children: widget.members.take(3).map((m) => _MemberCard(member: m)).toList(),
-              ),
+              ) : const SizedBox(),
             ),
           ),
           const SizedBox(height: 16),
