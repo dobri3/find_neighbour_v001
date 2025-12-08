@@ -452,6 +452,7 @@ Future<void> _pickAvatar() async {
             ),
             const SizedBox(height: 20),
             _buildInput("О себе", _descController, "Расскажите о себе",
+                            validate: false,
                 minLines: 3, maxLines: 5),
           ],
         ),

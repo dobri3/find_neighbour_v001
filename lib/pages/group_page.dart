@@ -134,6 +134,7 @@ Future<void> _sendJoinRequest() async {
       body: SingleChildScrollView(
         child: Center(
           child: Container(
+            // color: AppColors.baseBright,
             constraints: const BoxConstraints(
               maxWidth: 1100,
             ),
@@ -146,17 +147,12 @@ Future<void> _sendJoinRequest() async {
                   ),
                   child: AppTextStyles.logo(context),
                 ),
-                // Container(
-                //   margin: const EdgeInsets.only(bottom: 20),
-                //   decoration: AppContainerStyles.profileCard,
-                //   child: Padding(
-                //     padding: const EdgeInsets.only(
-                //       top: 20,
-                //       left: 60,
-                //       right: 60,
-                //       bottom: 60,
-                //     ),
                 Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: AppColors.teal.withOpacity(0.06)),
+                  ),
                       constraints: const BoxConstraints(maxWidth: 1100),
                       padding: EdgeInsets.symmetric(
                         horizontal: isMobile ? 16 : 32,
@@ -192,23 +188,6 @@ Future<void> _sendJoinRequest() async {
                                   "${_group.parameters.age} лет", "Возраст"),
                               ],
                             ),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          //   children: [
-                          //     container("${_group.parameters.budget} ₽",
-                          //         "Средний бюджет"),
-                          //     const SizedBox(width: 20),
-                          //     container("${_group.members.length}",
-                          //         "Человек в группе"),
-                          //     const SizedBox(width: 20),
-                          //     container(
-                          //         "${_group.parameters.roommatesCount - _group.members.length}",
-                          //         "Нужно соседей"),
-                          //     const SizedBox(width: 20),
-                          //     container(
-                          //         "${_group.parameters.age} лет", "Возраст"),
-                          //   ],
-                          // ),
                         
                 _session != null &&
                         _session!.id == _group.ownerId &&
@@ -355,7 +334,7 @@ class _InfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width < 600;
+    final isMobile = MediaQuery.of(context).size.width < 650;
 
     return Container(
       padding: const EdgeInsets.all(20),
