@@ -22,6 +22,8 @@ class UserService {
 
   Future<String> updateUser(User user, XFile? avatar) async {
     try {
+      print(avatar!.path.split('/').last);
+      print(avatar.mimeType);
       var formData = FormData.fromMap({
         "data": user.toJsonForServerString(),
         "avatar": avatar == null
@@ -29,7 +31,9 @@ class UserService {
             : MultipartFile.fromBytes(
                 await avatar.readAsBytes(),
                 filename: avatar.path.split('/').last,
-                contentType: MediaType.parse(avatar.mimeType!),
+                contentType: MediaType.parse(
+                  avatar.mimeType!,
+                ),
               ),
       });
 

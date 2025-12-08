@@ -67,8 +67,25 @@ class _ChatPageState extends State<ChatPage> {
         widget.groupId,
       );
 
+      List<Chat> chats = await ApiService.chatService.getChatsByUserId();
+
       if (_webSocket != null) {
-        Chat currentChat = chats.firstWhere((chat) => chat.id == widget.chatId);
+        Chat currentChat;
+        if (widget.chatId != null) {
+          currentChat = chats.firstWhere((chat) => chat.id == widget.chatId);
+        } else {
+          User user = await ApiService.userService.getUserById(widget.userId!);
+
+          currentChat = Chat(
+            id: widget.userId!,
+            name: user.name,
+            avatarUrl: user.photoUrl ?? '',
+            members: [
+              user,
+              session,
+            ],
+          );
+        }
 
         setState(() {
           _messages.clear();
@@ -314,6 +331,8 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _onChatSelected(BuildContext context, String chatId) async {
+    print(chatId);
+
     await _webSocket?.sink.close();
     _webSocket = await ApiService.chatService.connectToChat(
       chatId,
