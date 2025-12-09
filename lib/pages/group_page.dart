@@ -124,9 +124,15 @@ Future<void> _sendJoinRequest() async {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
 
-    final isMobile = width < 700;
-    final isTablet = width >= 700 && width < 1000;
+    final isMobile = width < 750;
+    final isTablet = width >= 750 && width < 1000;
     final isDesktop = width >= 1000;
+
+    // decoration: BoxDecoration(
+    //                 color: AppColors.white,
+    //                 borderRadius: BorderRadius.circular(16),
+    //                 border: Border.all(color: AppColors.teal.withOpacity(0.06)),
+    //               ),
 
     return Scaffold(
       appBar: HomeHeader(),
@@ -134,7 +140,6 @@ Future<void> _sendJoinRequest() async {
       body: SingleChildScrollView(
         child: Center(
           child: Container(
-            // color: AppColors.baseBright,
             constraints: const BoxConstraints(
               maxWidth: 1100,
             ),
@@ -148,11 +153,6 @@ Future<void> _sendJoinRequest() async {
                   child: AppTextStyles.logo(context),
                 ),
                 Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.teal.withOpacity(0.06)),
-                  ),
                       constraints: const BoxConstraints(maxWidth: 1100),
                       padding: EdgeInsets.symmetric(
                         horizontal: isMobile ? 16 : 32,
@@ -160,12 +160,30 @@ Future<void> _sendJoinRequest() async {
                     child: Center(
                       child: Column(
                         children: [
-                          Text(
-                            '${_group.parameters.name}',
-                            style: AppTextStyles.profileTitle(context),
-                          ),
-                          const SizedBox(height: 20),
-                          isMobile
+                Container(
+                  constraints: const BoxConstraints(maxWidth: 1100 ),
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isMobile ? 16 : 32,
+                    vertical: 24,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: AppColors.teal.withOpacity(0.06),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        _group.parameters.name,
+                        style: AppTextStyles.profileTitle(context),
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      isMobile
                           ? Column(
                               children: [
                                 _StatRowMobile(group: _group),
@@ -174,62 +192,56 @@ Future<void> _sendJoinRequest() async {
                             )
                           : Row(
                               children: [
-                                container("${_group.parameters.budget} ₽",
-                                  "Средний бюджет"),
-                              const SizedBox(width: 20),
-                              container("${_group.members.length}",
-                                  "Человек в группе"),
+                                container("${_group.parameters.budget} ₽", "Средний бюджет"),
+                                const SizedBox(width: 20),
+                                container("${_group.members.length}", "Человек в группе"),
                                 const SizedBox(width: 20),
                                 container(
                                   "${_group.parameters.roommatesCount - _group.members.length}",
-                                  "Нужно соседей"),
+                                  "Нужно соседей",
+                                ),
                                 const SizedBox(width: 20),
-                                container(
-                                  "${_group.parameters.age} лет", "Возраст"),
+                                container("${_group.parameters.age} лет", "Возраст"),
                               ],
                             ),
-                        
-                _session != null &&
-                        _session!.id == _group.ownerId &&
-                        _requests != null &&
-                        _requests!.length > 0
-                    ? Column(
-                        children: [
-                           Text(
-                            "Запросы",
-                            style: AppTextStyles.sectionTitle(context),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.only(top: 20),
-                            child: Column(
-                              spacing: 20,
-                              children: [
-                                for (var request in _requests!)
-                                  RequestCard(
-                                    request: request,
-                                    onAccept: () async {
-                                      await ApiService.matcherService
-                                          .acceptJoinRequest(
-                                              _session!.id, request.id);
-                                    },
-                                    onReject: () async {
-                                      await ApiService.matcherService
-                                          .rejectJoinRequest(
-                                              _session!.id, request.id);
-                                    },
-                                    onMore: () {
-                                      context.router.push(
-                                          UserProfileRoute(id: request.userId));
-                                    },
-                                  ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                        ],
-                      )
-                    : const SizedBox(),
-                    const SizedBox(height: 20,),
+
+                      if (_session != null &&
+                          _session!.id == _group.ownerId &&
+                          _requests != null &&
+                          _requests!.isNotEmpty) ...[
+                        const SizedBox(height: 24),
+                        Text(
+                          "Запросы",
+                          style: AppTextStyles.sectionTitle(context),
+                        ),
+                        const SizedBox(height: 20),
+                        Column(
+                          spacing: 20,
+                          children: [
+                            for (var request in _requests!)
+                              RequestCard(
+                                request: request,
+                                onAccept: () async {
+                                  await ApiService.matcherService
+                                      .acceptJoinRequest(_session!.id, request.id);
+                                },
+                                onReject: () async {
+                                  await ApiService.matcherService
+                                      .rejectJoinRequest(_session!.id, request.id);
+                                },
+                                onMore: () {
+                                  context.router.push(
+                                    UserProfileRoute(id: request.userId),
+                                  );
+                                },
+                              ),
+                          ],
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20,),
                  Text(
                   "Информация",
                   style: AppTextStyles.sectionTitle(context),
@@ -299,7 +311,8 @@ Future<void> _sendJoinRequest() async {
     return Expanded(
       child: Container(
         alignment: Alignment.center,
-        height: 100,
+        height: 110,
+        width: 120,
         decoration: AppContainerStyles.sectionContainer,
         child: Padding(
           padding: const EdgeInsets.all(10),
@@ -452,10 +465,6 @@ class _ContactsCard extends StatelessWidget {
                       isJoinLoading || isJoinSuccess ? null : onJoin,
                   style:OutlinedButton.styleFrom(
                    fixedSize: const Size(200, 50),
-                  // side: BorderSide(
-                  // color: AppColors.teal.withOpacity(0.8), 
-                  // width: 1,
-                  // ),
                   backgroundColor: Colors.transparent,
                   foregroundColor: AppColors.textBase,
                     shape: RoundedRectangleBorder(
