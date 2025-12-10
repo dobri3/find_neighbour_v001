@@ -225,11 +225,11 @@ class _AppShellState extends State<AppShell> {
   late final StreamSubscription<String> _sub;
 
   @override
-  void initState() async{
+  void initState() {
     super.initState();
 
-  final currentUser = await ApiService.authService.getSession();
-  ChatService().connectAndListenGlobal(userId: currentUser.id);
+  // final currentUser = await ApiService.authService.getSession();
+  // ChatService().connectAndListenGlobal(userId: currentUser.id);
 
     _sub = AppNotifications().stream.listen((message) {
       AppNotificationService().show(
