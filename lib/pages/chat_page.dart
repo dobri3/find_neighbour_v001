@@ -151,45 +151,65 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: HomeHeader(),
-      backgroundColor: AppColors.baseBright,
-      body: Center(
+Widget build(BuildContext context) {
+  final isMobile = MediaQuery.of(context).size.width < 900;
+
+  return Scaffold(
+    appBar: HomeHeader(),
+    backgroundColor: AppColors.baseBright,
+    body: Center(
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 1100),
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        width: double.infinity,
+        height: double.infinity,
+
+        child: isMobile
+            ? _buildMobileLayout(context)
+            : _buildDesktopLayout(context),
+      ),
+    ),
+  );
+}
+
+
+Widget _buildDesktopLayout(BuildContext context) {
+  return Row(
+    children: [
+      Expanded(
+        flex: 2,
         child: Container(
-          constraints: const BoxConstraints(
-            maxWidth: 1100,
-          ),
-          padding: const EdgeInsets.only(
-            top: 20,
-            bottom: 20,
-          ),
-          width: double.infinity,
-          height: double.infinity,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Expanded(
-                flex: 2,
-                child: Container(
-                  decoration: AppContainerStyles.profileCard,
-                  child: _buildChatList(context),
-                ),
-              ),
-              const SizedBox(width: 20),
-              Expanded(
-                flex: 5,
-                child: Container(
-                  decoration: AppContainerStyles.profileCard,
-                  child: _buildChatDetail(context),
-                ),
-              ),
-            ],
-          ),
+          decoration: AppContainerStyles.profileCard,
+          child: _buildChatList(context),
         ),
       ),
+      const SizedBox(width: 20),
+      Expanded(
+        flex: 5,
+        child: Container(
+          decoration: AppContainerStyles.profileCard,
+          child: _buildChatDetail(context),
+        ),
+      ),
+    ],
+  );
+}
+
+Widget _buildMobileLayout(BuildContext context) {
+
+  if (_selectedChatId == null) {
+    return Container(
+      decoration: AppContainerStyles.profileCard,
+      child: _buildChatList(context),
     );
   }
+
+  return Container(
+    decoration: AppContainerStyles.profileCard,
+    child: _buildChatDetail(context, isMobile: true),
+  );
+}
+
 
   Widget _buildChatList(BuildContext context) {
     return Column(children: [
@@ -202,7 +222,7 @@ class _ChatPageState extends State<ChatPage> {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: AppColors.textBase, // Белый текст для темного фона
+                color: AppColors.textBase, 
               ),
             ),
             SizedBox(height: 20),
@@ -316,7 +336,7 @@ class _ChatPageState extends State<ChatPage> {
     });
   }
 
-  Widget _buildChatDetail(BuildContext context) {
+  Widget _buildChatDetail(BuildContext context, {bool isMobile = false}) {
     return Container(
       child: chat == null
           ? null

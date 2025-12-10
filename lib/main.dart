@@ -1,4 +1,5 @@
 import 'package:find_neighbour_v001/routing/app_router.dart';
+import 'package:find_neighbour_v001/widgets/toast_notification.dart';
 import 'package:flutter/material.dart';
 import 'package:find_neighbour_v001/api/api.dart';
 import 'package:find_neighbour_v001/api/interceptor.dart';
@@ -36,6 +37,11 @@ class MyApp extends StatelessWidget {
           AutoRouterObserver(),
         ],
       ),
+      builder: (context, child) {
+    return AppShell(
+      child: child!,
+    );
+  },
     );
   }
 }
