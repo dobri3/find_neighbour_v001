@@ -1,203 +1,268 @@
+// import 'package:find_neighbour_v001/styles/app_colors.dart';
+// import 'package:find_neighbour_v001/styles/app_text_styles.dart';
+// import 'package:flutter/material.dart';
+
+// class AppNotificationService {
+//   static final AppNotificationService _instance = AppNotificationService._();
+//   factory AppNotificationService() => _instance;
+//   AppNotificationService._();
+
+//   OverlayEntry? _entry;
+
+//   void show(
+//     BuildContext context, {
+//     required String message,
+//     Duration duration = const Duration(seconds: 3),
+//   }) {
+//     _entry?.remove();
+
+//     _entry = OverlayEntry(
+//       builder: (context) => _NotificationWidget(message: message),
+//     );
+
+//     Overlay.of(context, rootOverlay: true).insert(_entry!);
+
+//     Future.delayed(duration, () {
+//       _entry?.remove();
+//       _entry = null;
+//     });
+//   }
+// }
+
+
+// class _NotificationWidget extends StatelessWidget {
+//   final String message;
+
+//   const _NotificationWidget({required this.message});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Positioned(
+//       bottom: 24,
+//       left: 16,
+//       right: 16,
+//       child: Material(
+//         color: Colors.transparent,
+//         child: Container(
+//           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+//           decoration: BoxDecoration(
+//             color: AppColors.textBase,
+//             borderRadius: BorderRadius.circular(12),
+//             boxShadow: [
+//               BoxShadow(
+//                 color: Colors.black.withOpacity(0.25),
+//                 blurRadius: 10,
+//               ),
+//             ],
+//           ),
+//           child: Text(
+//             message,
+//             style: AppTextStyles.whiteSmall(context)
+//                 .copyWith(color: Colors.white),
+//             textAlign: TextAlign.center,
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+
+import 'dart:async';
+
+import 'package:find_neighbour_v001/api/api.dart';
+import 'package:find_neighbour_v001/api/chat.dart';
+import 'package:find_neighbour_v001/styles/app_colors.dart';
+import 'package:find_neighbour_v001/styles/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
-class ToastNotification {
-  static void show(
+class AppNotificationService {
+  static final AppNotificationService _instance = AppNotificationService._();
+  factory AppNotificationService() => _instance;
+  AppNotificationService._();
+
+  OverlayEntry? _entry;
+
+  void show(
     BuildContext context, {
     required String message,
-    ToastType type = ToastType.info,
     Duration duration = const Duration(seconds: 3),
   }) {
-    final overlay = Overlay.of(context);
-    late OverlayEntry overlayEntry;
+    _entry?.remove();
+    _entry = null;
 
-    overlayEntry = OverlayEntry(
-      builder: (context) => _ToastWidget(
-        message: message,
-        type: type,
-        onDismiss: () => overlayEntry.remove(),
-      ),
+    final overlay = Overlay.of(context);
+    if (overlay == null) return;
+
+    _entry = OverlayEntry(
+      builder: (context) {
+        return _NotificationWidget(
+          message: message,
+          onDismissed: hide,
+        );
+      },
     );
 
-    overlay.insert(overlayEntry);
+    overlay.insert(_entry!);
 
-    // Auto dismiss after duration
-    Future.delayed(duration, () {
-      if (overlayEntry.mounted) {
-        overlayEntry.remove();
-      }
-    });
+    Future.delayed(duration, hide);
   }
 
-  static void showSuccess(BuildContext context, String message) {
-    show(context, message: message, type: ToastType.success);
-  }
-
-  static void showError(BuildContext context, String message) {
-    show(context, message: message, type: ToastType.error);
-  }
-
-  static void showInfo(BuildContext context, String message) {
-    show(context, message: message, type: ToastType.info);
-  }
-
-  static void showWarning(BuildContext context, String message) {
-    show(context, message: message, type: ToastType.warning);
+  void hide() {
+    _entry?.remove();
+    _entry = null;
   }
 }
 
-enum ToastType {
-  success,
-  error,
-  warning,
-  info,
-}
-
-class _ToastWidget extends StatefulWidget {
+class _NotificationWidget extends StatefulWidget {
   final String message;
-  final ToastType type;
-  final VoidCallback onDismiss;
+  final VoidCallback onDismissed;
 
-  const _ToastWidget({
+  const _NotificationWidget({
     required this.message,
-    required this.type,
-    required this.onDismiss,
+    required this.onDismissed,
   });
 
   @override
-  State<_ToastWidget> createState() => _ToastWidgetState();
+  State<_NotificationWidget> createState() => _NotificationWidgetState();
 }
 
-class _ToastWidgetState extends State<_ToastWidget>
+class _NotificationWidgetState extends State<_NotificationWidget>
     with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _slideAnimation;
-  late Animation<double> _opacityAnimation;
+  late final AnimationController _controller;
+  late final Animation<Offset> _offset;
 
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 300),
+
+    _controller = AnimationController(
       vsync: this,
+      duration: const Duration(milliseconds: 250),
     );
 
-    _slideAnimation = Tween<double>(
-      begin: -1.0,
-      end: 0.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOut,
-    ));
+    _offset = Tween<Offset>(
+      begin: const Offset(0, 1),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    );
 
-    _opacityAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOut,
-    ));
-
-    _animationController.forward();
+    _controller.forward();
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
+    _controller.dispose();
     super.dispose();
-  }
-
-  void _dismiss() {
-    _animationController.reverse().then((_) {
-      widget.onDismiss();
-    });
-  }
-
-  Color _getBackgroundColor() {
-    switch (widget.type) {
-      case ToastType.success:
-        return const Color(0xFF10B981);
-      case ToastType.error:
-        return const Color(0xFFEF4444);
-      case ToastType.warning:
-        return const Color(0xFFF59E0B);
-      case ToastType.info:
-        return const Color(0xFF3B82F6);
-    }
-  }
-
-  Color _getTextColor() {
-    return Colors.white;
-  }
-
-  IconData _getIcon() {
-    switch (widget.type) {
-      case ToastType.success:
-        return Icons.check_circle;
-      case ToastType.error:
-        return Icons.error;
-      case ToastType.warning:
-        return Icons.warning;
-      case ToastType.info:
-        return Icons.info;
-    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.of(context).padding.bottom;
+
     return Positioned(
-      top: MediaQuery.of(context).padding.top + 16,
       left: 16,
       right: 16,
-      child: AnimatedBuilder(
-        animation: _animationController,
-        builder: (context, child) {
-          return Transform.translate(
-            offset: Offset(0, _slideAnimation.value * 100),
-            child: Opacity(
-              opacity: _opacityAnimation.value,
-              child: Material(
-                elevation: 8,
-                borderRadius: BorderRadius.circular(12),
-                color: _getBackgroundColor(),
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                      Icon(
-                        _getIcon(),
-                        color: _getTextColor(),
-                        size: 24,
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          widget.message,
-                          style: TextStyle(
-                            color: _getTextColor(),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: "Inter",
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      GestureDetector(
-                        onTap: _dismiss,
-                        child: Icon(
-                          Icons.close,
-                          color: _getTextColor(),
-                          size: 20,
-                        ),
-                      ),
-                    ],
-                  ),
+      bottom: bottomInset + 16,
+      child: SlideTransition(
+        position: _offset,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            decoration: BoxDecoration(
+              color: AppColors.textBase,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: 20,
+                  color: Colors.black.withOpacity(0.25),
                 ),
-              ),
+              ],
             ),
-          );
-        },
+            child: Text(
+              widget.message,
+              style: AppTextStyles.whiteSmall(context),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
       ),
     );
+  }
+}
+
+
+class AppNotifications {
+  static final AppNotifications _instance = AppNotifications._();
+  factory AppNotifications() => _instance;
+  AppNotifications._();
+
+  final _controller = StreamController<String>.broadcast();
+
+  Stream<String> get stream => _controller.stream;
+
+  void push(String message) {
+    _controller.add(message);
+  }
+
+  void dispose() {
+    _controller.close();
+  }
+}
+
+
+class AppShell extends StatefulWidget {
+  final Widget child;
+  const AppShell({required this.child});
+
+  @override
+  State<AppShell> createState() => _AppShellState();
+}
+
+class _AppShellState extends State<AppShell> {
+  late final StreamSubscription<String> _sub;
+
+  @override
+  void initState() async{
+    super.initState();
+
+  final currentUser = await ApiService.authService.getSession();
+  ChatService().connectAndListenGlobal(userId: currentUser.id);
+
+    _sub = AppNotifications().stream.listen((message) {
+      AppNotificationService().show(
+        context,
+        message: message,
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _sub.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
+  }
+}
+
+class NotificationState {
+  static final NotificationState instance = NotificationState._();
+  NotificationState._();
+
+  final ValueNotifier<int> counter = ValueNotifier<int>(0);
+
+  void increment() {
+    counter.value++;
+  }
+
+  void reset() {
+    counter.value = 0;
   }
 }
 

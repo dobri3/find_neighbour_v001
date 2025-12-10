@@ -352,7 +352,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     height: 20,
                   ),
                 Container(
-                  margin: const EdgeInsets.only(bottom: 20),
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                   decoration: AppContainerStyles.profileCard,
                   child: Padding(
                     padding: EdgeInsets.symmetric(
@@ -503,8 +504,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             ),
             const SizedBox(height: 20),
             _buildInput("О себе", _descController, "Расскажите о себе",
-                            validate: false,
-                minLines: 3, maxLines: 5),
+                validate: false, minLines: 3, maxLines: 5),
           ],
         ),
       ),

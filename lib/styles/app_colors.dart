@@ -28,6 +28,7 @@ class AppColors {
   static const Color base1 = Color(0xFFEBF0F7);
   static const Color detailBlue = Color(0xFF143566);
   static const Color textBase = Color(0xFF2C2A4F);  //color9
+  static const Color redBase = Color.fromARGB(255, 84, 41, 41);
   static const Color baseLight = Color(0xFFF2F8FF);
   static const Color accentBlue = Color(0xFF354B6A);
   static const Color textLight = Color(0xFF32373F);

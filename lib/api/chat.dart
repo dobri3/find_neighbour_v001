@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:find_neighbour_v001/api/api.dart';
 import 'package:find_neighbour_v001/models/chat/chat.dart';
+
+import 'package:find_neighbour_v001/widgets/toast_notification.dart';
 import 'dart:io';
 
 import 'package:web_socket_channel/html.dart';
@@ -73,5 +77,29 @@ class ChatService {
       print(e);
       return null;
     }
+  }
+
+  void connectAndListenGlobal({required String userId}) async {
+    final socket = await connectToChat(null, userId, null);
+    if (socket == null) return;
+
+    socket.stream.listen((event) {
+      if (event is! String) return;
+
+      print('WS EVENT RAW: $event');
+
+      final data = jsonDecode(event);
+      final type = data['type'];
+
+      if (type == 'new_request') {
+        AppNotifications().push("Новая заявка в вашу группу");
+        NotificationState.instance.increment();
+      }
+
+      if (type == 'new_message') {
+        AppNotifications().push("Новое сообщение");
+        NotificationState.instance.increment();
+      }
+    });
   }
 }
