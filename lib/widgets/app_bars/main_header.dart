@@ -115,9 +115,9 @@ List<Widget> _buildHeaderContent(
         ),
       if (isMobile)
         IconButton(
-          onPressed: () async {
-            var group = await ApiService.matcherService.getGroupByUserId(user!.id);
-            context.router.push(GroupRoute(id: group.id));
+          onPressed: () {
+            // var group = await ApiService.matcherService.getGroupByUserId(user!.id);
+            // context.router.push(GroupRoute(id: group.id));
           },
           icon: const Icon(Icons.group, color: AppColors.textBase),
         ),
