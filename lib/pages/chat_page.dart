@@ -160,7 +160,7 @@ Widget build(BuildContext context) {
     body: Center(
       child: Container(
         constraints: const BoxConstraints(maxWidth: 1100),
-        padding: const EdgeInsets.symmetric(vertical: 20),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
         width: double.infinity,
         height: double.infinity,
 

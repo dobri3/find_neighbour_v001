@@ -316,10 +316,10 @@ Future<void> _pickAvatar() async {
                   ),
                   child: AppTextStyles.logo(context),
                 ),
-                if (!isMobile)
+                if (isMobile)
                 const SizedBox(height: 20,),
                 Container(
-                  margin: const EdgeInsets.only(bottom: 20),
+                  margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                   decoration: AppContainerStyles.profileCard,
                   child: Padding(
                     padding: EdgeInsets.symmetric(

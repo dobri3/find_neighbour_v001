@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:find_neighbour_v001/widgets/toast_notification.dart';
 import 'package:flutter/material.dart';
 import 'package:find_neighbour_v001/api/api.dart';
 import 'package:find_neighbour_v001/models/user.dart';
@@ -35,6 +36,8 @@ class _HomeHeaderState extends State<HomeHeader> {
       user = u;
       loading = false;
     });
+
+    
   }
 
   bool get isAuthorized => user != null && user!.id.isNotEmpty;
@@ -74,58 +77,84 @@ class _HomeHeaderState extends State<HomeHeader> {
     );
   }
 
-  List<Widget> _buildHeaderContent(BuildContext context, double logoFontSize, double avatarRadius, double spacing, bool isMobile) {
-    final List<Widget> widgets = [
-      GestureDetector(
-        onTap: () => context.router.push(const RecommendationRoute()),
-        child: AppTextStyles.logo(context),
-      ),
-      Spacer(),
-    ];
+List<Widget> _buildHeaderContent(
+    BuildContext context,
+    double logoFontSize,
+    double avatarRadius,
+    double spacing,
+    bool isMobile,
+) {
+  final List<Widget> widgets = [
+    GestureDetector(
+      onTap: () => context.router.push(const RecommendationRoute()),
+      child: AppTextStyles.logo(context),
+    ),
+    Spacer(),
+  ];
 
-    if (isAuthorized) {
-      widgets.addAll([
-        if (!isMobile)
-          GestureDetector(
-            onTap: () => context.router.push(ChatRoute()),
-            child: Text("Сообщения", style: AppTextStyles.whiteSmall(context)),
-          ),
-        if (isMobile)
-          IconButton(
-            onPressed: () => context.router.push(ChatRoute()),
-            icon: const Icon(Icons.message, color: AppColors.textBase),
-          ),
-        SizedBox(width: spacing),
-        if (!isMobile)
-          GestureDetector(
-            onTap: () async {
-              var group = await ApiService.matcherService.getGroupByUserId(user!.id);
-              context.router.push(GroupRoute(id: group.id));
-            },
-            child: Text("Группы", style: AppTextStyles.whiteSmall(context)),
-          ),
-        if (isMobile)
+  if (isAuthorized) {
+    widgets.addAll([
+      if (!isMobile)
+        GestureDetector(
+          onTap: () => context.router.push(ChatRoute()),
+          child: Text("Сообщения", style: AppTextStyles.whiteSmall(context)),
+        ),
+      if (isMobile)
         IconButton(
-            onPressed: () async {
-                var group = await ApiService.matcherService.getGroupByUserId(user!.id);
-                context.router.push(GroupRoute(id: group.id));
-              },
-            icon: const Icon(Icons.group, color: AppColors.textBase),
-          ),
-        SizedBox(width: spacing),
-          IconButton(
-            onPressed: () => context.router.push(const RecommendationRoute()),
-            icon: const Icon(Icons.notifications_none, color: AppColors.textBase),
-          ),
-        SizedBox(width: spacing / 2),
-        _AuthorizedUserSection(user: user!, avatarRadius: avatarRadius, isMobile: isMobile,),
-      ]);
-    } else {
-      widgets.add(_UnauthorizedButton());
-    }
+          onPressed: () => context.router.push(ChatRoute()),
+          icon: const Icon(Icons.message, color: AppColors.textBase),
+        ),
+      SizedBox(width: spacing),
+      if (!isMobile)
+        GestureDetector(
+          onTap: () async {
+            var group = await ApiService.matcherService.getGroupByUserId(user!.id);
+            context.router.push(GroupRoute(id: group.id));
+          },
+          child: Text("Группы", style: AppTextStyles.whiteSmall(context)),
+        ),
+      if (isMobile)
+        IconButton(
+          onPressed: () async {
+            var group = await ApiService.matcherService.getGroupByUserId(user!.id);
+            context.router.push(GroupRoute(id: group.id));
+          },
+          icon: const Icon(Icons.group, color: AppColors.textBase),
+        ),
+      SizedBox(width: spacing),
+      
+      ValueListenableBuilder<int>(
+        valueListenable: NotificationState.instance.counter,
+        builder: (context, count, child) {
+          return IconButton(
+            onPressed: () {
+              NotificationState.instance.reset();
+              context.router.push(const RecommendationRoute());
+            },
+            icon: Icon(
+              count > 0 ? Icons.notifications_active : Icons.notifications_none,
+              color: count > 0 ? AppColors.redBase : AppColors.textBase,
+            ),
+          );
+        },
+      ),
 
-    return widgets;
+      SizedBox(width: spacing / 2),
+      _AuthorizedUserSection(
+        user: user!,
+        avatarRadius: avatarRadius,
+        isMobile: isMobile,
+      ),
+    ]);
+  } else {
+    widgets.add(_UnauthorizedButton());
   }
+
+  return widgets;
+}
+
+
+
 }
 
 class _AuthorizedUserSection extends StatelessWidget {

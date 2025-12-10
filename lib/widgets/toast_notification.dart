@@ -70,6 +70,8 @@
 
 import 'dart:async';
 
+import 'package:find_neighbour_v001/api/api.dart';
+import 'package:find_neighbour_v001/api/chat.dart';
 import 'package:find_neighbour_v001/styles/app_colors.dart';
 import 'package:find_neighbour_v001/styles/app_text_styles.dart';
 import 'package:flutter/material.dart';
@@ -223,8 +225,11 @@ class _AppShellState extends State<AppShell> {
   late final StreamSubscription<String> _sub;
 
   @override
-  void initState() {
+  void initState() async{
     super.initState();
+
+  final currentUser = await ApiService.authService.getSession();
+  ChatService().connectAndListenGlobal(userId: currentUser.id);
 
     _sub = AppNotifications().stream.listen((message) {
       AppNotificationService().show(
@@ -245,3 +250,19 @@ class _AppShellState extends State<AppShell> {
     return widget.child;
   }
 }
+
+class NotificationState {
+  static final NotificationState instance = NotificationState._();
+  NotificationState._();
+
+  final ValueNotifier<int> counter = ValueNotifier<int>(0);
+
+  void increment() {
+    counter.value++;
+  }
+
+  void reset() {
+    counter.value = 0;
+  }
+}
+
