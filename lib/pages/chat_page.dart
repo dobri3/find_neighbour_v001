@@ -57,6 +57,15 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _loadChatData() async {
+    ApiService.chatService.GettingMessageEventHTTP(
+      (message) {
+        print('message');
+        print(message);
+      },
+      () {
+        print('done');
+      },
+    );
     List<Chat> chats = await ApiService.chatService.getChatsByUserId();
     User? session = await ApiService.authService.getSession();
 
@@ -187,65 +196,61 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   @override
-Widget build(BuildContext context) {
-  final isMobile = MediaQuery.of(context).size.width < 900;
+  Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 900;
 
-  return Scaffold(
-    appBar: HomeHeader(),
-    backgroundColor: AppColors.baseBright,
-    body: Center(
-      child: Container(
-        constraints: const BoxConstraints(maxWidth: 1100),
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-        width: double.infinity,
-        height: double.infinity,
-
-        child: isMobile
-            ? _buildMobileLayout(context)
-            : _buildDesktopLayout(context),
-      ),
-    ),
-  );
-}
-
-
-Widget _buildDesktopLayout(BuildContext context) {
-  return Row(
-    children: [
-      Expanded(
-        flex: 2,
+    return Scaffold(
+      appBar: HomeHeader(),
+      backgroundColor: AppColors.baseBright,
+      body: Center(
         child: Container(
-          decoration: AppContainerStyles.profileCard,
-          child: _buildChatList(context),
+          constraints: const BoxConstraints(maxWidth: 1100),
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+          width: double.infinity,
+          height: double.infinity,
+          child: isMobile
+              ? _buildMobileLayout(context)
+              : _buildDesktopLayout(context),
         ),
       ),
-      const SizedBox(width: 20),
-      Expanded(
-        flex: 5,
-        child: Container(
-          decoration: AppContainerStyles.profileCard,
-          child: _buildChatDetail(context),
-        ),
-      ),
-    ],
-  );
-}
-
-Widget _buildMobileLayout(BuildContext context) {
-
-  if (_selectedChatId == null) {
-    return Container(
-      decoration: AppContainerStyles.profileCard,
-      child: _buildChatList(context),
     );
   }
 
-  return Container(
-    decoration: AppContainerStyles.profileCard,
-    child: _buildChatDetail(context, isMobile: true),
-  );
-}
+  Widget _buildDesktopLayout(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 2,
+          child: Container(
+            decoration: AppContainerStyles.profileCard,
+            child: _buildChatList(context),
+          ),
+        ),
+        const SizedBox(width: 20),
+        Expanded(
+          flex: 5,
+          child: Container(
+            decoration: AppContainerStyles.profileCard,
+            child: _buildChatDetail(context),
+          ),
+        ),
+      ],
+    );
+  }
 
+  Widget _buildMobileLayout(BuildContext context) {
+    if (_selectedChatId == null) {
+      return Container(
+        decoration: AppContainerStyles.profileCard,
+        child: _buildChatList(context),
+      );
+    }
+
+    return Container(
+      decoration: AppContainerStyles.profileCard,
+      child: _buildChatDetail(context, isMobile: true),
+    );
+  }
 
   Widget _buildChatList(BuildContext context) {
     return Column(children: [
@@ -258,7 +263,7 @@ Widget _buildMobileLayout(BuildContext context) {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: AppColors.textBase, 
+                color: AppColors.textBase,
               ),
             ),
             SizedBox(height: 20),

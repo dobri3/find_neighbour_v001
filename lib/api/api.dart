@@ -4,6 +4,7 @@ import 'package:find_neighbour_v001/api/auth.dart';
 import 'package:find_neighbour_v001/api/user.dart';
 import 'package:find_neighbour_v001/api/matcher.dart';
 import 'package:find_neighbour_v001/api/chat.dart';
+import 'package:find_neighbour_v001/api/notification.dart';
 
 class ApiService {
   static final Dio _dio = Dio(
@@ -34,4 +35,5 @@ class ApiService {
   static UserService get userService => _userService;
   static MatcherService get matcherService => _matcherService;
   static ChatService get chatService => _chatService;
+  static NotificationService get notificationService => NotificationService();
 }

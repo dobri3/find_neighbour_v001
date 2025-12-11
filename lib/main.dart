@@ -8,7 +8,7 @@ import 'package:auto_route/auto_route.dart';
 
 final appRouter = AppRouter();
 
-Future<void> main() async {
+void main() {
   usePathUrlStrategy();
 
   runApp(const MyApp());
@@ -37,10 +37,10 @@ class MyApp extends StatelessWidget {
         ],
       ),
       builder: (context, child) {
-    return AppShell(
-      child: child!,
-    );
-  },
+        return AppShell(
+          child: child!,
+        );
+      },
     );
   }
 }
