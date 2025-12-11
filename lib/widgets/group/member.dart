@@ -9,11 +9,15 @@ import 'package:find_neighbour_v001/styles/app_colors.dart';
 class Member extends StatelessWidget {
   final form.Form member;
   final VoidCallback? onMore;
+  final VoidCallback? onRemove;
+  final bool isOwner;
 
   const Member({
     required this.member,
     this.onMore,
-    super.key,
+    super.key, 
+    this.onRemove, 
+    this.isOwner = false,
   });
 
   @override
@@ -25,8 +29,8 @@ class Member extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       child: isMobile
-          ? _MemberMobile(member: member, onMore: onMore)
-          : _MemberDesktop(member: member, onMore: onMore),
+          ? _MemberMobile(member: member, onMore: onMore, onRemove: onRemove, isOwner: isOwner)
+          : _MemberDesktop(member: member, onMore: onMore, onRemove: onRemove, isOwner: isOwner),
     );
   }
 }
@@ -34,10 +38,14 @@ class Member extends StatelessWidget {
 class _MemberMobile extends StatelessWidget {
   final form.Form member;
   final VoidCallback? onMore;
+  final VoidCallback? onRemove;
+  final bool isOwner;
 
   const _MemberMobile({
     required this.member,
     this.onMore,
+    this.onRemove,
+    this.isOwner = false,
   });
 
   @override
@@ -88,6 +96,21 @@ class _MemberMobile extends StatelessWidget {
             child: const Text("Подробнее"),
           ),
         ),
+        if (isOwner) ...[
+          const SizedBox(height: 8),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              onPressed: onRemove,
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(color: AppColors.redBase),
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+              child: const Text("Исключить пользователя", style: TextStyle(color: AppColors.redBase)),
+            ),
+          ),
+        ],
       ],
     );
   }
@@ -97,10 +120,14 @@ class _MemberMobile extends StatelessWidget {
 class _MemberDesktop extends StatelessWidget {
   final form.Form member;
   final VoidCallback? onMore;
+  final VoidCallback? onRemove;
+  final bool isOwner;
 
   const _MemberDesktop({
     required this.member,
     this.onMore,
+    this.onRemove,
+    this.isOwner = false,
   });
 
   @override
@@ -145,6 +172,18 @@ class _MemberDesktop extends StatelessWidget {
               ),
               child: const Text("Подробнее"),
             ),
+            if (isOwner) ...[
+              const SizedBox(width: 12),
+              OutlinedButton(
+                onPressed: onRemove,
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: AppColors.redBase),
+                  minimumSize: const Size(160, 48),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                ),
+                child: const Text("Исключить пользователя", style: TextStyle(color: AppColors.redBase)),
+              ),
+            ]
           ],
         ),
         const SizedBox(height: 16),

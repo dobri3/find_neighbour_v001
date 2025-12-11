@@ -31,18 +31,35 @@ class Request {
   }
 
   static Request fromJson(Map<String, dynamic> json) {
-    return Request(
-      id: json['id'] ?? '',
-      groupId: json['group_id'] ?? '',
-      userId: json['user_id'] ?? '',
-      createdAt: DateTime.parse(json['created_at'] ?? ''),
-    );
+  final req = Request(
+    id: json['id'] ?? '',
+    groupId: json['group_id'] ?? '',
+    userId: json['user_id'] ?? '',
+    createdAt: DateTime.parse(json['created_at'] ?? ''),
+  );
+
+  if (json['user'] != null) {
+    req.user = User.fromJson(json['user']);
   }
 
-  static Request nullRequest = Request(
+  Request nullRequest = Request(
     id: '',
     groupId: '',
     userId: '',
     createdAt: DateTime.now(),
   );
+
+  return req;
 }
+
+  // static Request fromJson(Map<String, dynamic> json) {
+  //   return Request(
+  //     id: json['id'] ?? '',
+  //     groupId: json['group_id'] ?? '',
+  //     userId: json['user_id'] ?? '',
+  //     createdAt: DateTime.parse(json['created_at'] ?? ''),
+  //   );
+  // }
+}
+
+

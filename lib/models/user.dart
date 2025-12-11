@@ -36,6 +36,7 @@ class User {
       'Name': name,
       'Surname': surname,
       'Description': description,
+      'PhotoUrl': photoUrl,  
     };
   }
 
@@ -45,6 +46,7 @@ class User {
       name: json['Name'] ?? '',
       surname: json['Surname'] ?? '',
       description: json['Description'] ?? '',
+      photoUrl: json['PhotoUrl'] ?? '', 
     );
   }
 

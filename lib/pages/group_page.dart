@@ -35,6 +35,8 @@ class GroupPage extends StatefulWidget {
 }
 
 class _GroupPageState extends State<GroupPage> {
+
+  
   
   bool _isJoinButtonLoading = false;
 bool _isJoinButtonSuccess = false;
@@ -66,6 +68,8 @@ Future<void> _sendJoinRequest() async {
       _isJoinButtonLoading = false;
     });
   }
+
+
 }
 
   Group _group = Group(
@@ -119,6 +123,8 @@ Future<void> _sendJoinRequest() async {
       _requests = requests;
     });
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -183,64 +189,69 @@ Future<void> _sendJoinRequest() async {
 
                       const SizedBox(height: 20),
 
-                      isMobile
-                          ? Column(
-                              children: [
-                                _StatRowMobile(group: _group),
-                                const SizedBox(height: 12),
-                              ],
-                            )
-                          : Row(
-                              children: [
-                                container("${_group.parameters.budget} ₽", "Средний бюджет"),
-                                const SizedBox(width: 20),
-                                container("${_group.members.length}", "Человек в группе"),
-                                const SizedBox(width: 20),
-                                container(
-                                  "${_group.parameters.roommatesCount - _group.members.length}",
-                                  "Нужно соседей",
-                                ),
-                                const SizedBox(width: 20),
-                                container("${_group.parameters.age} лет", "Возраст"),
-                              ],
-                            ),
+                      _StatRowResponsive (group: _group,
+                      
+                    ),
 
-                      if (_session != null &&
-                          _session!.id == _group.ownerId &&
-                          _requests != null &&
-                          _requests!.isNotEmpty) ...[
-                        const SizedBox(height: 24),
-                        Text(
-                          "Запросы",
-                          style: AppTextStyles.sectionTitle(context),
-                        ),
-                        const SizedBox(height: 20),
-                        Column(
-                          spacing: 20,
-                          children: [
-                            for (var request in _requests!)
-                              RequestCard(
-                                request: request,
-                                onAccept: () async {
-                                  await ApiService.matcherService
-                                      .acceptJoinRequest(_session!.id, request.id);
-                                },
-                                onReject: () async {
-                                  await ApiService.matcherService
-                                      .rejectJoinRequest(_session!.id, request.id);
-                                },
-                                onMore: () {
-                                  context.router.push(
-                                    UserProfileRoute(id: request.userId),
-                                  );
-                                },
-                              ),
-                          ],
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
+
+                //       isMobile
+                //           ? Column(
+                //               children: [
+                //                 _StatRowMobile(group: _group),
+                //                 const SizedBox(height: 12),
+                //               ],
+                //             )
+                //           : Row(
+                //               children: [
+                //                 container("${_group.parameters.budget} ₽", "Средний бюджет", isMobile),
+                //                 const SizedBox(width: 20),
+                //                 container("${_group.members.length}", "Человек в группе", isMobile),
+                //                 const SizedBox(width: 20),
+                //                 container(
+                //                   "${_group.parameters.roommatesCount - _group.members.length}",
+                //                   "Нужно соседей", isMobile
+                //                 ),
+                //                 const SizedBox(width: 20),
+                //                 container("${_group.parameters.age} лет", "Возраст", isMobile),
+                //               ],
+                //             ),
+
+                //       if (_session != null &&
+                //           _session!.id == _group.ownerId &&
+                //           _requests != null &&
+                //           _requests!.isNotEmpty) ...[
+                //         const SizedBox(height: 24),
+                //         Text(
+                //           "Запросы",
+                //           style: AppTextStyles.sectionTitle(context),
+                //         ),
+                //         const SizedBox(height: 20),
+                //         Column(
+                //           spacing: 20,
+                //           children: [
+                //             for (var request in _requests!)
+                //               RequestCard(
+                //                 request: request,
+                //                 onAccept: () async {
+                //                   await ApiService.matcherService
+                //                       .acceptJoinRequest(_session!.id, request.id);
+                //                 },
+                //                 onReject: () async {
+                //                   await ApiService.matcherService
+                //                       .rejectJoinRequest(_session!.id, request.id);
+                //                 },
+                //                 onMore: () {
+                //                   context.router.push(
+                //                     UserProfileRoute(id: request.userId),
+                //                   );
+                //                 },
+                //               ),
+                //           ],
+                //         ),
+                //       ],
+                //     ],
+                //   ),
+                // ),
                 const SizedBox(height: 20,),
                  Text(
                   "Информация",
@@ -256,7 +267,7 @@ Future<void> _sendJoinRequest() async {
           isJoinLoading: _isJoinButtonLoading,
           isJoinSuccess: _isJoinButtonSuccess,
           onWrite: () {},
-          onJoin: _sendJoinRequest,
+          onJoin: _sendJoinRequest, isMember: _group.members.any((m) => m.userId == _session!.id),
           ),
                       ],
                     )
@@ -269,7 +280,7 @@ Future<void> _sendJoinRequest() async {
           isJoinLoading: _isJoinButtonLoading,
           isJoinSuccess: _isJoinButtonSuccess,
           onWrite: () {},
-          onJoin: _sendJoinRequest,
+          onJoin: _sendJoinRequest, isMember: _group.members.any((m) => m.userId == _session!.id),
           )),
                       ],
                     ),
@@ -284,13 +295,17 @@ Future<void> _sendJoinRequest() async {
                     spacing: 20,
                     children: [
                       for (var member in _group.members)
-                        Member(
-                          member: member,
-                          onMore: () {
-                            context.router
-                                .push(UserProfileRoute(id: member.userId));
-                          },
-                        )
+                          Member(
+                            member: member,
+                            onMore: () { 
+                              context.router
+                                 .push(UserProfileRoute(id: member.userId));
+                             },
+                            isOwner: _session!.id == _group.ownerId,
+                            onRemove: () async {
+                              // await ApiService.matcherService.removeMember(_group.id, member.userId); не нашла сервиса для удаления
+                            },
+                          )
                     ],
                   ),
                 ),
@@ -298,21 +313,28 @@ Future<void> _sendJoinRequest() async {
               ],
             ),
           ),
-        ),
-              ],
+                        ],
+                    ),
+                    ),
           )
+              ]
+      )
         )
       )
       )
     );
   }
 
-  Widget container(String title, String value) {
+
+
+  Widget container(String title, String value, bool isMobile) {
     return Expanded(
       child: Container(
         alignment: Alignment.center,
-        height: 110,
-        width: 120,
+        // height: 110,
+        // width: 120,
+      height: isMobile ? 80 : 110,
+      width: isMobile ? 90 : 120,  
         decoration: AppContainerStyles.sectionContainer,
         child: Padding(
           padding: const EdgeInsets.all(10),
@@ -396,18 +418,119 @@ class _InfoCard extends StatelessWidget {
 }
 
 
+// class _ContactsCard extends StatelessWidget {
+//   final bool isJoinLoading;
+//   final bool isJoinSuccess;
+//   final VoidCallback onWrite;
+//   final Future<void> Function() onJoin;
+
+//   const _ContactsCard({
+//     super.key,
+//     required this.isJoinLoading,
+//     required this.isJoinSuccess,
+//     required this.onWrite,
+//     required this.onJoin,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final isMobile = MediaQuery.of(context).size.width < 600;
+
+//     return Container(
+//       padding: const EdgeInsets.all(20),
+//       decoration: AppContainerStyles.profileCard,
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           Text(
+//             'Контакты',
+//             style: AppTextStyles.smallHeaderBold(context),
+//           ),
+//           const SizedBox(height: 12),
+//           Text(
+//             'E-mail: email@email.com',
+//             style: AppTextStyles.whiteSmall(context),
+//           ),
+//           const SizedBox(height: 8),
+//           Text(
+//             'Телефон: телефон владельца',
+//             style: AppTextStyles.whiteSmall(context),
+//           ),
+//           const SizedBox(height: 24),
+//           Column(
+//             children: [
+//               SizedBox(
+//                 width: double.infinity,
+//                 child: OutlinedButton(
+//                   onPressed: onWrite,
+//                   style: OutlinedButton.styleFrom(
+//                     padding: const EdgeInsets.symmetric(vertical: 14),
+//                     side: BorderSide(
+//                       color: AppColors.teal.withOpacity(0.8),
+//                     ),
+//                     shape: RoundedRectangleBorder(
+//                       borderRadius: BorderRadius.circular(10),
+//                     ),
+//                   ),
+//                   child: Text(
+//                     'Написать',
+//                     style: AppTextStyles.whiteSmall(context),
+//                   ),
+//                 ),
+//               ),
+//               const SizedBox(height: 12),
+//               SizedBox(
+//                 width: double.infinity,
+                
+//                 child: OutlinedButton(
+//                   onPressed:
+//                       isJoinLoading || isJoinSuccess ? null : onJoin,
+//                   style:OutlinedButton.styleFrom(
+//                    fixedSize: const Size(200, 50),
+//                   backgroundColor: Colors.transparent,
+//                   foregroundColor: AppColors.textBase,
+//                     shape: RoundedRectangleBorder(
+//                       borderRadius: BorderRadius.circular(10),
+//                     ),
+//                   ),
+//                   child: isJoinLoading
+//                       ? const SizedBox(
+//                           width: 20,
+//                           height: 20,
+//                           child: CircularProgressIndicator(strokeWidth: 2),
+//                         )
+//                       : Text(
+//                           isJoinSuccess
+//                               ? 'Заявка отправлена'
+//                               : 'Занять место',
+//                           style: AppTextStyles.whiteSmall(context),
+//                         ),
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
 class _ContactsCard extends StatelessWidget {
   final bool isJoinLoading;
   final bool isJoinSuccess;
+  final bool isMember; // новый флаг: уже в группе
   final VoidCallback onWrite;
   final Future<void> Function() onJoin;
+  final Future<void> Function()? onLeave; // колбек для выхода из группы
 
   const _ContactsCard({
     super.key,
     required this.isJoinLoading,
     required this.isJoinSuccess,
+    required this.isMember,
     required this.onWrite,
     required this.onJoin,
+    this.onLeave,
   });
 
   @override
@@ -420,20 +543,11 @@ class _ContactsCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Контакты',
-            style: AppTextStyles.smallHeaderBold(context),
-          ),
+          Text('Контакты', style: AppTextStyles.smallHeaderBold(context)),
           const SizedBox(height: 12),
-          Text(
-            'E-mail: email@email.com',
-            style: AppTextStyles.whiteSmall(context),
-          ),
+          Text('E-mail: email@email.com', style: AppTextStyles.whiteSmall(context)),
           const SizedBox(height: 8),
-          Text(
-            'Телефон: телефон владельца',
-            style: AppTextStyles.whiteSmall(context),
-          ),
+          Text('Телефон: телефон владельца', style: AppTextStyles.whiteSmall(context)),
           const SizedBox(height: 24),
           Column(
             children: [
@@ -443,33 +557,26 @@ class _ContactsCard extends StatelessWidget {
                   onPressed: onWrite,
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    side: BorderSide(
-                      color: AppColors.teal.withOpacity(0.8),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                    side: BorderSide(color: AppColors.teal.withOpacity(0.8)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   ),
-                  child: Text(
-                    'Написать',
-                    style: AppTextStyles.whiteSmall(context),
-                  ),
+                  child: Text('Написать', style: AppTextStyles.whiteSmall(context)),
                 ),
               ),
               const SizedBox(height: 12),
               SizedBox(
                 width: double.infinity,
-                
                 child: OutlinedButton(
-                  onPressed:
-                      isJoinLoading || isJoinSuccess ? null : onJoin,
-                  style:OutlinedButton.styleFrom(
-                   fixedSize: const Size(200, 50),
-                  backgroundColor: Colors.transparent,
-                  foregroundColor: AppColors.textBase,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                  onPressed: isJoinLoading
+                      ? null
+                      : isMember
+                          ? onLeave
+                          : onJoin,
+                  style: OutlinedButton.styleFrom(
+                    fixedSize: const Size(200, 50),
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: AppColors.textBase,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   ),
                   child: isJoinLoading
                       ? const SizedBox(
@@ -478,9 +585,7 @@ class _ContactsCard extends StatelessWidget {
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
                       : Text(
-                          isJoinSuccess
-                              ? 'Заявка отправлена'
-                              : 'Занять место',
+                          isMember ? 'Выйти из группы' : (isJoinSuccess ? 'Заявка отправлена' : 'Занять место'),
                           style: AppTextStyles.whiteSmall(context),
                         ),
                 ),
@@ -493,76 +598,57 @@ class _ContactsCard extends StatelessWidget {
   }
 }
 
-class _StatRowMobile extends StatelessWidget {
+
+class _StatRowResponsive extends StatelessWidget {
   final Group group;
 
-  const _StatRowMobile({
-    required this.group,
-  });
+  const _StatRowResponsive({required this.group});
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 12,
-      runSpacing: 12,
-      children: [
-        _StatItem(
-          title: "${group.parameters.budget} ₽",
-          subtitle: "Средний бюджет",
-        ),
-        _StatItem(
-          title: "${group.members.length}",
-          subtitle: "В группе",
-        ),
-        _StatItem(
-          title:
-              "${group.parameters.roommatesCount - group.members.length}",
-          subtitle: "Нужно соседей",
-        ),
-        _StatItem(
-          title: "${group.parameters.age} лет",
-          subtitle: "Возраст",
-        ),
-      ],
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      final maxWidth = constraints.maxWidth;
+      final isMobile = maxWidth < 750;
+      final isTablet = maxWidth >= 750 && maxWidth < 900;
+
+      int itemsPerRow = (isMobile || isTablet) ? 2 : 4;
+      double itemWidth = (maxWidth - (16 * (itemsPerRow - 1))) / itemsPerRow;
+
+      return Wrap(
+        spacing: 16,
+        runSpacing: 16,
+        children: [
+          _StatItem(title: "${group.parameters.budget} ₽", subtitle: "Средний бюджет", width: itemWidth),
+          _StatItem(title: "${group.members.length}", subtitle: "В группе", width: itemWidth),
+          _StatItem(title: "${group.parameters.roommatesCount - group.members.length}", subtitle: "Нужно соседей", width: itemWidth),
+          _StatItem(title: "${group.parameters.age} лет", subtitle: "Возраст", width: itemWidth),
+        ],
+      );
+    });
   }
 }
 
 class _StatItem extends StatelessWidget {
   final String title;
   final String subtitle;
+  final double width;
 
-  const _StatItem({
-    required this.title,
-    required this.subtitle,
-  });
+  const _StatItem({required this.title, required this.subtitle, required this.width});
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-
-    return SizedBox(
-      width: (width - 48) / 2, 
-      child: Container(
-        height: 100,
-        decoration: AppContainerStyles.sectionContainer,
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              title,
-              style: AppTextStyles.sectionTitle(context),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              subtitle,
-              style: AppTextStyles.whiteSmall(context),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
+    return Container(
+      width: width,
+      height: 100,
+      decoration: AppContainerStyles.sectionContainer,
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(title, style: AppTextStyles.sectionTitle(context), textAlign: TextAlign.center),
+          const SizedBox(height: 8),
+          Text(subtitle, style: AppTextStyles.whiteSmall(context), textAlign: TextAlign.center),
+        ],
       ),
     );
   }

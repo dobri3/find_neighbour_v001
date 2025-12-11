@@ -115,9 +115,9 @@ List<Widget> _buildHeaderContent(
         ),
       if (isMobile)
         IconButton(
-          onPressed: () {
-            // var group = await ApiService.matcherService.getGroupByUserId(user!.id);
-            // context.router.push(GroupRoute(id: group.id));
+          onPressed: () async{
+            var group = await ApiService.matcherService.getGroupByUserId(user!.id);
+            context.router.push(GroupRoute(id: group.id));
           },
           icon: const Icon(Icons.group, color: AppColors.textBase),
         ),
@@ -170,9 +170,18 @@ class _AuthorizedUserSection extends StatelessWidget {
       onTap: () => context.router.push(UserProfileRoute(id: user.id, auth: false)),
       child: Row(
         children: [
+          // CircleAvatar(
+          //   radius: avatarRadius,
+          //   backgroundImage: const AssetImage("asset/images/smart_guy.jpg"),
+          // ),
           CircleAvatar(
             radius: avatarRadius,
-            backgroundImage: const AssetImage("asset/images/smart_guy.jpg"),
+            backgroundImage: user.photoUrl != null
+                ? NetworkImage(user.photoUrl!)
+                : null,
+            child: user.photoUrl == null
+                ? Icon(Icons.person, color: AppColors.accentBlue, size: avatarRadius) 
+                : null,
           ),
           const SizedBox(width: 8),
           if (!isMobile)
@@ -189,7 +198,7 @@ class _UnauthorizedButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: () => context.router.push(const AuthRoute()),
       style: AppButtonStyles.primaryMedium.copyWith(
-        elevation: MaterialStateProperty.all(0), // убираем тень
+        elevation: MaterialStateProperty.all(0),
       ),
       child: Text(
         "Регистрация",
