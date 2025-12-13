@@ -11,13 +11,15 @@ class Member extends StatelessWidget {
   final VoidCallback? onMore;
   final VoidCallback? onRemove;
   final bool isOwner;
+  final String? currentUserId;
 
   const Member({
     required this.member,
     this.onMore,
-    super.key, 
-    this.onRemove, 
+    this.onRemove,
     this.isOwner = false,
+    this.currentUserId,
+    super.key,
   });
 
   @override
@@ -29,8 +31,8 @@ class Member extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       child: isMobile
-          ? _MemberMobile(member: member, onMore: onMore, onRemove: onRemove, isOwner: isOwner)
-          : _MemberDesktop(member: member, onMore: onMore, onRemove: onRemove, isOwner: isOwner),
+          ? _MemberMobile(member: member, onMore: onMore, onRemove: onRemove, isOwner: isOwner, currentUserId: currentUserId)
+          : _MemberDesktop(member: member, onMore: onMore, onRemove: onRemove, isOwner: isOwner, currentUserId: currentUserId),
     );
   }
 }
@@ -40,12 +42,14 @@ class _MemberMobile extends StatelessWidget {
   final VoidCallback? onMore;
   final VoidCallback? onRemove;
   final bool isOwner;
+  final String? currentUserId;
 
   const _MemberMobile({
     required this.member,
     this.onMore,
     this.onRemove,
-    this.isOwner = false,
+    this.isOwner = false, 
+    this.currentUserId,
   });
 
   @override
@@ -96,7 +100,7 @@ class _MemberMobile extends StatelessWidget {
             child: const Text("Подробнее"),
           ),
         ),
-        if (isOwner) ...[
+        if  (isOwner && (member.userId != currentUserId)) ...[
           const SizedBox(height: 8),
           SizedBox(
             width: double.infinity,
@@ -107,7 +111,7 @@ class _MemberMobile extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
-              child: const Text("Исключить пользователя", style: TextStyle(color: AppColors.redBase)),
+              child: const Text("Исключить", style: TextStyle(color: AppColors.redBase)),
             ),
           ),
         ],
@@ -122,12 +126,14 @@ class _MemberDesktop extends StatelessWidget {
   final VoidCallback? onMore;
   final VoidCallback? onRemove;
   final bool isOwner;
+  final String? currentUserId;
 
   const _MemberDesktop({
     required this.member,
     this.onMore,
     this.onRemove,
-    this.isOwner = false,
+    this.isOwner = false, 
+    this.currentUserId,
   });
 
   @override
@@ -172,7 +178,7 @@ class _MemberDesktop extends StatelessWidget {
               ),
               child: const Text("Подробнее"),
             ),
-            if (isOwner) ...[
+            if  (isOwner && (member.userId != currentUserId)) ...[
               const SizedBox(width: 12),
               OutlinedButton(
                 onPressed: onRemove,
@@ -181,7 +187,7 @@ class _MemberDesktop extends StatelessWidget {
                   minimumSize: const Size(160, 48),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
-                child: const Text("Исключить пользователя", style: TextStyle(color: AppColors.redBase)),
+                child: const Text("Исключить", style: TextStyle(color: AppColors.redBase)),
               ),
             ]
           ],

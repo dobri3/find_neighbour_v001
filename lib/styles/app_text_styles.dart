@@ -363,6 +363,18 @@ static Widget logo(BuildContext context) {
     );
   }
 
+    static TextStyle redSmall(BuildContext context, {bool isSmall = false}) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 750;
+    return TextStyle(
+      fontSize: isSmall
+          ? (isMobile ? 12 : 15)
+          : (isMobile ? 14 : 16),
+      color: AppColors.redBase,
+      fontFamily: "Inter",
+    );
+  }
+
 static TextStyle buttonSmall(BuildContext context, {bool isSmall = false}) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 750;

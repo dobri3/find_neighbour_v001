@@ -165,6 +165,9 @@ class MatcherService {
     }
   }
 
+
+
+
   Future<String> sendJoinRequest(String userId, String groupId) async {
     try {
       Response respone = await _dio.post('/matcher/group/send',
@@ -254,7 +257,7 @@ class MatcherService {
     }
   }
 
-  Future leaveGroup() async {
+  Future leaveGroup(String id) async {
     try {
       await _dio.post('/matcher/group/user');
     } catch (e) {
@@ -262,11 +265,25 @@ class MatcherService {
     }
   }
 
-  Future kickMember(String memberId) async {
-    try {
-      await _dio.post('matcher/group/kick/$memberId');
-    } catch (e) {
+  // Future kickMember(String memberId) async {
+  //   try {
+  //     await _dio.post('matcher/group/kick/$memberId');
+  //   } catch (e) {
+  //     throw e;
+  //   }
+  // }
+
+  Future<void> kickMember(String groupId, String userId) async {
+    try{await _dio.post('/matcher/group/user/kick', data: {
+    'group_id': groupId,
+    'user_id': userId,
+  });
+  }
+  catch (e) {
       throw e;
     }
-  }
+  
+}
+
+
 }
