@@ -824,7 +824,7 @@ Future<void> _sendJoinRequest() async {
                              },
                             isOwner: _session!.id == _group.ownerId,
                             onRemove: () async {
-                              // await ApiService.matcherService.removeMember(_group.id, member.userId); не нашла сервиса для удаления
+                              await ApiService.matcherService.kickMember(_group.id); 
                             },
                           )
                     ],
