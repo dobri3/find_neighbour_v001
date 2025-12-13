@@ -88,7 +88,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
   }
 
   void _loadUserData() async {
-    // User _user = await ApiService.userService.getUserById(widget.id);
     final user = await ApiService.userService.getUserById(widget.id);
     sessionUser = await ApiService.authService.getSession();
     form.Form _form;
@@ -126,14 +125,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
     }
 
     setState(() {
-      // _id = _user.id;
-      // _name = _user.name;
-      // _surname = _user.surname;
-      //   _age = _form.parameters.age;
-      //   _user = user;
-
-      // _userLocation = _form.parameters.geo;
-      // _address = _form.parameters.address;
 
       _user = user;
       _id = user.id;
@@ -143,8 +134,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
       _userLocation = _form.parameters.geo;
       _address = _form.parameters.address;
-      // print(_address);
-      // print(_userLocation.toJson());
     });
 
     _nameController.text = _user.name;

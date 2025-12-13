@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:find_neighbour_v001/widgets/toast_notification.dart';
+import 'package:find_neighbour_v001/widgets/notification_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:find_neighbour_v001/api/api.dart';
 import 'package:find_neighbour_v001/models/user.dart';
@@ -7,6 +7,7 @@ import 'package:find_neighbour_v001/routing/app_router.dart';
 import 'package:find_neighbour_v001/styles/app_colors.dart';
 import 'package:find_neighbour_v001/styles/app_text_styles.dart';
 import 'package:find_neighbour_v001/styles/app_button_styles.dart';
+import 'package:find_neighbour_v001/models/notification.dart' as models;
 
 
 class HomeHeader extends StatefulWidget implements PreferredSizeWidget {
@@ -27,6 +28,22 @@ class _HomeHeaderState extends State<HomeHeader> {
   void initState() {
     super.initState();
     _loadUser();
+    NotificationController.instance.subscribe();
+    // ТЕСТ
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+  Future.delayed(const Duration(seconds: 1), () {
+    final testNotification = models.Notification(
+      id: 'test1',
+      title: 'Тест',
+      body: 'Пользователь Иван отправил запрос на вступление в группу',
+      isRead: false,
+      createdAt: DateTime.now(),
+    );
+    final current = List<models.Notification>.from(NotificationController.instance.notifications.value);
+    current.insert(0, testNotification);
+    NotificationController.instance.notifications.value = current;
+  });
+});
   }
 
   Future<void> _loadUser() async {
@@ -44,6 +61,7 @@ class _HomeHeaderState extends State<HomeHeader> {
 
   @override
   Widget build(BuildContext context) {
+    
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 750;
 
@@ -115,29 +133,54 @@ List<Widget> _buildHeaderContent(
         ),
       if (isMobile)
         IconButton(
-          onPressed: () {
-            // var group = await ApiService.matcherService.getGroupByUserId(user!.id);
-            // context.router.push(GroupRoute(id: group.id));
+          onPressed: () async{
+            var group = await ApiService.matcherService.getGroupByUserId(user!.id);
+            context.router.push(GroupRoute(id: group.id));
           },
           icon: const Icon(Icons.group, color: AppColors.textBase),
         ),
       SizedBox(width: spacing),
-      
-      ValueListenableBuilder<int>(
-        valueListenable: NotificationState.instance.counter,
-        builder: (context, count, child) {
-          return IconButton(
-            onPressed: () {
-              NotificationState.instance.reset();
-              context.router.push(const RecommendationRoute());
-            },
-            icon: Icon(
-              count > 0 ? Icons.notifications_active : Icons.notifications_none,
-              color: count > 0 ? AppColors.redBase : AppColors.textBase,
-            ),
-          );
-        },
-      ),
+      // if (!isMobile)
+      //   GestureDetector(
+      //     onTap: () {
+      //       _showNotificationsPopup(context);
+      //     },
+      //     child: Text("Собщения", style: AppTextStyles.whiteSmall(context)),
+      //   ),
+      // if (isMobile)
+      ValueListenableBuilder<List<models.Notification>>(
+      valueListenable: NotificationController.instance.notifications,
+      builder: (context, notifications, child) {
+        final unread = notifications.where((n) => !n.isRead).length;
+
+        return IconButton(
+          onPressed: () {
+            _showNotificationsPopup(context);
+          },
+          icon: Stack(
+            children: [
+              Icon(
+                Icons.notifications_active,
+                color: AppColors.textBase,
+              ),
+              if (unread > 0)
+                Positioned(
+                  right: 0,
+                  top: 0,
+                  child: CircleAvatar(
+                    radius: 6,
+                    backgroundColor: const Color.fromARGB(255, 128, 35, 35),
+                    child: Text(
+                      '$unread',
+                      style: const TextStyle(fontSize: 8, color: AppColors.base1),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        );
+      },
+    ),
 
       SizedBox(width: spacing / 2),
       _AuthorizedUserSection(
@@ -189,7 +232,7 @@ class _UnauthorizedButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: () => context.router.push(const AuthRoute()),
       style: AppButtonStyles.primaryMedium.copyWith(
-        elevation: MaterialStateProperty.all(0), // убираем тень
+        elevation: MaterialStateProperty.all(0),
       ),
       child: Text(
         "Регистрация",
@@ -197,4 +240,64 @@ class _UnauthorizedButton extends StatelessWidget {
       ),
     );
   }
+}
+
+
+// void _showNotificationsPopup(BuildContext context) {
+//   final notifications = NotificationController.instance.notifications.value;
+
+//   final items = notifications.map((n) {
+//     return PopupMenuItem(
+//       value: n.id,
+//       child: Row(
+//         children: [
+//           CircleAvatar(
+//             radius: 16,
+//             backgroundImage: NetworkImage(n.avatarUrl ?? ''), // URL аватарки
+//           ),
+//       const SizedBox(width: 8),
+//       Expanded(
+//       child: Text(
+//         "${n.title}: ${n.body}",
+//         maxLines: 2,
+//         overflow: TextOverflow.ellipsis,
+//         style: TextStyle(color: AppColors.base1),
+//       ),
+//       )
+//         ]
+//       )
+//     );
+//   }).toList();
+
+
+void _showNotificationsPopup(BuildContext context) {
+  final notifications = NotificationController.instance.notifications.value;
+
+  final items = notifications.map((n) {
+    return PopupMenuItem(
+      value: n.id,
+      child: 
+      Text(
+        "${n.title}: ${n.body}",
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(color: AppColors.base1),
+      ),
+    );
+  }).toList();
+
+
+  showMenu(
+    context: context,
+    position: const RelativeRect.fromLTRB(1000, 80, 16, 0),
+    items: items,
+    color: AppColors.accentBlue.withOpacity(0.85),
+  ).then((selectedId) {
+    if (selectedId != null) {
+      final notification = notifications.firstWhere((n) => n.id == selectedId);
+      NotificationController.instance.markAsRead(notification.id);
+
+      context.router.push(GroupRoute(id: notification.id)); // тут нужно правильно groupId
+    }
+  });
 }

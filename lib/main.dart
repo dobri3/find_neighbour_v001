@@ -1,5 +1,6 @@
 import 'package:find_neighbour_v001/routing/app_router.dart';
-import 'package:find_neighbour_v001/widgets/toast_notification.dart';
+import 'package:find_neighbour_v001/widgets/app_initializer.dart';
+import 'package:find_neighbour_v001/widgets/chat_notification_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:find_neighbour_v001/api/api.dart';
 import 'package:find_neighbour_v001/api/interceptor.dart';
@@ -23,24 +24,19 @@ class MyApp extends StatelessWidget {
       dio: ApiService.dio,
       refreshTokenCallback: ApiService.authService.refreshToken,
     ));
-    return MaterialApp.router(
-      title: 'ИщуСоседа',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: "Inter",
-        colorScheme: const ColorScheme.dark(),
-        useMaterial3: true,
+    return AppInitializer(
+      child: MaterialApp.router(
+        title: 'ИщуСоседа',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          fontFamily: "Inter",
+          colorScheme: const ColorScheme.dark(),
+          useMaterial3: true,
+        ),
+        scaffoldMessengerKey:
+            ChatNotificationController.instance.messengerKey,
+        routerConfig: appRouter.config(),
       ),
-      routerConfig: appRouter.config(
-        navigatorObservers: () => [
-          AutoRouterObserver(),
-        ],
-      ),
-      builder: (context, child) {
-        return AppShell(
-          child: child!,
-        );
-      },
     );
   }
 }

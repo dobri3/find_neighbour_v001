@@ -50,10 +50,8 @@ class RequestCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 10),
-                // Кнопки справа
                 Row(
                   children: [
-                    // Кнопка "Подробнее"
                     SizedBox(
                       width: 100,
                       child: ElevatedButton(
@@ -78,7 +76,6 @@ class RequestCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    // Кнопка "Принять"
                     SizedBox(
                       width: 100,
                       child: ElevatedButton(
@@ -101,7 +98,6 @@ class RequestCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    // Кнопка "Отклонить"
                     SizedBox(
                       width: 100,
                       child: ElevatedButton(

@@ -1,3 +1,4 @@
+import 'package:find_neighbour_v001/widgets/chat_notification_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 
@@ -68,6 +69,8 @@ class _ChatPageState extends State<ChatPage> {
     );
     List<Chat> chats = await ApiService.chatService.getChatsByUserId();
     User? session = await ApiService.authService.getSession();
+    _session = session;
+    ChatNotificationController.instance.currentUserId = session?.id;
 
     if (widget.userId != null || widget.groupId != null) {
       _webSocket = await ApiService.chatService.connectToChat(
@@ -185,14 +188,17 @@ class _ChatPageState extends State<ChatPage> {
       _scrollToBottom();
     });
 
+    ChatNotificationController.instance.activeChatId = widget.chatId;
+
     _loadChatData();
   }
 
   @override
   void dispose() async {
-    await _webSocket?.sink.close();
-    _textController.dispose();
-    super.dispose();
+    ChatNotificationController.instance.activeChatId = null;
+  _webSocket?.sink.close();
+  _textController.dispose();
+  super.dispose();
   }
 
   @override
