@@ -1005,10 +1005,19 @@ class _ContactsCard extends StatelessWidget {
                           height: 20,
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
-                      : Text(
-                          isMember ? 'Выйти из группы' : (isJoinSuccess ? 'Заявка отправлена' : 'Занять место'),
-                          style: AppTextStyles.whiteSmall(context),
-                        ),
+                      : OutlinedButton(
+                        onPressed: onLeave,
+                        style: OutlinedButton.styleFrom(
+                    fixedSize: const Size(200, 50),
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: AppColors.redBase,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                        child: Text(
+                            isMember ? 'Выйти из группы' : (isJoinSuccess ? 'Заявка отправлена' : 'Занять место'),
+                            style: AppTextStyles.whiteSmall(context),
+                          ),
+                      ),
                 ),
               ),
             ],
