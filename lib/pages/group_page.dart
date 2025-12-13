@@ -222,7 +222,75 @@ Future<void> _sendJoinRequest() async {
                       
                     ),
 
-                      if (_session != null &&
+                //       if (_session != null &&
+                //           _session!.id == _group.ownerId &&
+                //           _requests != null &&
+                //           _requests!.isNotEmpty) ...[
+                //         const SizedBox(height: 24),
+                //         Text(
+                //           "Запросы",
+                //           style: AppTextStyles.sectionTitle(context),
+                //         ),
+                //         const SizedBox(height: 20),
+                //         Column(
+                //           spacing: 20,
+                //           children: [
+                //             for (var request in _requests!)
+                //               RequestCard(
+                //                 request: request,
+                //                 // onAccept: () async {
+                //                 //   await ApiService.matcherService
+                //                 //       .acceptJoinRequest(_session!.id, request.id);
+                //                 // },
+                //                 onAccept: () async {
+                //                   try {
+                //                     await ApiService.matcherService
+                //                         .acceptJoinRequest(_session!.id, request.id);
+
+                //                     setState(() {
+                //                       _requests!.removeWhere((r) => r.id == request.id);
+                                      
+                //                     });
+                //                   } catch (e) {
+                //                     ScaffoldMessenger.of(context).showSnackBar(
+                //                       SnackBar(content: Text('Ошибка принятия заявки')),
+                //                     );
+                //                   }
+                //                 },
+
+                //                 // onReject: () async {
+                //                 //   await ApiService.matcherService
+                //                 //       .rejectJoinRequest(_session!.id, request.id);
+                //                 // },
+
+                //                 onReject: () async {
+                //                   try {
+                //                     await ApiService.matcherService
+                //                         .rejectJoinRequest(_session!.id, request.id);
+
+                //                     setState(() {
+                //                       _requests!.removeWhere((r) => r.id == request.id);
+                //                     });
+                //                   } catch (e) {
+                //                     ScaffoldMessenger.of(context).showSnackBar(
+                //                       SnackBar(content: Text('Ошибка отклонения заявки')),
+                //                     );
+                //                   }
+                //                 },
+
+                //                 onMore: () {
+                //                   context.router.push(
+                //                     UserProfileRoute(id: request.userId),
+                //                   );
+                //                 },
+                //               ),
+                //           ],
+                //         ),
+                //       ],
+                    ],
+                  ),
+                ),
+                if (_session != null &&
                           _session!.id == _group.ownerId &&
                           _requests != null &&
                           _requests!.isNotEmpty) ...[
@@ -287,9 +355,6 @@ Future<void> _sendJoinRequest() async {
                           ],
                         ),
                       ],
-                    ],
-                  ),
-                ),
                 const SizedBox(height: 20,),
                  Text(
                   "Информация",
