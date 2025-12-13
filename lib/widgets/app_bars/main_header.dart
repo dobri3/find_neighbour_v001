@@ -29,21 +29,21 @@ class _HomeHeaderState extends State<HomeHeader> {
     super.initState();
     _loadUser();
     NotificationController.instance.subscribe();
-    // ТЕСТ
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-  Future.delayed(const Duration(seconds: 1), () {
-    final testNotification = models.Notification(
-      id: 'test1',
-      title: 'Тест',
-      body: 'Пользователь Иван отправил запрос на вступление в группу',
-      isRead: false,
-      createdAt: DateTime.now(),
-    );
-    final current = List<models.Notification>.from(NotificationController.instance.notifications.value);
-    current.insert(0, testNotification);
-    NotificationController.instance.notifications.value = current;
-  });
-});
+//     // ТЕСТ
+//       WidgetsBinding.instance.addPostFrameCallback((_) {
+//   Future.delayed(const Duration(seconds: 1), () {
+//     final testNotification = models.Notification(
+//       id: 'test1',
+//       title: 'Тест',
+//       body: 'Пользователь Иван отправил запрос на вступление в группу',
+//       isRead: false,
+//       createdAt: DateTime.now(),
+//     );
+//     final current = List<models.Notification>.from(NotificationController.instance.notifications.value);
+//     current.insert(0, testNotification);
+//     NotificationController.instance.notifications.value = current;
+//   });
+// });
   }
 
   Future<void> _loadUser() async {
