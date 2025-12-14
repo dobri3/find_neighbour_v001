@@ -188,8 +188,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   void _validateForm() {
     bool stringFieldsValid = _isStringValid(_nameController.text) &&
-        _isStringValid(_surnameController.text) &&
-        _isStringValid(_descController.text);
+        _isStringValid(_surnameController.text);
+        //  &&
+        // _isStringValid(_descController.text);
 
     bool numberFieldsValid = _isNumberValid(_moneyController.text) &&
         _isNumberValid(_neighboursController.text) &&
@@ -492,7 +493,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
               ),
             ),
             const SizedBox(height: 20),
-            _buildInput("О себе", _descController, "Расскажите о себе",
+            _buildInput("О себе",
+             _descController, 
+             "Расскажите о себе",
                 validate: false, minLines: 3, maxLines: 5),
           ],
         ),
