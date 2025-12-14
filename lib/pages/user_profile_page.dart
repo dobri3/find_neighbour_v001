@@ -180,11 +180,27 @@ class _UserProfilePageState extends State<UserProfilePage> {
         RegExp(r'^[а-яА-Яa-zA-Z\s]+$').hasMatch(value);
   }
 
-  bool _isNumberValid(String value) {
-    if (value.isEmpty) return false;
-    int? number = int.tryParse(value);
-    return number != null && number > 0;
-  }
+  // bool _isNumberValid(String value) {
+  //   if (value.isEmpty) return false;
+  //   int? number = int.tryParse(value);
+  //   return number != null && number > 0;
+  // }
+
+  bool _isNumberValid(
+  String value, {
+  int? min,
+  int? max,
+}) {
+  if (value.isEmpty) return false;
+
+  final number = int.tryParse(value);
+  if (number == null) return false;
+
+  if (min != null && number < min) return false;
+  if (max != null && number > max) return false;
+
+  return true;
+}
 
   void _validateForm() {
     bool stringFieldsValid = _isStringValid(_nameController.text) &&
@@ -192,11 +208,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
         //  &&
         // _isStringValid(_descController.text);
 
-    bool numberFieldsValid = _isNumberValid(_moneyController.text) &&
-        _isNumberValid(_neighboursController.text) &&
-        _isNumberValid(_roomCountController.text) &&
-        _isNumberValid(_monthsController.text) &&
-        _isNumberValid(_ageController.text);
+    bool numberFieldsValid = _isNumberValid(_moneyController.text, min: 10000, max: 100000) && 
+        _isNumberValid(_neighboursController.text, min: 1, max: 10) &&
+        _isNumberValid(_roomCountController.text, min: 1, max: 6) &&
+        _isNumberValid(_monthsController.text, min: 3, max: 60) &&
+        _isNumberValid(_ageController.text, min: 17, max: 50);
 
     bool modified = _nameController.text != _name ||
         _surnameController.text != _surname ||
