@@ -202,6 +202,32 @@ class _UserProfilePageState extends State<UserProfilePage> {
   return true;
 }
 
+String? _numberValidationError(
+  String value, {
+  required int min,
+  required int max,
+}) {
+  if (value.isEmpty) {
+    return 'Поле обязательно для заполнения';
+  }
+
+  final number = int.tryParse(value);
+  if (number == null) {
+    return 'Введите целое число';
+  }
+
+  if (number < min) {
+    return 'Минимум: $min';
+  }
+
+  if (number > max) {
+    return 'Максимум: $max';
+  }
+
+  return null;
+}
+
+
   void _validateForm() {
     bool stringFieldsValid = _isStringValid(_nameController.text) &&
         _isStringValid(_surnameController.text);
@@ -540,6 +566,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     "Возраст",
                     _ageController,
                     "Введите возраст",
+                    minValue: 17,
+                    maxValue: 50,
                   ),
                 ),
                 Expanded(
@@ -614,11 +642,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 children: [
                   Expanded(
                     child: _buildInput("Бюджет ₽", _moneyController,
-                        "Введите бюджет в рублях"),
+                        "Введите бюджет в рублях", minValue: 10000, maxValue: 100000),
                   ),
                   Expanded(
                       child: _buildInput("Количество соседей",
-                          _neighboursController, "Введите количество соседей")),
+                          _neighboursController, "Введите количество соседей", minValue: 1, maxValue: 10)),
                 ],
               ),
             ),
@@ -628,10 +656,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
               children: [
                 Expanded(
                     child: _buildInput("Срок съема (мес.)", _monthsController,
-                        "Введите срок съема в месяцах")),
+                        "Введите срок съема в месяцах", minValue: 2, maxValue: 60)),
                 Expanded(
                     child: _buildInput("Количество комнат",
-                        _roomCountController, "Введите количество комнат")),
+                        _roomCountController, "Введите количество комнат", minValue: 1, maxValue: 6)),
               ],
             ),
             const SizedBox(height: 20),
@@ -679,22 +707,49 @@ class _UserProfilePageState extends State<UserProfilePage> {
     int maxLines = 1,
     int minLines = 1,
     bool validate = true,
+    int? minValue,
+    int? maxValue,
   }) {
     bool isStringField = [_nameController, _surnameController, _descController]
         .contains(controller);
     bool isValid = true;
 
-    if (validate) {
-      bool isStringField = [
-        _nameController,
-        _surnameController,
-        _descController
-      ].contains(controller);
+    // if (validate) {
+    //   bool isStringField = [
+    //     _nameController,
+    //     _surnameController,
+    //     _descController
+    //   ].contains(controller);
 
-      isValid = isStringField
-          ? _isStringValid(controller.text)
-          : _isNumberValid(controller.text);
-    }
+    //   isValid = isStringField
+    //       ? _isStringValid(controller.text)
+    //       : _isNumberValid(controller.text);
+    // }
+
+    String? errorText;
+
+if (validate) {
+  bool isStringField = [
+    _nameController,
+    _surnameController,
+    _descController,
+  ].contains(controller);
+
+  if (isStringField) {
+    errorText =
+        _isStringValid(controller.text) ? null : 'Некорректное значение';
+  } else if (minValue != null && maxValue != null) {
+    errorText = _numberValidationError(
+      controller.text,
+      min: minValue,
+      max: maxValue,
+    );
+  } else {
+    errorText =
+        _isNumberValid(controller.text) ? null : 'Некорректное значение';
+  }
+}
+
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -710,7 +765,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 cursorColor: AppColors.textBase,
                 decoration:
                     AppContainerStyles.textInput(context, hint).copyWith(
-                  errorText: isValid ? null : 'Некорректное значение',
+                  errorText: errorText,
                 ),
               )
             : Padding(
